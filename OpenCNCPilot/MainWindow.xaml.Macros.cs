@@ -30,7 +30,7 @@ namespace OpenCNCPilot
 
 		private void RefreshMacroButtons()
 		{
-			StackPanelMacros.Children.Clear();
+			//StackPanelMacros.Children.Clear();
 			for (int i = 0; i < Macros.Count; i++)
 			{
 				int index = i;
@@ -83,7 +83,7 @@ namespace OpenCNCPilot
 
 				b.ContextMenu = menu;
 
-				StackPanelMacros.Children.Add(b);
+				//StackPanelMacros.Children.Add(b);
 			}
 		}
 

@@ -47,9 +47,10 @@ namespace OpenCNCPilot
 
 			if (machine.Connected)
 			{
-				MessageBox.Show("Can't close while connected!");
+                machine.Disconnect();
+				//MessageBox.Show("Can't close while connected!");
 				e.Cancel = true;
-				return;
+				//return;
 			}
 
 			settingsWindow.Close();

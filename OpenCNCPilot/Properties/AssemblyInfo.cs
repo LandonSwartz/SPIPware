@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenCNCPilot")]
+[assembly: AssemblyTitle("SPIPware")]
 [assembly: AssemblyDescription("GCode Sender and AutoLeveller")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("martin2250")]
-[assembly: AssemblyProduct("OpenCNCPilot")]
+[assembly: AssemblyProduct("SPIPware")]
 [assembly: AssemblyCopyright("Copyright ©martin2250  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace OpenCNCPilot
 {
-	partial class MainWindow
+    partial class MainWindow
 	{
 		private void ButtonEditSimplify_Click(object sender, RoutedEventArgs e)
 		{

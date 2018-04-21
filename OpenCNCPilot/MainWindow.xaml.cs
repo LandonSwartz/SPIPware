@@ -4,12 +4,15 @@ using OpenCNCPilot.Communication;
 using OpenCNCPilot.Util;
 using Microsoft.Win32;
 using OpenCNCPilot.GCode;
-using System.Windows.Controls;
+
 using System.ComponentModel;
+using System.Windows.Controls.Ribbon;
+using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace OpenCNCPilot
 {
-	public partial class MainWindow : Window, INotifyPropertyChanged
+	public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
 	{
 		Machine machine = new Machine();
 
@@ -32,13 +35,15 @@ namespace OpenCNCPilot
 
 		public MainWindow()
 		{
-			AppDomain.CurrentDomain.UnhandledException += UnhandledException;
+  			AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 			InitializeComponent();
-
-			openFileDialogGCode.FileOk += OpenFileDialogGCode_FileOk;
+            updateSerialPortComboBox();
+         
+            //SerialPortSelect.SelectedValue = port[0];
+            openFileDialogGCode.FileOk += OpenFileDialogGCode_FileOk;
 			saveFileDialogGCode.FileOk += SaveFileDialogGCode_FileOk;
-			openFileDialogHeightMap.FileOk += OpenFileDialogHeightMap_FileOk;
-			saveFileDialogHeightMap.FileOk += SaveFileDialogHeightMap_FileOk;
+			//openFileDialogHeightMap.FileOk += OpenFileDialogHeightMap_FileOk;
+			//saveFileDialogHeightMap.FileOk += SaveFileDialogHeightMap_FileOk;
 
 			machine.ConnectionStateChanged += Machine_ConnectionStateChanged;
 
@@ -57,8 +62,8 @@ namespace OpenCNCPilot
 			machine.BufferStateChanged += Machine_BufferStateChanged;
 			machine.OperatingModeChanged += Machine_OperatingMode_Changed;
 			machine.FileChanged += Machine_FileChanged;
-			machine.FilePositionChanged += Machine_FilePositionChanged;
-			machine.ProbeFinished += Machine_ProbeFinished;
+			//machine.FilePositionChanged += Machine_FilePositionChanged;
+			//machine.ProbeFinished += Machine_ProbeFinished;
 			machine.OverrideChanged += Machine_OverrideChanged;
 			machine.PinStateChanged += Machine_PinStateChanged;
 
@@ -90,8 +95,8 @@ namespace OpenCNCPilot
 			RaisePropertyChanged("LastProbePosMachine");
 			RaisePropertyChanged("LastProbePosWork");
 		}
-
-		private void UnhandledException(object sender, UnhandledExceptionEventArgs ea)
+     
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs ea)
 		{
 			Exception e = (Exception)ea.ExceptionObject;
 
@@ -140,8 +145,24 @@ namespace OpenCNCPilot
 					e.Cancel = true;
 			}
 		}
+        
+        private void updateSerialPortComboBox()
+        {
 
-		private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+            SerialPortSelect.Items.Clear();
+            
+            foreach (string port in System.IO.Ports.SerialPort.GetPortNames())   
+            SerialPortSelect.Items.Add(port);
+            
+
+
+        }
+        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            updateSerialPortComboBox();
+            
+        }
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
 		{
 			System.Diagnostics.Process.Start(e.Uri.AbsoluteUri);
 		}
@@ -155,7 +176,9 @@ namespace OpenCNCPilot
 			}
 		}
 
-		private void Window_Drop(object sender, DragEventArgs e)
+       
+
+        private void Window_Drop(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 			{
@@ -170,7 +193,7 @@ namespace OpenCNCPilot
 						if (machine.Mode == Machine.OperatingMode.Probe || Map != null)
 							return;
 
-						OpenHeightMap(file);
+						//OpenHeightMap(file);
 					}
 					else
 					{
@@ -233,57 +256,57 @@ namespace OpenCNCPilot
 
 		private void ButtonRapidOverride_Click(object sender, RoutedEventArgs e)
 		{
-			Button b = sender as Button;
+			//Button b = sender as Button;
 
-			if (b == null)
-				return;
+			//if (b == null)
+			//	return;
 
-			switch(b.Content as string)
-			{
-				case "100%":
-					machine.SendControl(0x95);
-					break;
-				case "50%":
-					machine.SendControl(0x96);
-					break;
-				case "25%":
-					machine.SendControl(0x97);
-					break;
-			}
+			//switch(b.Content as string)
+			//{
+			//	case "100%":
+			//		machine.SendControl(0x95);
+			//		break;
+			//	case "50%":
+			//		machine.SendControl(0x96);
+			//		break;
+			//	case "25%":
+			//		machine.SendControl(0x97);
+			//		break;
+			//}
 		}
 
 		private void ButtonFeedOverride_Click(object sender, RoutedEventArgs e)
 		{
-			Button b = sender as Button;
+			//Button b = sender as Button;
 
-			if (b == null)
-				return;
+			//if (b == null)
+			//	return;
 
-			switch (b.Tag as string)
-			{
-				case "100%":
-					machine.SendControl(0x90);
-					break;
-				case "+10%":
-					machine.SendControl(0x91);
-					break;
-				case "-10%":
-					machine.SendControl(0x92);
-					break;
-				case "+1%":
-					machine.SendControl(0x93);
-					break;
-				case "-1%":
-					machine.SendControl(0x94);
-					break;
-			}
+			//switch (b.Tag as string)
+			//{
+			//	case "100%":
+			//		machine.SendControl(0x90);
+			//		break;
+			//	case "+10%":
+			//		machine.SendControl(0x91);
+			//		break;
+			//	case "-10%":
+			//		machine.SendControl(0x92);
+			//		break;
+			//	case "+1%":
+			//		machine.SendControl(0x93);
+			//		break;
+			//	case "-1%":
+			//		machine.SendControl(0x94);
+			//		break;
+			//}
 		}
 
 		private void ButtonResetViewport_Click(object sender, RoutedEventArgs e)
 		{
-			viewport.Camera.Position = new System.Windows.Media.Media3D.Point3D(50, -150, 250);
-			viewport.Camera.LookDirection = new System.Windows.Media.Media3D.Vector3D(-50, 150, -250);
-			viewport.Camera.UpDirection = new System.Windows.Media.Media3D.Vector3D(0, 0, 1);
+			//viewport.Camera.Position = new System.Windows.Media.Media3D.Point3D(50, -150, 250);
+			//viewport.Camera.LookDirection = new System.Windows.Media.Media3D.Vector3D(-50, 150, -250);
+			//viewport.Camera.UpDirection = new System.Windows.Media.Media3D.Vector3D(0, 0, 1);
 		}
 
 		private void ButtonSaveTLOPos_Click(object sender, RoutedEventArgs e)

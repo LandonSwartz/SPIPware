@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCNCPilot", "OpenCNCPilot\OpenCNCPilot.csproj", "{BA3CA6C1-34A3-4582-9EE3-64DA5F144C3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPIPware", "OpenCNCPilot\SPIPware.csproj", "{BA3CA6C1-34A3-4582-9EE3-64DA5F144C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

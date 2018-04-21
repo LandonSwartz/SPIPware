@@ -23,7 +23,7 @@ namespace OpenCNCPilot
 
 		private void Machine_PlaneChanged()
 		{
-			ButtonArcPlane.Content = machine.Plane.ToString() + "-Plane";
+			//ButtonArcPlane.Content = machine.Plane.ToString() + "-Plane";
 		}
 
 		private void Machine_UnitChanged()
@@ -60,22 +60,22 @@ namespace OpenCNCPilot
 
 		private void Machine_PositionUpdateReceived()
 		{
-			ModelTool.Point1 = (machine.WorkPosition + new Vector3(0, 0, 10)).ToPoint3D();
-			ModelTool.Point2 = machine.WorkPosition.ToPoint3D();
+			//ModelTool.Point1 = (machine.WorkPosition + new Vector3(0, 0, 10)).ToPoint3D();
+			//ModelTool.Point2 = machine.WorkPosition.ToPoint3D();
 
 			var nfi = Constants.DecimalOutputFormat;
 
 			LabelPosX.Text = machine.WorkPosition.X.ToString("N", nfi);
 			LabelPosY.Text = machine.WorkPosition.Y.ToString("N", nfi);
-			LabelPosZ.Text = machine.WorkPosition.Z.ToString("N", nfi);
+			//LabelPosZ.Text = machine.WorkPosition.Z.ToString("N", nfi);
 
 			LabelPosMX.Text = machine.MachinePosition.X.ToString("N", nfi);
 			LabelPosMY.Text = machine.MachinePosition.Y.ToString("N", nfi);
-			LabelPosMZ.Text = machine.MachinePosition.Z.ToString("N", nfi);
+			//LabelPosMZ.Text = machine.MachinePosition.Z.ToString("N", nfi);
 
-			LabelFeedRateRealtime.Text = ((int)Math.Round(machine.FeedRateRealtime)).ToString();
+			//LabelFeedRateRealtime.Text = ((int)Math.Round(machine.FeedRateRealtime)).ToString();
 
-			TextBoxCurrentTLO.Text = machine.CurrentTLO.ToString("N", nfi);
+			//TextBoxCurrentTLO.Text = machine.CurrentTLO.ToString("N", nfi);
 
 			if(machine.Mode == Machine.OperatingMode.Manual)
 				UpdateExpressionPreview();
@@ -83,8 +83,8 @@ namespace OpenCNCPilot
 
 		private void Machine_BufferStateChanged()
 		{
-			ProgressBarBufferCapacity.Value = machine.BufferState;
-			LabelBufferState.Content = machine.BufferState;
+			//ProgressBarBufferCapacity.Value = machine.BufferState;
+			//LabelBufferState.Content = machine.BufferState;
 		}
 
 		private void ButtonDistanceMode_Click(object sender, RoutedEventArgs e)
@@ -128,19 +128,22 @@ namespace OpenCNCPilot
 
 		private void AddHistoryItem(ListBoxItem item)
 		{
-			if (ListBoxHistory.Items.Count > 8)
-				ListBoxHistory.Items.RemoveAt(0);
+			//if (ListBoxHistory.Items.Count > 8)
+			//	ListBoxHistory.Items.RemoveAt(0);
 
 			DoubleAnimation anim = new DoubleAnimation(0, new Duration(TimeSpan.FromSeconds(2)));
 			anim.BeginTime = TimeSpan.FromSeconds(Properties.Settings.Default.ConsoleFadeTime);
 
-			item.HorizontalContentAlignment = HorizontalAlignment.Right;
-			item.VerticalContentAlignment = VerticalAlignment.Center;
+			//item.HorizontalContentAlignment = HorizontalAlignment.Right;
+			//item.VerticalContentAlignment = VerticalAlignment.Center;
 
 			ListBoxHistory.Items.Add(item);
+            ListBoxHistory.Items.MoveCurrentToLast();
+            ListBoxHistory.ScrollIntoView(ListBoxHistory.Items.CurrentItem);
+          
 
-			item.BeginAnimation(OpacityProperty, anim);
-		}
+            //item.BeginAnimation(OpacityProperty, anim);
+        }
 
 		private void Machine_NonFatalException(string obj)
 		{
@@ -200,25 +203,25 @@ namespace OpenCNCPilot
 			AddHistoryItem(item);
 		}
 
-		private void Machine_FilePositionChanged()
-		{
-			RunFilePosition.Text = machine.FilePosition.ToString();
+		//private void Machine_FilePositionChanged()
+		//{
+		//	RunFilePosition.Text = machine.FilePosition.ToString();
 
-			if (ListViewFile.SelectedItem is TextBlock)
-			{
-				if(ListViewFile.SelectedIndex >= 0 && machine.PauseLines[ListViewFile.SelectedIndex])
-					((TextBlock)ListViewFile.SelectedItem).Background = Brushes.YellowGreen;
-				else
-					((TextBlock)ListViewFile.SelectedItem).Background = Brushes.Transparent;
-			}
+		//	if (ListViewFile.SelectedItem is TextBlock)
+		//	{
+		//		if(ListViewFile.SelectedIndex >= 0 && machine.PauseLines[ListViewFile.SelectedIndex])
+		//			((TextBlock)ListViewFile.SelectedItem).Background = Brushes.YellowGreen;
+		//		else
+		//			((TextBlock)ListViewFile.SelectedItem).Background = Brushes.Transparent;
+		//	}
 
-			ListViewFile.SelectedIndex = machine.FilePosition;
+		//	ListViewFile.SelectedIndex = machine.FilePosition;
 
-			if (ListViewFile.SelectedItem is TextBlock)
-				((TextBlock)ListViewFile.SelectedItem).Background = Brushes.Gray;
+		//	if (ListViewFile.SelectedItem is TextBlock)
+		//		((TextBlock)ListViewFile.SelectedItem).Background = Brushes.Gray;
 
-			ListViewFile.ScrollIntoView(ListViewFile.SelectedItem);
-		}
+		//	ListViewFile.ScrollIntoView(ListViewFile.SelectedItem);
+		//}
 
 		private void Machine_FileChanged()
 		{
@@ -233,10 +236,10 @@ namespace OpenCNCPilot
 			}
 
 			if(Properties.Settings.Default.EnableCodePreview)
-				ToolPath.GetModel(ModelLine, ModelRapid, ModelArc);
+				//ToolPath.GetModel(ModelLine, ModelRapid, ModelArc);
 
-			RunFileLength.Text = machine.File.Count.ToString();
-			RunFileDuration.Text = ToolPath.TotalTime.ToString(@"hh\:mm\:ss");
+			//RunFileLength.Text = machine.File.Count.ToString();
+			//RunFileDuration.Text = ToolPath.TotalTime.ToString(@"hh\:mm\:ss");
 			FileRunTime = TimeSpan.Zero;
 
 			int digits = (int)Math.Ceiling(Math.Log10(machine.File.Count));
@@ -244,7 +247,7 @@ namespace OpenCNCPilot
 			string format = "D" + digits;
 
 
-			ListViewFile.Items.Clear();
+			//ListViewFile.Items.Clear();
 
 			for(int line = 0; line < machine.File.Count; line++)
 			{
@@ -253,12 +256,12 @@ namespace OpenCNCPilot
 				if (machine.PauseLines[line])
 					tb.Background = Brushes.YellowGreen;
 
-				ListViewFile.Items.Add(tb);
+				//ListViewFile.Items.Add(tb);
 			}
 
 			if (ToolPath.ContainsMotion)
 			{
-				ModelFileBoundary.Points.Clear();
+				//ModelFileBoundary.Points.Clear();
 				Point3DCollection boundary = new Point3DCollection();
 
 				Vector3 MinPoint = ToolPath.MinFeed;
@@ -286,22 +289,22 @@ namespace OpenCNCPilot
 					}
 				}
 
-				ModelFileBoundary.Points = boundary;
+				//ModelFileBoundary.Points = boundary;
 
-				ModelTextMinPoint.Text = string.Format(Constants.DecimalOutputFormat, "({0:0.###}, {1:0.###}, {2:0.###})", MinPoint.X, MinPoint.Y, MinPoint.Z);
-				ModelTextMaxPoint.Text = string.Format(Constants.DecimalOutputFormat, "({0:0.###}, {1:0.###}, {2:0.###})", MaxPoint.X, MaxPoint.Y, MaxPoint.Z);
-				ModelTextMinPoint.Position = MinPoint.ToPoint3D();
-				ModelTextMaxPoint.Position = MaxPoint.ToPoint3D();
-				ModelFileBoundaryPoints.Points.Clear();
-				ModelFileBoundaryPoints.Points.Add(MinPoint.ToPoint3D());
-				ModelFileBoundaryPoints.Points.Add(MaxPoint.ToPoint3D());
+				//ModelTextMinPoint.Text = string.Format(Constants.DecimalOutputFormat, "({0:0.###}, {1:0.###}, {2:0.###})", MinPoint.X, MinPoint.Y, MinPoint.Z);
+				//ModelTextMaxPoint.Text = string.Format(Constants.DecimalOutputFormat, "({0:0.###}, {1:0.###}, {2:0.###})", MaxPoint.X, MaxPoint.Y, MaxPoint.Z);
+				//ModelTextMinPoint.Position = MinPoint.ToPoint3D();
+				//ModelTextMaxPoint.Position = MaxPoint.ToPoint3D();
+				//ModelFileBoundaryPoints.Points.Clear();
+				//ModelFileBoundaryPoints.Points.Add(MinPoint.ToPoint3D());
+				//ModelFileBoundaryPoints.Points.Add(MaxPoint.ToPoint3D());
 			}
 			else
 			{
-				ModelFileBoundary.Points.Clear();
-				ModelFileBoundaryPoints.Points.Clear();
-				ModelTextMinPoint.Text = "";
-				ModelTextMaxPoint.Text = "";
+				//ModelFileBoundary.Points.Clear();
+				//ModelFileBoundaryPoints.Points.Clear();
+				//ModelTextMinPoint.Text = "";
+				//ModelTextMaxPoint.Text = "";
 			}
 		}
 
@@ -309,22 +312,22 @@ namespace OpenCNCPilot
 		{
 			ButtonDistanceMode.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonUnit.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
-			ButtonArcPlane.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+			//ButtonArcPlane.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonStatus.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
-			ButtonFeedRateOvr.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
+			//ButtonFeedRateOvr.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
 
-			ButtonFeedHold.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
+			//ButtonFeedHold.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
 			ButtonCycleStart.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
 			ButtonSoftReset.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 
-			ButtonSettings.IsEnabled = machine.Mode == Machine.OperatingMode.Disconnected;
+			//ButtonSettings.IsEnabled = machine.Mode == Machine.OperatingMode.Disconnected;
 
-			ButtonFileOpen.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
-			ButtonFileSave.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
-			ButtonFileStart.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
-			ButtonFilePause.IsEnabled = machine.Mode == Machine.OperatingMode.SendFile;
-			ButtonFileGoto.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
-			ButtonFileClear.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
+			//ButtonFileOpen.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
+			//ButtonFileSave.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
+			//ButtonFileStart.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+			//ButtonFilePause.IsEnabled = machine.Mode == Machine.OperatingMode.SendFile;
+			//ButtonFileGoto.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
+			//ButtonFileClear.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
 
 			ButtonManualSend.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonManualSetG10Zero.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
@@ -335,17 +338,17 @@ namespace OpenCNCPilot
 				CheckBoxEnableJog.IsChecked = false;
 			CheckBoxEnableJog.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 
-			ButtonEditSimplify.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
-			ButtonEditArcToLines.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
-			ButtonEditSplit.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
+			//ButtonEditSimplify.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
+			//ButtonEditArcToLines.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
+			//ButtonEditSplit.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
 
-			ModelTool.Visible = machine.Connected;
+			//ModelTool.Visible = machine.Connected;
 
-			ButtonSyncBuffer.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+			//ButtonSyncBuffer.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 
-			StackPanelOverrides.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
+			//StackPanelOverrides.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
 
-			UpdateProbeTabButtons();
+			//UpdateProbeTabButtons();
 
 			if (lastMode == Machine.OperatingMode.Manual && machine.Mode == Machine.OperatingMode.SendFile)
 			{
@@ -358,14 +361,14 @@ namespace OpenCNCPilot
 
 			lastMode = machine.Mode;
 
-			groupBoxTLO.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+			//groupBoxTLO.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 
 			ButtonGrblSettings.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 		}
 
 		private void FileRuntimeTimer_Tick(object sender, EventArgs e)
 		{
-			RunFileRunTime.Text = ((DateTime.Now - LastFileStart) + FileRunTime).ToString(@"hh\:mm\:ss");
+			//RunFileRunTime.Text = ((DateTime.Now - LastFileStart) + FileRunTime).ToString(@"hh\:mm\:ss");
 		}
 
 		private void Machine_ConnectionStateChanged()
@@ -373,22 +376,22 @@ namespace OpenCNCPilot
 			ButtonConnect.Visibility = machine.Connected ? Visibility.Collapsed : Visibility.Visible;
 			ButtonDisconnect.Visibility = machine.Connected ? Visibility.Visible : Visibility.Collapsed;
 
-			ButtonSettings.IsEnabled = !machine.Connected;
+			//ButtonSettings.IsEnabled = !machine.Connected;
 		}
 
 		private void Machine_OverrideChanged()
 		{
-			ButtonFeedRateOvr.Content = $"Feed: {machine.FeedOverride}%";
-			RunFeedOvr.Text = $"{machine.FeedOverride}%";
-			RunRapidOvr.Text = $"{machine.RapidOverride}%";
+			//ButtonFeedRateOvr.Content = $"Feed: {machine.FeedOverride}%";
+			//RunFeedOvr.Text = $"{machine.FeedOverride}%";
+			//RunRapidOvr.Text = $"{machine.RapidOverride}%";
 		}
 
 		private void Machine_PinStateChanged()
 		{
-			LabelStateLimitX.Visibility = machine.PinStateLimitX ? Visibility.Visible : Visibility.Collapsed;
-			LabelStateLimitY.Visibility = machine.PinStateLimitY ? Visibility.Visible : Visibility.Collapsed;
-			LabelStateLimitZ.Visibility = machine.PinStateLimitZ ? Visibility.Visible : Visibility.Collapsed;
-			LabelStateProbe.Visibility = machine.PinStateProbe ? Visibility.Visible : Visibility.Collapsed;
+			//LabelStateLimitX.Visibility = machine.PinStateLimitX ? Visibility.Visible : Visibility.Collapsed;
+			//LabelStateLimitY.Visibility = machine.PinStateLimitY ? Visibility.Visible : Visibility.Collapsed;
+			//LabelStateLimitZ.Visibility = machine.PinStateLimitZ ? Visibility.Visible : Visibility.Collapsed;
+			//LabelStateProbe.Visibility = machine.PinStateProbe ? Visibility.Visible : Visibility.Collapsed;
 		}
 	}
 }
