@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 			  xmlns:util="clr-namespace:OpenCNCPilot.Util"
 			  mc:Ignorable="d"
 		AllowDrop="True"
@@ -10,12 +11,16 @@
 		DragEnter="Window_DragEnter"
 		DataContext="{Binding RelativeSource={RelativeSource Self}}"
         PreviewKeyDown="Window_PreviewKeyDown"
-        Title="SPIPware" Closing="Window_Closing" d:DesignWidth="1170" d:DesignHeight="558">
+        Title="SPIPware" Closing="Window_Closing" d:DesignWidth="1508" d:DesignHeight="727">
 	<Window.Resources>
 		<ResourceDictionary Source="MainWindow.Resources.xaml"/>
 	</Window.Resources>
 
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="9*"/>
+			<ColumnDefinition Width="1153*"/>
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*"/>
@@ -28,7 +33,7 @@
 		</Grid.ColumnDefinitions>-->
 
 
-		<Ribbon SelectedIndex="0">
+		<Ribbon SelectedIndex="0" Grid.ColumnSpan="2">
 			<Ribbon.HelpPaneContent>
 				<RibbonButton Label="Help">
 					<StackPanel>
@@ -59,7 +64,7 @@
 
 			</Ribbon.ApplicationMenu>
 			<RibbonTab Header="Control">
-				<RibbonGroup Header="Machine Connection">
+				<RibbonGroup Header="Connection Configuration">
 					<StackPanel Orientation="Horizontal">
 						<StackPanel Orientation="Vertical" Margin="0,0,5,5">
 							<!--<Button Name="ButtonSettings" Content="Settings" Style="{StaticResource styleButton}" Click="ButtonSettings_Click"/>-->
@@ -69,17 +74,22 @@
 						<StackPanel Orientation="Vertical">
 
 							<StackPanel Orientation="Horizontal">
-								<Label Content="Serial Port" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+								<Label Content="Serial Port:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
 								<ComboBox Name="SerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="ComboBox_DropDownOpened">
 
 								</ComboBox>
+								
 							</StackPanel>
-
 							<StackPanel Orientation="Horizontal">
-								<Label Content="BaudRate" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-								<TextBox Margin="4,2,5,2"  Text="{util:SettingBinding SerialPortBaud}"/>
+								<Label Content="Camera:    " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+								<ComboBox Name="m_CameraList" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="ComboBox_DropDownOpened">
+
+								</ComboBox>
 
 							</StackPanel>
+						
+
+							
 
 
 
@@ -98,49 +108,111 @@
 
 					</StackPanel>
 				</RibbonGroup>
-				<RibbonGroup Header="Camera Connection">
-					<StackPanel Orientation="Vertical">
-						<RibbonComboBox Label="Camera:"  ></RibbonComboBox>
-						<StackPanel Orientation="Horizontal">
-							<RibbonButton Content="He" Style="{StaticResource styleButton}">
-
-							</RibbonButton>
-						</StackPanel>
-					</StackPanel>
-				</RibbonGroup>
+				
 				<RibbonGroup Header="Commands">
-					<Button Name="ButtonSoftReset" Click="ButtonSoftReset_Click" Content="Soft Reset" Style="{StaticResource styleButton}" Margin="5,5,0,5"/>
-					<Button Name="ButtonCycleStart" Click="ButtonCycleStart_Click" Content="Start" Style="{StaticResource styleButton}" Margin="5,5,0,5"/>
+					<StackPanel Orientation="Horizontal">
+						<Button  Name="ButtonManualResetG10" Click="ButtonManualResetG10_Click" Style="{StaticResource styleButton}"  
+									    ToolTip="Reset Work Coordinate System (G54) with 'G10 L2 P0 X0 Y0 Z0'&#x0a;This button will NOT automatically send the command" Height="50">
+							<Image Source="Resources/Images/reset-icon.png" Style="{StaticResource ImageEnabled}">
+								
+							</Image>
+						</Button>
+						
+						<!--<Button Name="ButtonCycleStart" Click="ButtonCycleStart_Click" Content="Start" Style="{StaticResource styleButton}" Margin="5,5,0,5"/>-->
+						<Button IsEnabled="True" Name="ButtonUnlock" Style="{StaticResource styleButton}" Height="50">
+							<Image Source="Resources/Images/unlock-icon.png" Style="{StaticResource ImageEnabled}">
+
+							</Image>
+						</Button>
+						<Button Name="ButtonHome" Style="{StaticResource styleButton}" Height="50">
+							<Image Source="Resources/Images/Home-icon.png" Style="{StaticResource ImageEnabled}">
+
+							</Image>
+						</Button>
+						
+						<Button Name="ButtonStop" Style="{StaticResource styleButton}" Height="50" >
+							<Image Source="Resources/Images/stop-icon.png" Style="{StaticResource ImageEnabled}">
+
+							</Image>
+						</Button>
+					</StackPanel>
+					
 				</RibbonGroup>
 
 				<RibbonGroup Header="Machine Status">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text=" X: " VerticalAlignment="Center"/>
-						<TextBox Name="LabelPosX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
-						<TextBlock Text=" Y: " VerticalAlignment="Center"/>
-						<TextBox Name="LabelPosY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
-						<!--<TextBlock Text=" Z: " VerticalAlignment="Center"/>
+					<StackPanel Orientation="Vertical">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="   X: " VerticalAlignment="Center"/>
+							<TextBox Name="LabelPosX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+							<TextBlock Text="    Y: " VerticalAlignment="Center"/>
+							<TextBox Name="LabelPosY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+							<!--<TextBlock Text=" Z: " VerticalAlignment="Center"/>
 						<TextBox Name="LabelPosZ" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>-->
-						<TextBlock Text="   MX: " VerticalAlignment="Center"/>
-						<TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
-						<TextBlock Text=" MY: " VerticalAlignment="Center"/>
-						<TextBox Name="LabelPosMY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
-						<!--<TextBlock Text=" MZ: " VerticalAlignment="Center"/>
+							
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="MX: " VerticalAlignment="Center"/>
+							<TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+							<TextBlock Text=" MY: " VerticalAlignment="Center"/>
+							<TextBox Name="LabelPosMY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+							<!--<TextBlock Text=" MZ: " VerticalAlignment="Center"/>
 						<TextBox Name="LabelPosMZ" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>-->
-						<!--<TextBlock Text=" F:" VerticalAlignment="Center"/>-->
-						<!--<TextBlock Name="LabelFeedRateRealtime" Width="45" Text="0" VerticalAlignment="Center"/>-->
+							<!--<TextBlock Text=" F:" VerticalAlignment="Center"/>-->
+							<!--<TextBlock Name="LabelFeedRateRealtime" Width="45" Text="0" VerticalAlignment="Center"/>-->
+						</StackPanel>
+
 					</StackPanel>
-					<Button Name="ButtonUnit" Content="Metric" Click="ButtonUnit_Click" Style="{StaticResource styleButton}" Margin="5,5,0,5"  ToolTip="Unit System - Click to Toggle"/>
+					
+					
 					<Button Name="ButtonStatus" Content="Disconnected" Click="ButtonStatus_Click" Style="{StaticResource styleButton}" Margin="5,5,0,5"  ToolTip="Machine Status - Click to send $X to unlock"/>
-					<Button Name="ButtonDistanceMode" Content="Absolute" Click="ButtonDistanceMode_Click" Style="{StaticResource styleButton}" Margin="5,5,0,5" ToolTip="Distance Mode - Click to Toggle"/>
+					
 
 				</RibbonGroup>
+				<RibbonGroup Header="Plate Calibraton">
+					<StackPanel Orientation="Horizontal">
+						<Label Content="First Plate Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+						<!--<ComboBox Name="Box_FirstPlateOffset" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="ComboBox_DropDownOpened">
+							
+						</ComboBox>-->
+						<xctk:IntegerUpDown Name="udPlateOffset" Value="{util:SettingBinding PlateOffset}" Width="65" Margin="5" />
+						<Button Name="btnTestFirst" Content="Test" Style="{StaticResource styleButton}" />
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label Content="Between Plates:  " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+						<!--<ComboBox Name="Box_BetweenPlateDistance" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="ComboBox_DropDownOpened">
+
+						</ComboBox>-->
+						<xctk:IntegerUpDown Name="udBetweenDistance" Value="{util:SettingBinding BetweenDistance}" Width="65" Margin="5" />
+						<Button Name="btnTestBetween" Content="Test" Style="{StaticResource styleButton}" />
+					</StackPanel>
+				</RibbonGroup>
+				<RibbonGroup Header="Camera Configucration">
+					<StackPanel Orientation="Vertical">
+
+						<StackPanel Orientation="Vertical">
+							
+							<StackPanel Orientation="Horizontal">
+								<!--<TextBlock Text="Path: " VerticalAlignment="Center"/>-->
+								<Button Name="btnCameraSettingPathSelect" Content="File" Style="{StaticResource styleButton}" Width="50" Margin=" 5" />
+								
+								<TextBox Name="tbCameraConfigFile" Width="150" Text="{util:SettingBinding CameraSettingsPath}"  VerticalContentAlignment="Center" Height="22"/>
+
+							</StackPanel>
+							<!--<StackPanel Orientation="Horizontal">
+								<TextBlock VerticalAlignment="Center">Live View:</TextBlock>
+								<Button Content="Off" Style="{StaticResource styleButton}" Width="40" Margin=" 5" />
+							</StackPanel>-->
+							
+						</StackPanel>
+					</StackPanel>
+				</RibbonGroup>
+
 			</RibbonTab>
-			<RibbonTab Header="Calibration">
+			<RibbonTab Header="Advanced">
 				<RibbonGroup Header="G-Code Terminal">
 					<StackPanel>
 						<Grid Margin="3,0,3,0">
-							<TextBox Name="TextBoxManual" Height="23" HorizontalAlignment="Stretch" PreviewKeyDown="TextBoxManual_PreviewKeyDown" TextChanged="TextBoxManual_TextChanged" Margin="0,5,41,5"/>
+							<TextBox Name="TextBoxManual" Height="23" Width="150" HorizontalAlignment="Stretch" PreviewKeyDown="TextBoxManual_PreviewKeyDown" TextChanged="TextBoxManual_TextChanged" Margin="0,5,41,5"/>
 							<Button Name="ButtonManualSend" Click="ButtonManualSend_Click" Style="{StaticResource styleButton}" Height="23" Content="Send" HorizontalAlignment="Right"/>
 						</Grid>
 						<TextBox Name="TextBoxPreview" IsReadOnly="True" Margin="3,0,3,3" Background="LightYellow"/>
@@ -155,8 +227,9 @@
 									    ToolTip="Set Position to (0,0,0) with 'G10 L2 P0 XYZ' where XYZ are the current machine coordinates,&#x0a;this has the advantage that it will be persistent through a reset&#x0a;This button will NOT automatically send the command"/>
 						<Button Name="ButtonManualSetG92Zero" Click="ButtonManualSetG92Zero_Click" Style="{StaticResource styleButton}" Content="Zero (G92)"
 									    ToolTip="Set Position to (0,0,0) with 'G92 X0 Y0 Z0',&#x0a;this has the disadvantage that it will NOT be persistent through a reset&#x0a;This button will NOT automatically send the command"/>
-						<Button Name="ButtonManualResetG10" Click="ButtonManualResetG10_Click" Style="{StaticResource styleButton}" Content="Reset (G10)"
-									    ToolTip="Reset Work Coordinate System (G54) with 'G10 L2 P0 X0 Y0 Z0'&#x0a;This button will NOT automatically send the command"/>
+						<Button Name="ButtonUnit" Content="Metric" Click="ButtonUnit_Click" Style="{StaticResource styleButton}" Margin="5,5,0,5"  ToolTip="Unit System - Click to Toggle"/>
+						<Button Name="ButtonDistanceMode" Content="Absolute" Click="ButtonDistanceMode_Click" Style="{StaticResource styleButton}" Margin="5,5,0,5" ToolTip="Distance Mode - Click to Toggle"/>
+						<Button Name="ButtonSoftReset" Click="ButtonSoftReset_Click" Content="Soft Reset" Style="{StaticResource styleButton}" Margin="5,5,0,5"/>
 					</StackPanel>
 				</RibbonGroup>
 				<RibbonGroup Header="Keyboard Jogging">
@@ -187,21 +260,28 @@
 							<TextBox Name="TextBoxJogDistanceFine" Text="{util:SettingBinding JogDistanceCtrl}" VerticalContentAlignment="Center"  HorizontalAlignment="Right" Height="23" Margin="0,62,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>
 						</Grid>
 					</GroupBox>
+					
 				</RibbonGroup>
 				<RibbonGroup Header="GRBL Calibration">
 					<StackPanel Orientation="Horizontal">
 						<Button Content="GRBL Settings" Style="{StaticResource styleButton}" Click="ShowGrblSettings_Click" Name="ButtonGrblSettings"/>
+						<StackPanel Orientation="Horizontal">
+							<Label Content="BaudRate" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+							<TextBox Margin="4,2,5,2"  Text="{util:SettingBinding SerialPortBaud}"/>
+
+						</StackPanel>
 					</StackPanel>
 				</RibbonGroup>
+
 			</RibbonTab>
 
 
 
 		</Ribbon>
 
-		<Grid Grid.Row="1">
+		<Grid Grid.Row="1" Grid.ColumnSpan="2">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="450" />
 				<ColumnDefinition Width="*"/>
 
 			</Grid.ColumnDefinitions>
@@ -223,17 +303,118 @@
 							<Setter Property="Padding" Value="3" />
 						</Style>
 					</TabControl.Resources>
-					<TabItem Header="Automatic">
-						<Label Content="Content goes here..." />
+					<TabItem Header="Imaging">
+						<StackPanel Orientation="Vertical">
+
+							<GroupBox>
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Acquisition</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
+									<TextBlock VerticalAlignment="Center">Total Plates:</TextBlock>
+									<xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates}" Name="udTotalPlates" Margin="5" />
+									
+									<TextBlock VerticalAlignment="Center">Current Plate:</TextBlock>
+									<xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CurrentPlate}" Name="udCurrentPlate"  Margin="5" />
+									<!--<TextBlock VerticalAlignment="Center">Cycle Delay (s):</TextBlock>
+									<xctk:IntegerUpDown Name="UpDown" Margin="5" />-->
+									<!--<Button Margin="5"	Padding="5" Content="Single Cycle"></Button>-->
+									<Button Margin="5"	Padding="5" Name="btnRunCycle" Content="Run Cycle"></Button>
+									<!--<Button Margin="5"	Padding="5" Content="Stop Cycle"></Button>-->
+									<!-- Make combo stop start button-->
+									
+									
+
+								</StackPanel>
+							</GroupBox>
+							
+							<GroupBox>
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Manual Control</TextBlock>
+								</GroupBox.Header>
+								<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+									<!--<TextBlock>Goto Plate</TextBlock>-->
+									<!--<Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Width="300" Margin="5" />-->
+									<TextBlock VerticalAlignment="Center" Margin="5">Location: </TextBlock>
+									<xctk:IntegerUpDown Minimum="0" Value= "{util:SettingBinding CurrentLocation}" Name="udCurrentLocation" Margin="5" />
+									<Button Margin="5" Padding="5" Content="Move" Name="btnMove"></Button>
+									<Button Margin="5" Padding="5" Content="Capture Image" Name="btnCapture"></Button>
+								</StackPanel>
+							</GroupBox>
+							<!--<GroupBox>
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Timelapse Imaging</TextBlock>
+								</GroupBox.Header>
+							</GroupBox>-->
+							<GroupBox >
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Plate Configuration</TextBlock>
+								</GroupBox.Header>
+								<Grid Name="PlateGrid">
+									<Grid.RowDefinitions>
+										<RowDefinition Height="*" />
+										<RowDefinition Height="Auto"/>
+									</Grid.RowDefinitions>
+									
+
+									<StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+										<!--<TextBlock>Goto Plate</TextBlock>-->
+										<!--<Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Width="300" Margin="5" />-->
+										<TextBlock VerticalAlignment="Center" Margin="5">Number of Locations:</TextBlock>
+										<xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" />
+										<CheckBox IsChecked="{util:SettingBinding SelectAll}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center"></CheckBox>
+
+									</StackPanel>
+									<StackPanel Grid.Row="1" Height="50">
+										
+									</StackPanel>
+
+								</Grid>
+								
+							</GroupBox>
+							<GroupBox>
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">File Configuration</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Orientation="Vertical">
+									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+
+										<TextBlock VerticalAlignment="Center" Margin="5">Root Folder:</TextBlock>
+										<Button Name="btnSaveFolderSelect" Margin="5" Padding="5" Content="Select"></Button>
+
+
+										<TextBox  Name="tbFolderPath" Width="265" Text="{util:SettingBinding SaveFolderPath}" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+									</StackPanel>
+									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+
+										<TextBlock VerticalAlignment="Center" Margin="5">Name:</TextBlock>
+										<CheckBox IsChecked="{util:SettingBinding CurrentPlateSave }" VerticalAlignment="Center" Content="Current Plate+"></CheckBox>
+										<CheckBox VerticalAlignment="Center" Content="DateTime+" IsChecked="True" IsEnabled="False"></CheckBox>
+										<TextBox  Name="tbFileName" Width="125" Text="{util:SettingBinding FileName}" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+										<ComboBox SelectedIndex="0" Height="22">
+											<ComboBoxItem Content=".png"></ComboBoxItem>
+										</ComboBox>
+									
+									</StackPanel>
+								</StackPanel>
+								
+							</GroupBox>
+
+
+						</StackPanel>
+						
 					</TabItem>
-					<TabItem Header="Manual" />
-					<TabItem Header="Time Lapse" />
+					<TabItem Header="Review" >
+						<TextBlock>Coming Soon...</TextBlock>
+					</TabItem>
+				
+					<!--<TabItem Header="Time Lapse" />-->
 				</TabControl>
 			</DockPanel>
 			<Grid Grid.Column="1">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
-				
+
 					<RowDefinition Height="Auto"/>
 
 				</Grid.RowDefinitions>

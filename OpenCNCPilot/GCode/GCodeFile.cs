@@ -1,7 +1,7 @@
 ﻿using OpenCNCPilot.GCode.GCodeCommands;
 using System.Collections.Generic;
 using System.Linq;
-using HelixToolkit.Wpf;
+//using HelixToolkit.Wpf;
 using System.Windows.Media.Media3D;
 using OpenCNCPilot.Properties;
 using System.Globalization;
@@ -123,52 +123,52 @@ namespace OpenCNCPilot.GCode
 			File.WriteAllLines(path, GetGCode());
 		}
 
-		public void GetModel(LinesVisual3D line, LinesVisual3D rapid, LinesVisual3D arc)
-		{
-			var sw = System.Diagnostics.Stopwatch.StartNew();
+		//public void GetModel(LinesVisual3D line, LinesVisual3D rapid, LinesVisual3D arc)
+		//{
+		//	var sw = System.Diagnostics.Stopwatch.StartNew();
 
-			Point3DCollection linePoints = new Point3DCollection();
-			Point3DCollection rapidPoints = new Point3DCollection();
-			Point3DCollection arcPoints = new Point3DCollection();
+		//	Point3DCollection linePoints = new Point3DCollection();
+		//	Point3DCollection rapidPoints = new Point3DCollection();
+		//	Point3DCollection arcPoints = new Point3DCollection();
 
-			foreach (Command c in Toolpath)
-			{
-				var l = c as Line;
+		//	foreach (Command c in Toolpath)
+		//	{
+		//		var l = c as Line;
 
-				if (l != null)
-				{
-					if (l.Rapid)
-					{
-						rapidPoints.Add(l.Start.ToPoint3D());
-						rapidPoints.Add(l.End.ToPoint3D());
-					}
-					else
-					{
-						linePoints.Add(l.Start.ToPoint3D());
-						linePoints.Add(l.End.ToPoint3D());
-					}
-					continue;
-				}
+		//		if (l != null)
+		//		{
+		//			if (l.Rapid)
+		//			{
+		//				rapidPoints.Add(l.Start.ToPoint3D());
+		//				rapidPoints.Add(l.End.ToPoint3D());
+		//			}
+		//			else
+		//			{
+		//				linePoints.Add(l.Start.ToPoint3D());
+		//				linePoints.Add(l.End.ToPoint3D());
+		//			}
+		//			continue;
+		//		}
 
-				var a = c as Arc;
+		//		var a = c as Arc;
 
-				if (a != null)
-				{
-					foreach (Motion sub in a.Split(Settings.Default.ViewportArcSplit))
-					{
-						arcPoints.Add(sub.Start.ToPoint3D());
-						arcPoints.Add(sub.End.ToPoint3D());
-					}
-				}
-			}
+		//		if (a != null)
+		//		{
+		//			foreach (Motion sub in a.Split(Settings.Default.ViewportArcSplit))
+		//			{
+		//				arcPoints.Add(sub.Start.ToPoint3D());
+		//				arcPoints.Add(sub.End.ToPoint3D());
+		//			}
+		//		}
+		//	}
 
-			line.Points = linePoints;
-			rapid.Points = rapidPoints;
-			arc.Points = arcPoints;
+		//	line.Points = linePoints;
+		//	rapid.Points = rapidPoints;
+		//	arc.Points = arcPoints;
 
-			sw.Stop();
-			Console.WriteLine("Generating the Toolpath Model took {0} ms", sw.ElapsedMilliseconds);
-		}
+		//	sw.Stop();
+		//	Console.WriteLine("Generating the Toolpath Model took {0} ms", sw.ElapsedMilliseconds);
+		//}
 
 		public List<string> GetGCode()
 		{
@@ -341,34 +341,34 @@ namespace OpenCNCPilot.GCode
 			return new GCodeFile(newFile);
 		}
 
-		public GCodeFile ApplyHeightMap(HeightMap map)
-		{
-			double segmentLength = Math.Min(map.GridX, map.GridY);
+		//public GCodeFile ApplyHeightMap(HeightMap map)
+		//{
+		//	double segmentLength = Math.Min(map.GridX, map.GridY);
 
-			List<Command> newToolPath = new List<Command>();
+		//	List<Command> newToolPath = new List<Command>();
 
-			foreach (Command command in Toolpath)
-			{
-				if (command is Motion)
-				{
-					Motion m = (Motion)command;
+		//	foreach (Command command in Toolpath)
+		//	{
+		//		if (command is Motion)
+		//		{
+		//			Motion m = (Motion)command;
 
-					foreach (Motion subMotion in m.Split(segmentLength))
-					{
-						subMotion.Start.Z += map.InterpolateZ(subMotion.Start.X, subMotion.Start.Y);
-						subMotion.End.Z += map.InterpolateZ(subMotion.End.X, subMotion.End.Y);
+		//			foreach (Motion subMotion in m.Split(segmentLength))
+		//			{
+		//				subMotion.Start.Z += map.InterpolateZ(subMotion.Start.X, subMotion.Start.Y);
+		//				subMotion.End.Z += map.InterpolateZ(subMotion.End.X, subMotion.End.Y);
 
-						newToolPath.Add(subMotion);
-					}
-				}
-				else
-				{
-					newToolPath.Add(command);
-					continue;
-				}
-			}
+		//				newToolPath.Add(subMotion);
+		//			}
+		//		}
+		//		else
+		//		{
+		//			newToolPath.Add(command);
+		//			continue;
+		//		}
+		//	}
 
-			return new GCodeFile(newToolPath);
-		}
+		//	return new GCodeFile(newToolPath);
+		//}
 	}
 }

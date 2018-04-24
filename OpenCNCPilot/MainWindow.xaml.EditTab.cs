@@ -14,31 +14,31 @@ namespace OpenCNCPilot
 			machine.SetFile(ToolPath.GetGCode().ToArray());
 		}
 
-		private void ButtonEditApplyHeightMap_Click(object sender, RoutedEventArgs e)
-		{
-			if (machine.Mode == Machine.OperatingMode.SendFile)
-				return;
+		//private void ButtonEditApplyHeightMap_Click(object sender, RoutedEventArgs e)
+		//{
+		//	if (machine.Mode == Machine.OperatingMode.SendFile)
+		//		return;
 
-			if(Map == null || Map.NotProbed.Count > 0)
-			{
-				MessageBox.Show("HeightMap is not ready");
-				return;
-			}
+		//	if(Map == null || Map.NotProbed.Count > 0)
+		//	{
+		//		MessageBox.Show("HeightMap is not ready");
+		//		return;
+		//	}
 
-			try
-			{
-				machine.SetFile(ToolPath.ApplyHeightMap(Map).GetGCode());
-				Machine_OperatingMode_Changed();
-			}
-			catch(IndexOutOfRangeException)
-			{
-                MessageBox.Show("The Toolpath is not contained in the HeightMap");	
-			}
-			catch(Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-		}
+		//	try
+		//	{
+		//		machine.SetFile(ToolPath.ApplyHeightMap(Map).GetGCode());
+		//		Machine_OperatingMode_Changed();
+		//	}
+		//	catch(IndexOutOfRangeException)
+		//	{
+  //              MessageBox.Show("The Toolpath is not contained in the HeightMap");	
+		//	}
+		//	catch(Exception ex)
+		//	{
+		//		MessageBox.Show(ex.Message);
+		//	}
+		//}
 
 		private void ButtonEditArcToLines_Click(object sender, RoutedEventArgs e)
 		{

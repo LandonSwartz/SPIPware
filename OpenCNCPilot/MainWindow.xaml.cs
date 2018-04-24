@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using SynchronousGrab;
 
 namespace OpenCNCPilot
 {
@@ -22,10 +23,11 @@ namespace OpenCNCPilot
 		SaveFileDialog saveFileDialogHeightMap = new SaveFileDialog() { Filter = Constants.FileFilterHeightMap };
 
 		GCodeFile ToolPath { get; set; } = GCodeFile.Empty;
-		HeightMap Map { get; set; }
+		//HeightMap Map { get; set; }
 
-		GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
-
+        private static VimbaHelper m_VimbaHelper = null;
+        GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
+        private CameraControl  cameraControl = new CameraControl();
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		private void RaisePropertyChanged(string propertyName)
@@ -35,6 +37,7 @@ namespace OpenCNCPilot
 
 		public MainWindow()
 		{
+
   			AppDomain.CurrentDomain.UnhandledException += UnhandledException;
 			InitializeComponent();
             updateSerialPortComboBox();
@@ -82,9 +85,34 @@ namespace OpenCNCPilot
 			CheckBoxUseExpressions_Changed(null, null);
 
 			UpdateCheck.CheckForUpdate();
-		}
+            cameraControl.m_CameraList = m_CameraList;
+            try
+            {
+                //Start up Vimba API
+                VimbaHelper vimbaHelper = new VimbaHelper();
+                vimbaHelper.Startup(cameraControl.OnCameraListChanged);
+                //Text += String.Format(" Vimba .NET API Version {0}", vimbaHelper.GetVersion());
+                m_VimbaHelper = vimbaHelper;
+                cameraControl.VimbaHelper = m_VimbaHelper;
 
-		public Vector3 LastProbePosMachine { get; set; }
+
+                try
+                {
+                    cameraControl.UpdateCameraList();
+                }
+                catch (Exception exception)
+                {
+                    cameraControl.LogError("Could not update camera list. Reason: " + exception.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                cameraControl.LogError("Could not startup Vimba API. Reason: " + exception.Message);
+            }
+        
+    }
+       
+        public Vector3 LastProbePosMachine { get; set; }
 		public Vector3 LastProbePosWork { get; set; }
 
 		private void Machine_ProbeFinished_UserOutput(Vector3 position, bool success)
@@ -115,7 +143,7 @@ namespace OpenCNCPilot
 				System.IO.File.WriteAllText("OpenCNCPilot_Crash_Log.txt", info);
 			}
 			catch { }
-
+           
 			Environment.Exit(1);
 		}
 
@@ -190,7 +218,7 @@ namespace OpenCNCPilot
 
 					if (file.EndsWith(".hmap"))
 					{
-						if (machine.Mode == Machine.OperatingMode.Probe || Map != null)
+						if (machine.Mode == Machine.OperatingMode.Probe )
 							return;
 
 						//OpenHeightMap(file);
@@ -225,7 +253,7 @@ namespace OpenCNCPilot
 
 					if (file.EndsWith(".hmap"))
 					{
-						if (machine.Mode != Machine.OperatingMode.Probe && Map == null)
+						if (machine.Mode != Machine.OperatingMode.Probe )
 						{
 							e.Effects = DragDropEffects.Copy;
 							return;

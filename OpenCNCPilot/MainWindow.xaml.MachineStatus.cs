@@ -317,7 +317,7 @@ namespace OpenCNCPilot
 			//ButtonFeedRateOvr.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
 
 			//ButtonFeedHold.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
-			ButtonCycleStart.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
+			//ButtonCycleStart.IsEnabled = machine.Mode != Machine.OperatingMode.Disconnected;
 			ButtonSoftReset.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 
 			//ButtonSettings.IsEnabled = machine.Mode == Machine.OperatingMode.Disconnected;

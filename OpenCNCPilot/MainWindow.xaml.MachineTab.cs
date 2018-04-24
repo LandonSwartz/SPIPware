@@ -54,7 +54,21 @@ namespace OpenCNCPilot
 			}
 
 			settingsWindow.Close();
-			Application.Current.Shutdown();
+            if (null != m_VimbaHelper)
+            {
+                try
+                {
+                    //Shutdown Vimba API when application exits
+                    m_VimbaHelper.Shutdown();
+
+                    m_VimbaHelper = null;
+                }
+                catch (Exception exception)
+                {
+                    cameraControl.LogError("Could not shutdown Vimba API. Reason: " + exception.Message);
+                }
+            }
+            Application.Current.Shutdown();
 		}
 
 		private void ButtonSyncBuffer_Click(object sender, RoutedEventArgs e)
