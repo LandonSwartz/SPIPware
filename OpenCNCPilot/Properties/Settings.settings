@@ -171,5 +171,17 @@ G92Z0;</Value>
     <Setting Name="CurrentLocation" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="CameraName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Mako</Value>
+    </Setting>
+    <Setting Name="PrimaryAxis" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">X</Value>
+    </Setting>
+    <Setting Name="Speed" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+    <Setting Name="CameraState" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Not Ready</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

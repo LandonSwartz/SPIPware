@@ -39,15 +39,36 @@ namespace OpenCNCPilot
 		private void Machine_StatusChanged()
 		{
 			ButtonStatus.Content = machine.Status;
-
-			if (machine.Status == "Alarm")
-				ButtonStatus.Foreground = Brushes.Red;
-			else if(machine.Status == "Hold")
-				ButtonStatus.Foreground = Brushes.Yellow;
-			else if (machine.Status == "Run")
-				ButtonStatus.Foreground = Brushes.Green;
-			else
-				ButtonStatus.Foreground = Brushes.Black;
+            checkCycle();
+            if (machine.Status == "Alarm")
+            {
+                stopCycle();
+                firstRun = true;
+                ButtonStatus.Foreground = Brushes.Red;
+                CameraControl.runningCycle = false;
+                cameraControl.firstRun = true;
+            }
+                
+                
+            else if (machine.Status == "Hold")
+            {
+                ButtonStatus.Foreground = Brushes.Yellow;
+            }
+               
+            else if (machine.Status == "Run")
+            {
+                ButtonStatus.Foreground = Brushes.Green;
+            }
+               
+            else if (machine.Status == "Home")
+            {
+                machine.homeMachinePos = (decimal)machine.MachinePosition.X;
+                cameraControl.home = true;
+                cameraControl.firstRun = false;
+                targetLocation = machine.sendMotionCommand(currentIndex);
+            }
+            else
+                ButtonStatus.Foreground = Brushes.Black;
 
 			if (StopRuntimeOnIdle && machine.Status == "Idle")
 			{
@@ -60,17 +81,17 @@ namespace OpenCNCPilot
 
 		private void Machine_PositionUpdateReceived()
 		{
-			//ModelTool.Point1 = (machine.WorkPosition + new Vector3(0, 0, 10)).ToPoint3D();
-			//ModelTool.Point2 = machine.WorkPosition.ToPoint3D();
-
+            //ModelTool.Point1 = (machine.WorkPosition + new Vector3(0, 0, 10)).ToPoint3D();
+            //ModelTool.Point2 = machine.WorkPosition.ToPoint3D();
+            checkCycle();
 			var nfi = Constants.DecimalOutputFormat;
 
 			LabelPosX.Text = machine.WorkPosition.X.ToString("N", nfi);
-			LabelPosY.Text = machine.WorkPosition.Y.ToString("N", nfi);
+			//LabelPosY.Text = machine.WorkPosition.Y.ToString("N", nfi);
 			//LabelPosZ.Text = machine.WorkPosition.Z.ToString("N", nfi);
 
 			LabelPosMX.Text = machine.MachinePosition.X.ToString("N", nfi);
-			LabelPosMY.Text = machine.MachinePosition.Y.ToString("N", nfi);
+			//LabelPosMY.Text = machine.MachinePosition.Y.ToString("N", nfi);
 			//LabelPosMZ.Text = machine.MachinePosition.Z.ToString("N", nfi);
 
 			//LabelFeedRateRealtime.Text = ((int)Math.Round(machine.FeedRateRealtime)).ToString();
@@ -310,7 +331,10 @@ namespace OpenCNCPilot
 
 		private void Machine_OperatingMode_Changed()
 		{
-			ButtonDistanceMode.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+            ButtonStop.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+            ButtonHome.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+            ButtonUnlock.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+            ButtonDistanceMode.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonUnit.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			//ButtonArcPlane.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonStatus.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;

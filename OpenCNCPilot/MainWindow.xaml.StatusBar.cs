@@ -15,10 +15,10 @@ namespace OpenCNCPilot
 			machine.FeedHold();
 		}
 
-		private void ButtonCycleStart_Click(object sender, RoutedEventArgs e)
-		{
-			machine.CycleStart();
-		}
+		//private void ButtonCycleStart_Click(object sender, RoutedEventArgs e)
+		//{
+		//	machine.CycleStart();
+		//}
 
 		private void ButtonSoftReset_Click(object sender, RoutedEventArgs e)
 		{

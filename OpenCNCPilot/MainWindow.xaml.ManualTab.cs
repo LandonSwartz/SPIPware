@@ -1,5 +1,6 @@
 ﻿using OpenCNCPilot.Communication;
 using OpenCNCPilot.Util;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -101,16 +102,40 @@ namespace OpenCNCPilot
 				}
 			}
 		}
-
+        private void ButtonCaptureImage(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Image capture button clicked");
+            cameraControl.CapSaveImage();
+        }
+        private void ButtonGotoPosition(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Goto button clicked");
+            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocation);
+        }
 		private void ButtonManualSetG10Zero_Click(object sender, RoutedEventArgs e)
 		{
 			if (machine.Mode != Machine.OperatingMode.Manual)
 				return;
 
-			TextBoxManual.Text = $"G10 L2 P0 X(MX) Y(MY) Z(MZ-TLO)";
-			CheckBoxUseExpressions.IsChecked = true;
+			machine.SendLine( $"G10 L2 P0 X(MX) Y(MY) Z(MZ-TLO)");
+			//CheckBoxUseExpressions.IsChecked = true;
 		}
-
+        private void ButtonStop_Click(object sender, RoutedEventArgs e)
+        {
+            machine.SoftReset();
+        }
+        private void ButtonHome_Click(object sender, RoutedEventArgs e)
+        {
+            machine.SendLine("$H");
+        }
+        private void ButtonReset_Click(object sender, RoutedEventArgs e)
+        {
+            machine.SoftReset();
+        }
+        private void ButtonUnlock_Click(object sender, RoutedEventArgs e)
+        {
+            machine.SendLine("$X");
+        }
 		private void ButtonManualSetG92Zero_Click(object sender, RoutedEventArgs e)
 		{
 			if (machine.Mode != Machine.OperatingMode.Manual)

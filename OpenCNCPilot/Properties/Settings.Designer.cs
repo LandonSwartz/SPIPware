@@ -691,5 +691,50 @@ namespace OpenCNCPilot.Properties {
                 this["CurrentLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Mako")]
+        public string CameraName {
+            get {
+                return ((string)(this["CameraName"]));
+            }
+            set {
+                this["CameraName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("X")]
+        public string PrimaryAxis {
+            get {
+                return ((string)(this["PrimaryAxis"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public string Speed {
+            get {
+                return ((string)(this["Speed"]));
+            }
+            set {
+                this["Speed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Not Ready")]
+        public string CameraState {
+            get {
+                return ((string)(this["CameraState"]));
+            }
+            set {
+                this["CameraState"] = value;
+            }
+        }
     }
 }

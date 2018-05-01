@@ -75,16 +75,17 @@
 
 							<StackPanel Orientation="Horizontal">
 								<Label Content="Serial Port:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-								<ComboBox Name="SerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="ComboBox_DropDownOpened">
+								<ComboBox Name="SerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="cbSerialOpen">
 
 								</ComboBox>
 								
 							</StackPanel>
 							<StackPanel Orientation="Horizontal">
 								<Label Content="Camera:    " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-								<ComboBox Name="m_CameraList" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="ComboBox_DropDownOpened">
+								<!--<ComboBox Name="m_CameraList" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding CameraName,Mode=TwoWay}" DropDownOpened="cbCameraOpen">
 
-								</ComboBox>
+								</ComboBox>-->
+								<TextBlock VerticalAlignment="Center" Text="{util:SettingBinding CameraState, Mode=OneWay}"></TextBlock>
 
 							</StackPanel>
 						
@@ -111,7 +112,7 @@
 				
 				<RibbonGroup Header="Commands">
 					<StackPanel Orientation="Horizontal">
-						<Button  Name="ButtonManualResetG10" Click="ButtonManualResetG10_Click" Style="{StaticResource styleButton}"  
+						<Button  Name="ButtonManualResetG10" Click="ButtonReset_Click" Style="{StaticResource styleButton}"  
 									    ToolTip="Reset Work Coordinate System (G54) with 'G10 L2 P0 X0 Y0 Z0'&#x0a;This button will NOT automatically send the command" Height="50">
 							<Image Source="Resources/Images/reset-icon.png" Style="{StaticResource ImageEnabled}">
 								
@@ -119,18 +120,18 @@
 						</Button>
 						
 						<!--<Button Name="ButtonCycleStart" Click="ButtonCycleStart_Click" Content="Start" Style="{StaticResource styleButton}" Margin="5,5,0,5"/>-->
-						<Button IsEnabled="True" Name="ButtonUnlock" Style="{StaticResource styleButton}" Height="50">
+						<Button  Name="ButtonUnlock" Click="ButtonUnlock_Click" Style="{StaticResource styleButton}" Height="50">
 							<Image Source="Resources/Images/unlock-icon.png" Style="{StaticResource ImageEnabled}">
 
 							</Image>
 						</Button>
-						<Button Name="ButtonHome" Style="{StaticResource styleButton}" Height="50">
+						<Button Name="ButtonHome" Click="ButtonHome_Click" Style="{StaticResource styleButton}" Height="50">
 							<Image Source="Resources/Images/Home-icon.png" Style="{StaticResource ImageEnabled}">
 
 							</Image>
 						</Button>
 						
-						<Button Name="ButtonStop" Style="{StaticResource styleButton}" Height="50" >
+						<Button Name="ButtonStop" Click="ButtonStop_Click" Style="{StaticResource styleButton}" Height="50" >
 							<Image Source="Resources/Images/stop-icon.png" Style="{StaticResource ImageEnabled}">
 
 							</Image>
@@ -144,8 +145,8 @@
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="   X: " VerticalAlignment="Center"/>
 							<TextBox Name="LabelPosX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
-							<TextBlock Text="    Y: " VerticalAlignment="Center"/>
-							<TextBox Name="LabelPosY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+							<!--<TextBlock Text="    Y: " VerticalAlignment="Center"/>
+							<TextBox Name="LabelPosY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>-->
 							<!--<TextBlock Text=" Z: " VerticalAlignment="Center"/>
 						<TextBox Name="LabelPosZ" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>-->
 							
@@ -153,8 +154,8 @@
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="MX: " VerticalAlignment="Center"/>
 							<TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
-							<TextBlock Text=" MY: " VerticalAlignment="Center"/>
-							<TextBox Name="LabelPosMY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+							<!--<TextBlock Text=" MY: " VerticalAlignment="Center"/>
+							<TextBox Name="LabelPosMY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>-->
 							<!--<TextBlock Text=" MZ: " VerticalAlignment="Center"/>
 						<TextBox Name="LabelPosMZ" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>-->
 							<!--<TextBlock Text=" F:" VerticalAlignment="Center"/>-->
@@ -192,11 +193,14 @@
 						<StackPanel Orientation="Vertical">
 							
 							<StackPanel Orientation="Horizontal">
-								<!--<TextBlock Text="Path: " VerticalAlignment="Center"/>-->
-								<Button Name="btnCameraSettingPathSelect" Content="File" Style="{StaticResource styleButton}" Width="50" Margin=" 5" />
+								<TextBlock Text="Camera Settings: " VerticalAlignment="Center" />
 								
-								<TextBox Name="tbCameraConfigFile" Width="150" Text="{util:SettingBinding CameraSettingsPath}"  VerticalContentAlignment="Center" Height="22"/>
+								
+								<ComboBox Name="tbCameraConfigFile" Width="150" Text="{util:SettingBinding CameraSettingsPath}"  VerticalContentAlignment="Center" Height="22"/>
 
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+								<Button Name="btnCameraSettingsReload" Content="Refresh Settings" Style="{StaticResource styleButton}" Width="100" Margin=" 5" />
 							</StackPanel>
 							<!--<StackPanel Orientation="Horizontal">
 								<TextBlock VerticalAlignment="Center">Live View:</TextBlock>
@@ -310,6 +314,9 @@
 								<GroupBox.Header >
 									<TextBlock HorizontalAlignment="Center">Acquisition</TextBlock>
 								</GroupBox.Header>
+								<StackPanel Orientation="Vertical">
+									
+								
 								<StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
 									<TextBlock VerticalAlignment="Center">Total Plates:</TextBlock>
 									<xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates}" Name="udTotalPlates" Margin="5" />
@@ -319,12 +326,16 @@
 									<!--<TextBlock VerticalAlignment="Center">Cycle Delay (s):</TextBlock>
 									<xctk:IntegerUpDown Name="UpDown" Margin="5" />-->
 									<!--<Button Margin="5"	Padding="5" Content="Single Cycle"></Button>-->
-									<Button Margin="5"	Padding="5" Name="btnRunCycle" Content="Run Cycle"></Button>
+									
 									<!--<Button Margin="5"	Padding="5" Content="Stop Cycle"></Button>-->
 									<!-- Make combo stop start button-->
 									
 									
 
+								</StackPanel>
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+										<Button Margin="5"	Padding="5" Name="btnRunCycle" Content="Run Cycle" Height="100" Width="200" Click="ButtonStartCycle_Click"></Button>
+									</StackPanel>
 								</StackPanel>
 							</GroupBox>
 							
@@ -337,8 +348,8 @@
 									<!--<Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Width="300" Margin="5" />-->
 									<TextBlock VerticalAlignment="Center" Margin="5">Location: </TextBlock>
 									<xctk:IntegerUpDown Minimum="0" Value= "{util:SettingBinding CurrentLocation}" Name="udCurrentLocation" Margin="5" />
-									<Button Margin="5" Padding="5" Content="Move" Name="btnMove"></Button>
-									<Button Margin="5" Padding="5" Content="Capture Image" Name="btnCapture"></Button>
+									<Button Margin="5" Padding="5" Content="Move" Name="btnMove" Click="ButtonGotoPosition"></Button>
+									<Button Margin="5" Padding="5" Content="Capture Image" Name="btnCapture" Click="ButtonCaptureImage"></Button>
 								</StackPanel>
 							</GroupBox>
 							<!--<GroupBox>
@@ -361,11 +372,11 @@
 										<!--<TextBlock>Goto Plate</TextBlock>-->
 										<!--<Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Width="300" Margin="5" />-->
 										<TextBlock VerticalAlignment="Center" Margin="5">Number of Locations:</TextBlock>
-										<xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" />
-										<CheckBox IsChecked="{util:SettingBinding SelectAll}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center"></CheckBox>
+										<xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" ValueChanged="updatePlateClick"  />
+										<CheckBox IsChecked="{util:SettingBinding SelectAll}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" ></CheckBox>
 
 									</StackPanel>
-									<StackPanel Grid.Row="1" Height="50">
+									<StackPanel Name="spCheckboxes" Grid.Row="1" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
 										
 									</StackPanel>
 
@@ -380,7 +391,7 @@
 									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
 
 										<TextBlock VerticalAlignment="Center" Margin="5">Root Folder:</TextBlock>
-										<Button Name="btnSaveFolderSelect" Margin="5" Padding="5" Content="Select"></Button>
+										<Button Name="btnSaveFolder" Margin="5" Padding="5" Content="Select" Click="BtnSaveFolderOpen_Click"></Button>
 
 
 										<TextBox  Name="tbFolderPath" Width="265" Text="{util:SettingBinding SaveFolderPath}" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
@@ -390,7 +401,7 @@
 										<TextBlock VerticalAlignment="Center" Margin="5">Name:</TextBlock>
 										<CheckBox IsChecked="{util:SettingBinding CurrentPlateSave }" VerticalAlignment="Center" Content="Current Plate+"></CheckBox>
 										<CheckBox VerticalAlignment="Center" Content="DateTime+" IsChecked="True" IsEnabled="False"></CheckBox>
-										<TextBox  Name="tbFileName" Width="125" Text="{util:SettingBinding FileName}" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+										<TextBox  Name="tbFileName" Width="125" Text="{util:SettingBinding FileName}" VerticalContentAlignment="Center" Height="22"/>
 										<ComboBox SelectedIndex="0" Height="22">
 											<ComboBoxItem Content=".png"></ComboBoxItem>
 										</ComboBox>
@@ -418,7 +429,7 @@
 					<RowDefinition Height="Auto"/>
 
 				</Grid.RowDefinitions>
-				<Image Grid.Row="0" Stretch="Uniform" Source="Resources/Images/SunBearLogo.png" VerticalAlignment="Top" HorizontalAlignment="Center">
+				<Image Name="m_PictureBox" Grid.Row="0" Stretch="Uniform" Source="Resources/Images/SunBearLogo.png" VerticalAlignment="Top" HorizontalAlignment="Center">
 
 
 				</Image>

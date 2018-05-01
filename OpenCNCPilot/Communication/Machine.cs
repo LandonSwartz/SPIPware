@@ -11,6 +11,7 @@ using OpenCNCPilot.GCode;
 using OpenCNCPilot.GCode.GCodeCommands;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Text;
 
 namespace OpenCNCPilot.Communication
 {
@@ -574,8 +575,44 @@ namespace OpenCNCPilot.Communication
 			Sent.Clear();
 			ToSendMacro.Clear();
 		}
+        public Decimal homeMachinePos;
+        private String buildCommand(decimal distance)
+        {
+            
+            StringBuilder sb = new StringBuilder();
+            sb.Append("G90");
+            sb.Append(Properties.Settings.Default.PrimaryAxis);
+            // homeMachinePos
+            //decimal distance = homeMachinePos + Properties.Settings.Default.startDistance + (Properties.Settings.Default.betweenDistance * position) + offset;
+            sb.Append(distance + " ");
+            sb.Append("F" + Properties.Settings.Default.Speed);
+            Console.WriteLine(sb.ToString());
+            return sb.ToString();
+        }
 
-		public void SendLine(string line)
+        public decimal sendMotionCommand(int position, decimal offset)
+        {
+
+
+            decimal distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+
+            SendLine(buildCommand(distance));
+            return distance;
+
+        }
+        public decimal sendMotionCommand(int position)
+        {
+
+
+            decimal distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position);
+
+
+            SendLine(buildCommand(distance));
+            return distance;
+
+        }
+
+        public void SendLine(string line)
 		{
 			if (!Connected)
 			{

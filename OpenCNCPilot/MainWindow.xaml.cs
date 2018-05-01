@@ -23,7 +23,15 @@ namespace OpenCNCPilot
 		SaveFileDialog saveFileDialogHeightMap = new SaveFileDialog() { Filter = Constants.FileFilterHeightMap };
 
 		GCodeFile ToolPath { get; set; } = GCodeFile.Empty;
-		//HeightMap Map { get; set; }
+        //HeightMap Map { get; set; }
+
+        private decimal targetLocation =0; 
+        private int currentIndex = 0;
+        public static bool runningCycle = false;
+        private bool home = false;
+        private bool goToFirstPlate = true;
+        private bool firstRun = true;
+        private bool settingsLoaded = false;
 
         private static VimbaHelper m_VimbaHelper = null;
         GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
@@ -83,9 +91,10 @@ namespace OpenCNCPilot
 			settingsWindow.SendLine += machine.SendLine;
 
 			CheckBoxUseExpressions_Changed(null, null);
-
-			UpdateCheck.CheckForUpdate();
-            cameraControl.m_CameraList = m_CameraList;
+            updatePlateCheckboxes();
+            UpdateCheck.CheckForUpdate();
+            //cameraControl.m_CameraList = m_CameraList;
+            cameraControl.m_PictureBox = m_PictureBox;
             try
             {
                 //Start up Vimba API
@@ -123,7 +132,27 @@ namespace OpenCNCPilot
 			RaisePropertyChanged("LastProbePosMachine");
 			RaisePropertyChanged("LastProbePosWork");
 		}
-     
+        private void BtnSaveFolderOpen_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.OK:
+                    var path = dialog.SelectedPath;
+                    Properties.Settings.Default.SaveFolderPath = path;
+                    //TxtFile.ToolTip = file;
+                    break;
+                case System.Windows.Forms.DialogResult.Cancel:
+                default:
+                    Properties.Settings.Default.SaveFolderPath= null;
+                    //TxtFile.ToolTip = null;
+                    break;
+            }
+                }
+        }
         private void UnhandledException(object sender, UnhandledExceptionEventArgs ea)
 		{
 			Exception e = (Exception)ea.ExceptionObject;
@@ -173,7 +202,128 @@ namespace OpenCNCPilot
 					e.Cancel = true;
 			}
 		}
-        
+        private bool FindCheckedBox(int index, bool firstBox)
+        {
+
+            if (!firstBox)
+            {
+                index++;
+            }
+            while (index < Properties.Settings.Default.NumLocations)
+            {
+
+                if (checkBoxes[index].IsChecked == true)
+                {
+                    Console.WriteLine("Box " + (index + 1) + " checked");
+
+                    currentIndex = index;
+                    return true;
+                }
+                else
+                {
+                    index++;
+                }
+
+            }
+            Console.WriteLine("No more boxes checked");
+            return false;
+        }
+        bool foundPlate = false;
+        public void checkCycle()
+        {
+            
+            if (runningCycle)
+            {
+                if (machine.Status == "Home") return;
+                
+                if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
+                {
+                    Console.WriteLine("Current Index" +currentIndex);
+                    
+                    cameraControl.CapSaveImage();
+                    Console.WriteLine("Found Plate: " + foundPlate);
+                    foundPlate = FindCheckedBox(currentIndex, false);
+                    if (foundPlate)
+                    {
+                        targetLocation = machine.sendMotionCommand(currentIndex);
+                    }
+                    else stopCycle();
+
+                }
+  
+
+            }
+            else
+            {
+                return;
+            }
+
+        }
+        public void startCycle()
+        {
+            if (runningCycle) stopCycle();
+            runningCycle = true;
+            currentIndex = 0;
+            bool isPlateFound = FindCheckedBox(currentIndex, true);
+            if (!isPlateFound) return;
+            if (firstRun)
+            {
+                machine.SendLine("$H");
+                firstRun = false;
+            }
+            else
+            {
+                targetLocation = machine.sendMotionCommand(currentIndex);
+            }
+            
+                
+            
+           
+            
+            
+        }
+        public void stopCycle()
+        {
+            runningCycle = false;
+            currentIndex = 0;
+            machine.sendMotionCommand(0);
+
+        }
+        List<CheckBox> checkBoxes = new List<CheckBox>();
+        List<TextBlock> textBlocks = new List<TextBlock>();
+        public void updatePlateClick(object sender, RoutedEventArgs e)
+        {
+            if(spCheckboxes != null)
+            {
+                spCheckboxes.Children.Clear();
+                checkBoxes.Clear();
+                textBlocks.Clear();
+                updatePlateCheckboxes();
+
+            }
+            
+        }
+       
+        public void updatePlateCheckboxes()
+        {
+            
+            int numBoxes = Properties.Settings.Default.NumLocations;
+            for (int i = 0; i < numBoxes; i++)
+            {
+                CheckBox tempCB = new CheckBox();
+                tempCB.VerticalAlignment = VerticalAlignment.Center;
+                tempCB.IsChecked = true;
+                checkBoxes.Add(tempCB);
+                TextBlock tempText = new TextBlock();
+                tempText.Text = i.ToString();
+                tempText.VerticalAlignment = VerticalAlignment.Center;
+                textBlocks.Add(tempText);
+                
+                spCheckboxes.Children.Add(checkBoxes[i]);
+                spCheckboxes.Children.Add(textBlocks[i]);
+
+            }
+        }
         private void updateSerialPortComboBox()
         {
 
@@ -182,10 +332,19 @@ namespace OpenCNCPilot
             foreach (string port in System.IO.Ports.SerialPort.GetPortNames())   
             SerialPortSelect.Items.Add(port);
             
+           if(!SerialPortSelect.Items.Contains(Properties.Settings.Default.SerialPortName))
+            {
+                SerialPortSelect.SelectedItem = 0;
+                SerialPortSelect.SelectedIndex = 0;
+            }
 
 
         }
-        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        private void cbCameraOpen(object sender, EventArgs e)
+        {
+
+        }
+        private void cbSerialOpen(object sender, EventArgs e)
         {
             updateSerialPortComboBox();
             
