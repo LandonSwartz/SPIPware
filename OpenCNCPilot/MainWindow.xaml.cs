@@ -10,6 +10,7 @@ using System.Windows.Controls.Ribbon;
 using System.Windows.Controls;
 using System.Collections.Generic;
 using SynchronousGrab;
+using System.IO;
 
 namespace OpenCNCPilot
 {
@@ -32,6 +33,7 @@ namespace OpenCNCPilot
         private bool goToFirstPlate = true;
         private bool firstRun = true;
         private bool settingsLoaded = false;
+        
 
         private static VimbaHelper m_VimbaHelper = null;
         GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
@@ -95,6 +97,7 @@ namespace OpenCNCPilot
             UpdateCheck.CheckForUpdate();
             //cameraControl.m_CameraList = m_CameraList;
             cameraControl.m_PictureBox = m_PictureBox;
+            updateCameraSettingsOptions();
             try
             {
                 //Start up Vimba API
@@ -108,6 +111,7 @@ namespace OpenCNCPilot
                 try
                 {
                     cameraControl.UpdateCameraList();
+                    
                 }
                 catch (Exception exception)
                 {
@@ -202,6 +206,57 @@ namespace OpenCNCPilot
 					e.Cancel = true;
 			}
 		}
+        private void btnTestFirst_Click(object sender, RoutedEventArgs e)
+        {
+            machine.sendMotionCommand(0);
+
+        }
+        private void btnTestBetween_Click(object sender, RoutedEventArgs e)
+        {
+            machine.sendMotionCommand(1);
+        }
+        private void updateCameraSettingsOptions()
+        {
+            cameraSettingsCB.Items.Clear();
+            
+            DirectoryInfo d = new DirectoryInfo("./Resources/CameraSettings/");//Assuming Test is your Folder
+            FileInfo[] Files = d.GetFiles("*.xml"); //Getting Text files
+            //string str = "";
+            foreach (FileInfo file in Files)
+            {
+                cameraSettingsCB.Items.Add(file);
+            }
+
+
+            if (!cameraSettingsCB.Items.Contains(Properties.Settings.Default.CameraSettingsPath))
+            {
+                cameraSettingsCB.SelectedItem = 0;
+                cameraSettingsCB.SelectedIndex = 0;
+            }
+
+
+        }
+        
+        private void selectAll_Change(object sender, RoutedEventArgs e)
+        {
+            foreach (CheckBox box in checkBoxes)
+            {
+                if (box != null)
+                {
+                    if(Properties.Settings.Default.SelectAll == true)
+                    {
+                        box.IsChecked = true;
+                    }
+                    else
+                    {
+                        box.IsChecked = false;
+                    }
+                    
+
+                }
+
+            }
+        }
         private bool FindCheckedBox(int index, bool firstBox)
         {
 
@@ -241,6 +296,14 @@ namespace OpenCNCPilot
                     Console.WriteLine("Current Index" +currentIndex);
                     
                     cameraControl.CapSaveImage();
+                    if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates) {
+                        Properties.Settings.Default.CurrentPlate++;
+                    }
+                    else
+                    {
+                        Properties.Settings.Default.CurrentPlate = 1;
+                    }
+
                     Console.WriteLine("Found Plate: " + foundPlate);
                     foundPlate = FindCheckedBox(currentIndex, false);
                     if (foundPlate)
@@ -261,14 +324,16 @@ namespace OpenCNCPilot
         }
         public void startCycle()
         {
+            btnRunCycle.IsEnabled = false;
             if (runningCycle) stopCycle();
             runningCycle = true;
             currentIndex = 0;
             bool isPlateFound = FindCheckedBox(currentIndex, true);
             if (!isPlateFound) return;
-            if (firstRun)
+            if (firstRun )
             {
                 machine.SendLine("$H");
+                //Properties.Settings.Default.CurrentPlate = 1;
                 firstRun = false;
             }
             else
@@ -285,6 +350,7 @@ namespace OpenCNCPilot
         public void stopCycle()
         {
             runningCycle = false;
+            btnRunCycle.IsEnabled = true;
             currentIndex = 0;
             machine.sendMotionCommand(0);
 
@@ -317,6 +383,7 @@ namespace OpenCNCPilot
                 TextBlock tempText = new TextBlock();
                 tempText.Text = i.ToString();
                 tempText.VerticalAlignment = VerticalAlignment.Center;
+                tempText.Margin = new Thickness(5);
                 textBlocks.Add(tempText);
                 
                 spCheckboxes.Children.Add(checkBoxes[i]);
@@ -526,6 +593,24 @@ namespace OpenCNCPilot
 			machine.SendLine("G49");
 		}
 
-		
-	}
+        private void cbSelectAll_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
+
+        private void btnCameraSettingsReload_Click(object sender, RoutedEventArgs e)
+        {
+            cameraControl.forceSettingsReload();
+        }
+
+        private void cameraSettingsCB_DropDownOpened(object sender, EventArgs e)
+        {
+            updateCameraSettingsOptions();
+        }
+
+        private void cameraSettingsCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            cameraControl.loadCameraSettings();
+        }
+    }
 }

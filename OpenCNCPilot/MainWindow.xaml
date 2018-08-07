@@ -176,7 +176,7 @@
 							
 						</ComboBox>-->
 						<xctk:IntegerUpDown Name="udPlateOffset" Value="{util:SettingBinding PlateOffset}" Width="65" Margin="5" />
-						<Button Name="btnTestFirst" Content="Test" Style="{StaticResource styleButton}" />
+						<Button Name="btnTestFirst" Content="Test" Style="{StaticResource styleButton}" Click="btnTestFirst_Click"/>
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label Content="Between Plates:  " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
@@ -184,7 +184,7 @@
 
 						</ComboBox>-->
 						<xctk:IntegerUpDown Name="udBetweenDistance" Value="{util:SettingBinding BetweenDistance}" Width="65" Margin="5" />
-						<Button Name="btnTestBetween" Content="Test" Style="{StaticResource styleButton}" />
+						<Button Name="btnTestBetween" Content="Test" Style="{StaticResource styleButton}" Click="btnTestBetween_Click" />
 					</StackPanel>
 				</RibbonGroup>
 				<RibbonGroup Header="Camera Configucration">
@@ -196,11 +196,11 @@
 								<TextBlock Text="Camera Settings: " VerticalAlignment="Center" />
 								
 								
-								<ComboBox Name="tbCameraConfigFile" Width="150" Text="{util:SettingBinding CameraSettingsPath}"  VerticalContentAlignment="Center" Height="22"/>
+								<ComboBox Name="cameraSettingsCB" Width="150" Text="{util:SettingBinding CameraSettingsPath}"  VerticalContentAlignment="Center" Height="22" DropDownOpened="cameraSettingsCB_DropDownOpened" SelectionChanged="cameraSettingsCB_SelectionChanged"/>
 
 							</StackPanel>
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-								<Button Name="btnCameraSettingsReload" Content="Refresh Settings" Style="{StaticResource styleButton}" Width="100" Margin=" 5" />
+								<Button Name="btnCameraSettingsReload" Content="Refresh Settings" Style="{StaticResource styleButton}" Width="100" Margin=" 5" Click="btnCameraSettingsReload_Click" />
 							</StackPanel>
 							<!--<StackPanel Orientation="Horizontal">
 								<TextBlock VerticalAlignment="Center">Live View:</TextBlock>
@@ -334,7 +334,7 @@
 
 								</StackPanel>
 									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-										<Button Margin="5"	Padding="5" Name="btnRunCycle" Content="Run Cycle" Height="100" Width="200" Click="ButtonStartCycle_Click"></Button>
+										<Button Margin="5"	Padding="5" FontSize="48" Name="btnRunCycle" Content="Run Cycle" Height="100" Width="300" Click="ButtonStartCycle_Click"></Button>
 									</StackPanel>
 								</StackPanel>
 							</GroupBox>
@@ -373,7 +373,7 @@
 										<!--<Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Width="300" Margin="5" />-->
 										<TextBlock VerticalAlignment="Center" Margin="5">Number of Locations:</TextBlock>
 										<xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" ValueChanged="updatePlateClick"  />
-										<CheckBox IsChecked="{util:SettingBinding SelectAll}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" ></CheckBox>
+										<CheckBox IsChecked="{util:SettingBinding SelectAll}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"></CheckBox>
 
 									</StackPanel>
 									<StackPanel Name="spCheckboxes" Grid.Row="1" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">

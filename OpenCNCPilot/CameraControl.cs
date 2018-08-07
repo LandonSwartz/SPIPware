@@ -22,7 +22,7 @@ namespace OpenCNCPilot
         public bool firstRun = true;
         public bool settingsLoaded = false;
 
-
+        string previousSettingsDir;
         private VimbaHelper m_VimbaHelper = null;
         public ComboBox m_CameraList;
         public Image m_PictureBox;
@@ -131,22 +131,127 @@ namespace OpenCNCPilot
                 }
             }
         }
-        public void CapSaveImage()
+        public void loadCameraSettings()
+        {
+            string cameraSettingsFileName = Directory.GetCurrentDirectory() + @"\Resources\CameraSettings\" + Properties.Settings.Default.CameraSettingsPath;
+            if (cameraSettingsFileName != previousSettingsDir) 
+            {
+                previousSettingsDir = cameraSettingsFileName;
+                forceSettingsReload();
+            }
+
+
+
+        }
+        public void forceSettingsReload()
+        {
+            string cameraSettingsFileName = Directory.GetCurrentDirectory() + @"\Resources\CameraSettings\" + Properties.Settings.Default.CameraSettingsPath;
+            if (File.Exists(cameraSettingsFileName))
+            {
+                LogMessage("Loading camera settings");
+                if (VimbaHelper != null && selectedItem != null)
+                {
+                    VimbaHelper.loadCamSettings(cameraSettingsFileName, selectedItem.ID);
+                }
+                else
+                {
+                    LogError("Settings not loaded because camera is disconnected");
+                }
+
+            }
+            else
+            {
+                LogError(cameraSettingsFileName);
+                LogError("Invalid file name for Camera Settings");
+            }
+            settingsLoaded = true;
+
+        }
+        public Task UpdateImageBox(System.Drawing.Image image)
+        {
+            BitmapImage bi;
+            using (var ms = new MemoryStream())
+            {
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+                ms.Position = 0;
+
+                bi = new BitmapImage();
+                bi.BeginInit();
+                bi.CacheOption = BitmapCacheOption.OnLoad;
+                bi.StreamSource = ms;
+                bi.EndInit();
+
+
+            }
+
+            //Display image
+            m_PictureBox.Source = bi;
+            return Task.FromResult(0);
+
+        }
+        public Task WriteBitmapToFile(BitmapImage image, string filePath)
+        {
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(image));
+
+            using (var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+            {
+                encoder.Save(fileStream);
+            }
+            return Task.FromResult(0);
+        }
+        public String createFilePath()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (Properties.Settings.Default.CurrentPlateSave == true)
+            {
+                string currentPlateStr = Properties.Settings.Default.CurrentPlate.ToString();
+                sb.Append(currentPlateStr + "_");
+            }
+            string currentDate = DateTime.Now.ToString("yyyy-MM-dd--H-mm-ss");
+            ImageFormat fileType = ImageFormat.Png;
+
+
+            sb.Append(currentDate + "_");
+            sb.Append(Properties.Settings.Default.FileName);
+            sb.Append("." + fileType.ToString().ToLower());
+
+            String filePath = Path.Combine(Properties.Settings.Default.SaveFolderPath, sb.ToString());
+            return filePath;
+        }
+      public Task WriteImageToFile(System.Drawing.Image  image)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (Properties.Settings.Default.CurrentPlateSave == true)
+            {
+                string currentPlateStr = Properties.Settings.Default.CurrentPlate.ToString();
+                sb.Append(currentPlateStr + "_");
+            }
+            string currentDate = DateTime.Now.ToString("yyyy-MM-dd--H-mm-ss");
+            ImageFormat fileType = ImageFormat.Png;
+
+
+            sb.Append(currentDate + "--");
+            sb.Append(Properties.Settings.Default.FileName);
+            sb.Append("." + fileType.ToString().ToLower());
+
+            String filePath = Path.Combine(Properties.Settings.Default.SaveFolderPath, sb.ToString());
+            //Console.WriteLine("Image written to: " + filePath);
+            // Console.WriteLine("File Name: " + sb.ToString());
+            
+            image.Save(filePath, fileType);
+            Console.WriteLine("Image written to: " + filePath);
+            LogMessage("Image acquired synchonously.");
+
+            return Task.FromResult(0);
+        }
+        public async void CapSaveImage()
         {
 
             if (!settingsLoaded)
             {
-                string cameraSettingsFileName = Properties.Settings.Default.CameraSettingsPath;
-                if (File.Exists(cameraSettingsFileName))
-                {
-                    LogMessage("Loading camera settings");
-                    VimbaHelper.loadCamSettings(cameraSettingsFileName, selectedItem.ID);
-                    settingsLoaded = true;
-                }
-                else
-                {
-                    LogError("Invalid file name for Camera Settings");
-                }
+                loadCameraSettings();
             }
             try
             {
@@ -162,42 +267,18 @@ namespace OpenCNCPilot
                 //Acquire an image synchronously (snap) from selected camera
                 System.Drawing.Image image = VimbaHelper.AcquireSingleImage(SelectedItem.ID);
 
-
-                BitmapImage bi;
-                using (var ms = new MemoryStream())
+                await UpdateImageBox(image);
+                String filePath = createFilePath();
+                if (Directory.Exists(Properties.Settings.Default.SaveFolderPath))
                 {
-                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                   
-                    ms.Position = 0;
+                    await WriteImageToFile(image);
 
-                    bi = new BitmapImage();
-                    bi.BeginInit();
-                    bi.CacheOption = BitmapCacheOption.OnLoad;
-                    bi.StreamSource = ms;
-                    bi.EndInit();
-                    
                 }
-
-                //Display image
-                m_PictureBox.Source = bi;
-                StringBuilder sb = new StringBuilder();
-                string currentDate = DateTime.Now.ToString("yyyy-MM-dd--H-mm-ss");
-                ImageFormat fileType = ImageFormat.Png;
-
-
-                sb.Append(currentDate + "--");
-                sb.Append(Properties.Settings.Default.FileName);
-                sb.Append("." + fileType.ToString().ToLower());
-
-                String filePath = Path.Combine(Properties.Settings.Default.SaveFolderPath, sb.ToString());
-                //Console.WriteLine("Image written to: " + filePath);
-                // Console.WriteLine("File Name: " + sb.ToString());
-                image.Save(filePath, fileType);
-                Console.WriteLine("Image written to: " + filePath);
-                LogMessage("Image acquired synchonously.");
-
-                // System.Threading.Thread.Sleep(200);
-
+                else
+                {
+                    LogError("Invalid directory selected");
+                }
+               
 
             }
             catch (Exception exception)
