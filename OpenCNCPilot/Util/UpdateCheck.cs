@@ -21,7 +21,7 @@ namespace OpenCNCPilot.Util
 			client.Headers["User-Agent"] = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.15) Gecko/20110303 Firefox/3.6.15";
 			client.Proxy = null;
 			client.DownloadStringCompleted += Client_DownloadStringCompleted;
-			client.DownloadStringAsync(new Uri("https://api.github.com/repos/martin2250/OpenCNCPilot/releases/latest"));
+			client.DownloadStringAsync(new Uri("https://api.github.com/repos/alexbeattie42/SPIPware/releases/latest"));
         }
 
 		private static void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)

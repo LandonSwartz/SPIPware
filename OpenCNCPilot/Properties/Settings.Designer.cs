@@ -736,5 +736,87 @@ namespace OpenCNCPilot.Properties {
                 this["CameraState"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime tlStartDate {
+            get {
+                return ((global::System.DateTime)(this["tlStartDate"]));
+            }
+            set {
+                this["tlStartDate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime tlEndDate {
+            get {
+                return ((global::System.DateTime)(this["tlEndDate"]));
+            }
+            set {
+                this["tlEndDate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool StartNow {
+            get {
+                return ((bool)(this["StartNow"]));
+            }
+            set {
+                this["StartNow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int tlInterval {
+            get {
+                return ((int)(this["tlInterval"]));
+            }
+            set {
+                this["tlInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int tlEndInterval {
+            get {
+                return ((int)(this["tlEndInterval"]));
+            }
+            set {
+                this["tlEndInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60000")]
+        public long tlEndIntervalType {
+            get {
+                return ((long)(this["tlEndIntervalType"]));
+            }
+            set {
+                this["tlEndIntervalType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60000")]
+        public long tlIntervalType {
+            get {
+                return ((long)(this["tlIntervalType"]));
+            }
+            set {
+                this["tlIntervalType"] = value;
+            }
+        }
     }
 }

@@ -146,8 +146,19 @@ namespace OpenCNCPilot
 
 			machine.SendLine("$X");
 		}
-
-		private void AddHistoryItem(ListBoxItem item)
+        public void LogMessage(string message)
+        {
+            if (null == message)
+            {
+                throw new ArgumentNullException("message");
+            }
+            var listBoxItem = new ListBoxItem();
+            listBoxItem.Content = message;
+            Console.WriteLine(message);
+            //int index = m_LogList.Items.Add(string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}: {1}", DateTime.Now, message));
+            //m_LogList.TopIndex = index;
+        }
+        private void AddHistoryItem(ListBoxItem item)
 		{
 			//if (ListBoxHistory.Items.Count > 8)
 			//	ListBoxHistory.Items.RemoveAt(0);

@@ -24,7 +24,6 @@ namespace OpenCNCPilot
 
         string previousSettingsDir;
         private VimbaHelper m_VimbaHelper = null;
-        public ComboBox m_CameraList;
         public Image m_PictureBox;
         //TODO Make real output
         private CameraInfo selectedItem;
@@ -37,6 +36,7 @@ namespace OpenCNCPilot
             {
                 throw new ArgumentNullException("message");
             }
+            
             Console.WriteLine(message);
             //int index = m_LogList.Items.Add(string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}: {1}", DateTime.Now, message));
             //m_LogList.TopIndex = index;

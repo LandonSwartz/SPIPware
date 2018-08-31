@@ -183,5 +183,26 @@ G92Z0;</Value>
     <Setting Name="CameraState" Type="System.String" Scope="User">
       <Value Profile="(Default)">Not Ready</Value>
     </Setting>
+    <Setting Name="tlStartDate" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="tlEndDate" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="StartNow" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="tlInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="tlEndInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="tlEndIntervalType" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">60000</Value>
+    </Setting>
+    <Setting Name="tlIntervalType" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">60000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
