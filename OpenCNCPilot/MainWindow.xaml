@@ -191,8 +191,8 @@
 
 
 			</RibbonTab>
-			<RibbonTab Header="Configuration">
-				<!--<RibbonGroup Header="Plate Calibraton">
+			<!--<RibbonTab Header="Configuration">
+				--><!--<RibbonGroup Header="Plate Calibraton">
 					<StackPanel Orientation="Horizontal">
 						<Label Content="First Plate Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
 						-->
@@ -238,8 +238,8 @@
 
 						</StackPanel>
 					</StackPanel>
-				</RibbonGroup>-->
-			</RibbonTab>
+				</RibbonGroup>--><!--
+			</RibbonTab>-->
 			<RibbonTab Header="Advanced">
 				<RibbonGroup Header="G-Code Terminal">
 					<StackPanel>

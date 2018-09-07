@@ -316,7 +316,7 @@ namespace OpenCNCPilot
                     {
                         targetLocation = machine.sendMotionCommand(currentIndex);
                     }
-                    else stopCycle();
+                    else endCycle();
 
                 }
 
@@ -403,7 +403,7 @@ namespace OpenCNCPilot
              && endDuration > 0)
             {
                 tokenSource = new CancellationTokenSource();
-                //startCycle();
+                startCycle();
                 try
                 {
                     await runSingleTimeLapse(timeLapseInterval, tokenSource.Token);
@@ -514,18 +514,22 @@ namespace OpenCNCPilot
            
 
         }
-        public void stopCycle()
+        public void endCycle()
         {
             runningCycle = false;
             updateCycleStatus(runningCycle);
             currentIndex = 0;
+            machine.sendMotionCommand(0);
+            enableMachineControlButtons();
+        }
+        public void stopCycle()
+        {
+            endCycle();
             if (machine.Connected)
             {
                 machine.SoftReset();
             }
-            enableMachineControlButtons();
-          
-
+     
         }
         List<CheckBox> checkBoxes = new List<CheckBox>();
         List<TextBlock> textBlocks = new List<TextBlock>();
