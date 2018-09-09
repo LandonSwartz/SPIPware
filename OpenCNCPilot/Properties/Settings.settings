@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OpenCNCPilot.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="SerialPortName" Type="System.String" Scope="User">
+    <Setting Name="P" Type="System.String" Scope="User">
       <Value Profile="(Default)">COM3</Value>
     </Setting>
     <Setting Name="SerialPortBaud" Type="System.Int32" Scope="User">
@@ -203,6 +203,15 @@ G92Z0;</Value>
     </Setting>
     <Setting Name="tlIntervalType" Type="System.Int64" Scope="User">
       <Value Profile="(Default)">60000</Value>
+    </Setting>
+    <Setting Name="ExperimentPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\</Value>
+    </Setting>
+    <Setting Name="tlExperimentPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\</Value>
+    </Setting>
+    <Setting Name="AcquisitionExperimentPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\</Value>
     </Setting>
   </Settings>
 </SettingsFile>

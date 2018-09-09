@@ -125,6 +125,7 @@
     <Compile Include="EnterNumberWindow.xaml.cs">
       <DependentUpon>EnterNumberWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Experiment.cs" />
     <Compile Include="GCode\GCodeCommands\Arc.cs" />
     <Compile Include="GCode\GCodeCommands\Command.cs" />
     <Compile Include="GCode\GCodeCommands\Line.cs" />

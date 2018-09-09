@@ -26,12 +26,12 @@ namespace OpenCNCPilot.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("COM3")]
-        public string SerialPortName {
+        public string P {
             get {
-                return ((string)(this["SerialPortName"]));
+                return ((string)(this["P"]));
             }
             set {
-                this["SerialPortName"] = value;
+                this["P"] = value;
             }
         }
         
@@ -816,6 +816,42 @@ namespace OpenCNCPilot.Properties {
             }
             set {
                 this["tlIntervalType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\")]
+        public string ExperimentPath {
+            get {
+                return ((string)(this["ExperimentPath"]));
+            }
+            set {
+                this["ExperimentPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\")]
+        public string tlExperimentPath {
+            get {
+                return ((string)(this["tlExperimentPath"]));
+            }
+            set {
+                this["tlExperimentPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\")]
+        public string AcquisitionExperimentPath {
+            get {
+                return ((string)(this["AcquisitionExperimentPath"]));
+            }
+            set {
+                this["AcquisitionExperimentPath"] = value;
             }
         }
     }

@@ -141,18 +141,30 @@
 				</RibbonGroup>
 				<RibbonGroup Header="Experiment Status">
 					<StackPanel Orientation="Vertical">
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="Timelapse Status: "  VerticalAlignment="Center"/>
-							<TextBox Name="timeLapseStatus" Width="75" Text="Running"  IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
-						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="Next Timelapse:   " VerticalAlignment="Center"/>
-							<TextBox Name="timeLapseCount" Width="75"  IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
-						</StackPanel>
+						
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="Cycle Status:        " VerticalAlignment="Center"/>
 							<TextBox Name="cycleStatus" Width="75" Text="Not Running" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
 						</StackPanel>
+
+					</StackPanel>
+
+				</RibbonGroup>
+				<RibbonGroup Header="Timelapse Status">
+					<StackPanel Orientation="Vertical">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="Timelapse Status: "  VerticalAlignment="Center"/>
+							<TextBox Name="timeLapseStatus" Width="125" Text="Running"  IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="Next Timelapse:   " VerticalAlignment="Center"/>
+							<TextBox Name="timeLapseCount" Width="125"  IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="Timelapse End:     " VerticalAlignment="Center"/>
+							<TextBox Name="timeLapseEnd" Width="125"  IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+						</StackPanel>
+
 
 					</StackPanel>
 
@@ -393,6 +405,13 @@
 
 
 									</StackPanel>
+									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+
+										<TextBlock VerticalAlignment="Center" Margin="5">Experiment File:</TextBlock>
+										<Button Name="btnAcquisitionExperimentFile" Margin="5" Padding="5" Content="Select" Click="BtnAcquisitionFileOpen_Click"></Button>
+										<TextBox  Name="tbAcquisitionExperimentPath" Width="250" Text="{util:SettingBinding AcquisitionExperimentPath}" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+
+									</StackPanel>
 									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 										<Button Margin="5"	Padding="5" FontSize="26" Name="btnRunCycle" Content="Run Cycle" Width="150" Click="ButtonStartCycle_Click"></Button>
 										<Button Margin="5"	Padding="5" FontSize="26" Name="btnStopCycle" Content="Stop Cycle" Width="150" Click="ButtonStopCycle_Click"></Button>
@@ -435,13 +454,13 @@
 										</ComboBox>-->
 									</StackPanel>
 									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-
-										<!--<ComboBox  SelectedIndex="0" Height="22">
-											<ComboBoxItem Content="minutes"></ComboBoxItem>
-											<ComboBoxItem Content="hours"></ComboBoxItem>
-											<ComboBoxItem Content="days"></ComboBoxItem>
-										</ComboBox>-->
-
+					
+											<TextBlock VerticalAlignment="Center" Margin="5">Experiment File:</TextBlock>
+											<Button Name="btnTimeLapseExperimentFile" Margin="5" Padding="5" Content="Select" Click="BtnTlExperimentFileOpen_Click"></Button>
+											<TextBox  Name="tbTimeLapseExperimentPath" Width="250" Text="{util:SettingBinding tlExperimentPath}" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+							
+									</StackPanel>
+									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
 										<Button Click="ButtonStartTimeLapse_Click" Margin="5"	Padding="5" FontSize="16" Name="btnRunTimeLapse" Content="Run Timelapse"></Button>
 										<Button Click="ButtonStopTimeLapse_Click" Margin="5"	Padding="5" FontSize="16" Name="btnStopTimeLapse" Content="Stop Timelapse"></Button>
 									</StackPanel>
@@ -449,7 +468,7 @@
 
 
 							</GroupBox>
-
+					
 						</StackPanel>
 					</TabItem>
 					<TabItem Header="Review" >
@@ -583,10 +602,33 @@
 
 						</StackPanel>
 					</GroupBox>
+						<GroupBox>
+							<GroupBox.Header >
+								<TextBlock HorizontalAlignment="Center">Experiment Configuration</TextBlock>
+							</GroupBox.Header>
+							<StackPanel Orientation="Vertical">
+
+
+								<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+
+									<TextBlock VerticalAlignment="Center" Margin="5">Experiment File:</TextBlock>
+								
+									<TextBox  Name="tbExperimentPath" Width="265" Text="{util:SettingBinding ExperimentPath}" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+									
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<Button Margin="5"  Padding="5" Name="btnExperimentFile" Content="New" Click="BtnExperimentFileOpen_Click"></Button>
+									<Button Margin="5"	Padding="5" Name="btnLoadExperiment" Content="Load" Click="ButtonLoadExperiment_Click"></Button>
+									<Button Margin="5"	Padding="5" Name="btnSaveExperiment" Content="Save" Click="ButtonSaveExperiment_Click" ></Button>
+									<Button Margin="5"	Padding="5" Name="btnSaveAsExperiment" Content="Save As" Click="ButtonSaveAsExperiment_Click" ></Button>
+
+								</StackPanel>
+							</StackPanel>
+						</GroupBox>
 
 
 
-				</StackPanel>
+					</StackPanel>
 
 			</DockPanel>
 			</Border>

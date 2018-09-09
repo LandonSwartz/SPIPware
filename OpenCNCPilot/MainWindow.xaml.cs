@@ -13,6 +13,7 @@ using SynchronousGrab;
 using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
+using OpenCNCPilot.Entities;
 
 namespace OpenCNCPilot
 {
@@ -147,25 +148,79 @@ namespace OpenCNCPilot
             RaisePropertyChanged("LastProbePosMachine");
             RaisePropertyChanged("LastProbePosWork");
         }
-        private void BtnSaveFolderOpen_Click(object sender, RoutedEventArgs e)
-        {
+        private string getFolderResult()
+        { 
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-
+                switch (result)
+                {
+                case System.Windows.Forms.DialogResult.OK:
+                    return dialog.SelectedPath;
+                case System.Windows.Forms.DialogResult.Cancel:
+                    default:
+                    return null;
+                }
+            }
+        }
+        private System.Windows.Forms.OpenFileDialog getFileResult()
+        {
+            using (var dialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 switch (result)
                 {
                     case System.Windows.Forms.DialogResult.OK:
-                        var path = dialog.SelectedPath;
-                        Properties.Settings.Default.SaveFolderPath = path;
-                        //TxtFile.ToolTip = file;
-                        break;
+                        return dialog;
                     case System.Windows.Forms.DialogResult.Cancel:
                     default:
-                        Properties.Settings.Default.SaveFolderPath = null;
-                        //TxtFile.ToolTip = null;
-                        break;
+                        return null;
                 }
+            }
+        }
+        private string getFileResultName()
+        {
+            var dialog = getFileResult();
+            if(dialog != null)
+            {
+                return dialog.FileName;
+            }
+            else { return null; }
+
+        }
+        private string getFileResultName(System.Windows.Forms.OpenFileDialog dialog)
+        {
+            if (dialog != null)
+            {
+                return dialog.FileName;
+            }
+            else { return null; }
+        }
+        private void BtnSaveFolderOpen_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.SaveFolderPath = getFolderResult(); 
+        }
+        private void BtnExperimentFileOpen_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = openSaveDialog();
+            saveAsSettingsToFile(dialog);
+            Properties.Settings.Default.ExperimentPath = dialog.FileName;
+        }
+        private void BtnTlExperimentFileOpen_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = getFileResult();
+            if(dialog != null)
+            {
+                Properties.Settings.Default.tlExperimentPath = getFileResultName(dialog);
+            }
+
+        }
+        private void BtnAcquisitionFileOpen_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = getFileResult();
+            if(dialog != null)
+            {
+                Properties.Settings.Default.AcquisitionExperimentPath = getFileResultName(dialog);
             }
         }
         private void UnhandledException(object sender, UnhandledExceptionEventArgs ea)
@@ -403,6 +458,7 @@ namespace OpenCNCPilot
              && endDuration > 0)
             {
                 tokenSource = new CancellationTokenSource();
+                Experiment.loadExperimentToSettings(Properties.Settings.Default.tlExperimentPath);
                 startCycle();
                 try
                 {
@@ -479,7 +535,9 @@ namespace OpenCNCPilot
             {
                 Properties.Settings.Default.tlStartDate = DateTime.Now;
             }
-            Double endTime = Properties.Settings.Default.tlEndIntervalType * Properties.Settings.Default.tlEndInterval;
+            double endTime = Properties.Settings.Default.tlEndIntervalType * Properties.Settings.Default.tlEndInterval;
+            DateTime endDate = DateTime.Now.AddMilliseconds(endTime);
+            timeLapseEnd.Text = endDate.ToString();
 
 
             handleTimelapseCalculations(timeLapseInterval, endTime);
@@ -489,6 +547,7 @@ namespace OpenCNCPilot
         {
             if (machine.Connected)
             {
+                
                 btnRunCycle.IsEnabled = false;
                 if (runningCycle) stopCycle();
                 runningCycle = true;
@@ -530,6 +589,45 @@ namespace OpenCNCPilot
                 machine.SoftReset();
             }
      
+        }
+
+        public void saveSettingsToFile()
+        {
+            Experiment.createExperimentFromSettings(Properties.Settings.Default.ExperimentPath);
+        }
+        public System.Windows.Forms.SaveFileDialog openSaveDialog()
+        {
+            using (var dialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                dialog.Filter = "Binary|*.bin";
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                switch (result)
+                {
+                    case System.Windows.Forms.DialogResult.OK:
+                        return dialog;
+                    case System.Windows.Forms.DialogResult.Cancel:
+                    default:
+                        return null;
+                }
+            }
+
+        }
+        public void saveAsSettingsToFile(System.Windows.Forms.SaveFileDialog dialog)
+        {
+            if(dialog != null)
+            {
+                Experiment.createExperimentFromSettings(dialog.FileName);
+                Properties.Settings.Default.ExperimentPath = dialog.FileName;
+           
+            }
+                  
+             
+        }
+        public void loadSettingsFromFile()
+        {
+            var dialog = getFileResult();
+            Experiment.loadExperimentToSettings(dialog.FileName);
+            Properties.Settings.Default.ExperimentPath = dialog.FileName;
         }
         List<CheckBox> checkBoxes = new List<CheckBox>();
         List<TextBlock> textBlocks = new List<TextBlock>();
@@ -575,7 +673,7 @@ namespace OpenCNCPilot
             foreach (string port in System.IO.Ports.SerialPort.GetPortNames())
                 SerialPortSelect.Items.Add(port);
 
-            if (!SerialPortSelect.Items.Contains(Properties.Settings.Default.SerialPortName))
+            if (!SerialPortSelect.Items.Contains(Properties.Settings.Default.P))
             {
                 SerialPortSelect.SelectedItem = 0;
                 SerialPortSelect.SelectedIndex = 0;
@@ -800,6 +898,19 @@ namespace OpenCNCPilot
         private void ButtonStopCycle_Click(object sender, RoutedEventArgs e)
         {
             stopCycle();
+        }
+        private void ButtonSaveExperiment_Click(object sender, RoutedEventArgs e)
+        {
+            saveSettingsToFile();
+        }
+        private void ButtonSaveAsExperiment_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = openSaveDialog();
+            saveAsSettingsToFile(dialog);
+        }
+        private void ButtonLoadExperiment_Click(object sender, RoutedEventArgs e)
+        {
+            loadSettingsFromFile();
         }
     }
 }

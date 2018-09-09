@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenCNCPilot.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -90,6 +91,7 @@ namespace OpenCNCPilot
         }
         private void ButtonStartCycle_Click(object sender, RoutedEventArgs e)
         {
+            Experiment.loadExperimentToSettings(Properties.Settings.Default.AcquisitionExperimentPath);
             startCycle();
         }
     }
