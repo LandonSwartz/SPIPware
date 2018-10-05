@@ -294,6 +294,20 @@
   <ItemGroup>
     <Resource Include="SunBearLogo.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CameraSettings\cnz_yeast_plate_setting.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\CameraSettings\vimbaVersion2_settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\CameraSettings\white_background_for-plants.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\CameraSettings\yeast_plate_camera_settings_v1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

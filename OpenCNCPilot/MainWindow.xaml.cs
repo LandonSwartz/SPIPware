@@ -109,6 +109,15 @@ namespace OpenCNCPilot
             UpdateCheck.CheckForUpdate();
             //cameraControl.m_CameraList = m_CameraList;
             cameraControl.m_PictureBox = m_PictureBox;
+            startVimba();
+
+        }
+
+        public Vector3 LastProbePosMachine { get; set; }
+        public Vector3 LastProbePosWork { get; set; }
+
+        private void startVimba()
+        {
             updateCameraSettingsOptions();
             try
             {
@@ -134,11 +143,7 @@ namespace OpenCNCPilot
             {
                 cameraControl.LogError("Could not startup Vimba API. Reason: " + exception.Message);
             }
-
         }
-
-        public Vector3 LastProbePosMachine { get; set; }
-        public Vector3 LastProbePosWork { get; set; }
 
         private void Machine_ProbeFinished_UserOutput(Vector3 position, bool success)
         {
@@ -355,6 +360,9 @@ namespace OpenCNCPilot
                 if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
                 {
                     Console.WriteLine("Current Index" + currentIndex);
+                    //machine.setBackLightStatus(true);
+                  
+
                     cameraControl.CapSaveImage();
                     if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
                     {
@@ -421,9 +429,14 @@ namespace OpenCNCPilot
             }
             runningTimeLapse = false;
         }
+        bool growLightsOn = false;
+        async Task waitForStartNow()
+        {
+            await Task.Delay(5000);
+        }
         async Task runSingleTimeLapse(TimeSpan duration, CancellationToken token)
         {
-         
+           
             while (duration.TotalSeconds > 0)
             {
                 timeLapseCount.Text = duration.TotalMinutes.ToString() + " minute(s)";
@@ -431,7 +444,16 @@ namespace OpenCNCPilot
                 {
                     disableMachineControlButtons();
                 }
-               
+                if (!isNightTime() && !growLightsOn)
+                {
+                    machine.setGrowLightStatus(true, true);
+                    growLightsOn = true;
+                }
+                else if(isNightTime() && growLightsOn)
+                {
+                    machine.setGrowLightStatus(false, false);
+                    growLightsOn = false;
+                }
                 await Task.Delay(60*1000, token);
                 duration = duration.Subtract(TimeSpan.FromMinutes(1));
             }
@@ -459,6 +481,8 @@ namespace OpenCNCPilot
             {
                 tokenSource = new CancellationTokenSource();
                 Experiment.loadExperimentToSettings(Properties.Settings.Default.tlExperimentPath);
+                machine.setBackLightStatus(true);
+                Thread.Sleep(300);
                 startCycle();
                 try
                 {
@@ -481,6 +505,7 @@ namespace OpenCNCPilot
             }
             else if (Properties.Settings.Default.tlStartDate > DateTime.Now)
             {
+                await waitForStartNow();
                 handleTimelapseCalculations(timeLapseInterval, endDuration);
             }
             else
@@ -525,6 +550,7 @@ namespace OpenCNCPilot
      
         public async void startTimeLapse()
         {
+            btnRunTimeLapse.IsEnabled = false;
             Console.WriteLine("Timelapse Starting");
             runningTimeLapse = true;
             TimeSpan timeLapseInterval = TimeSpan.FromMilliseconds(Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
@@ -536,12 +562,24 @@ namespace OpenCNCPilot
                 Properties.Settings.Default.tlStartDate = DateTime.Now;
             }
             double endTime = Properties.Settings.Default.tlEndIntervalType * Properties.Settings.Default.tlEndInterval;
-            DateTime endDate = DateTime.Now.AddMilliseconds(endTime);
+            DateTime endDate = Properties.Settings.Default.tlStartDate.AddMilliseconds(endTime);
             timeLapseEnd.Text = endDate.ToString();
 
 
             handleTimelapseCalculations(timeLapseInterval, endTime);
-       
+            timeLapseCount.Text = "Not Running";
+
+
+        }
+        public bool isNightTime()
+        {
+            TimeSpan startOfNight = TimeSpan.Parse("23:00:00");
+            TimeSpan endOfNight = TimeSpan.Parse("07:00:00");
+            TimeSpan now = DateTime.Now.TimeOfDay;
+
+            Console.WriteLine(now.TotalHours);
+            return (now >= startOfNight || now <= endOfNight) ? true : false;
+            
         }
         public void startCycle()
         {
@@ -555,14 +593,24 @@ namespace OpenCNCPilot
                 currentIndex = 0;
                 bool isPlateFound = FindCheckedBox(currentIndex, true);
                 if (!isPlateFound) return;
+
+              
+
+
                 if (firstRun)
                 {
                     machine.SendLine("$H");
+                   
+                    //machine.setGrowLightStatus(false, false);
+                    
                     //Properties.Settings.Default.CurrentPlate = 1;
                     firstRun = false;
                 }
                 else
                 {
+                    machine.setBackLightStatus(true);
+                    //machine.setGrowLightStatus(false, false);
+                    Thread.Sleep(300);
                     targetLocation = machine.sendMotionCommand(currentIndex);
                 }
             }
@@ -580,6 +628,8 @@ namespace OpenCNCPilot
             currentIndex = 0;
             machine.sendMotionCommand(0);
             enableMachineControlButtons();
+            machine.setBackLightStatus(false);
+            machine.setGrowLightStatus(true, !isNightTime());
         }
         public void stopCycle()
         {
@@ -626,8 +676,11 @@ namespace OpenCNCPilot
         public void loadSettingsFromFile()
         {
             var dialog = getFileResult();
-            Experiment.loadExperimentToSettings(dialog.FileName);
-            Properties.Settings.Default.ExperimentPath = dialog.FileName;
+            if(dialog!= null)
+            {
+                Experiment.loadExperimentToSettings(dialog.FileName);
+                Properties.Settings.Default.ExperimentPath = dialog.FileName;
+            }
         }
         List<CheckBox> checkBoxes = new List<CheckBox>();
         List<TextBlock> textBlocks = new List<TextBlock>();
@@ -912,5 +965,14 @@ namespace OpenCNCPilot
         {
             loadSettingsFromFile();
         }
+        private void ButtonCameraDisconnect_Click(object sender, RoutedEventArgs e)
+        {
+            cameraControl.shutdownVimba();
+        }
+        private void ButtonCameraConnect_Click(object sender, RoutedEventArgs e)
+        {
+            startVimba();
+        }
+
     }
 }

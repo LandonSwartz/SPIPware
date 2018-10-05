@@ -70,12 +70,15 @@
 							<!--<Button Name="ButtonSettings" Content="Settings" Style="{StaticResource styleButton}" Click="ButtonSettings_Click"/>-->
 							<Button Name="ButtonConnect" Content="Connect" Style="{StaticResource styleButton}" Click="ButtonConnect_Click"/>
 							<Button Name="ButtonDisconnect" Visibility="Collapsed" Content="Disconnect" Style="{StaticResource styleButton}" Click="ButtonDisconnect_Click"/>
+
+							<!--<Button Name="ButtonCameraConnect" Content="Connect" Style="{StaticResource styleButton}" Click="ButtonCameraConnect_Click"/>-->
+							<!--<Button Name="ButtonCameraDisconnect" Visibility="Collapsed" Content="Disconnect" Style="{StaticResource styleButton}" Click="ButtonCameraDisconnect_Click"/>-->
 						</StackPanel>
 						<StackPanel Orientation="Vertical">
 
 							<StackPanel Orientation="Horizontal">
 								<Label Content="Serial Port:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-								<ComboBox Name="SerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="cbSerialOpen">
+								<ComboBox Name="SerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding P,Mode=TwoWay}" DropDownOpened="cbSerialOpen">
 
 								</ComboBox>
 
@@ -372,7 +375,7 @@
 										<!--<Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Width="300" Margin="5" />-->
 										<TextBlock VerticalAlignment="Center" Margin="5">Number of Locations:</TextBlock>
 										<xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" ValueChanged="updatePlateClick"  />
-										<CheckBox IsChecked="{util:SettingBinding SelectAll}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"></CheckBox>
+										<CheckBox IsChecked="{util:SettingBinding SelectAll, Mode=TwoWay}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Checked="selectAll_Change" ></CheckBox>
 
 									</StackPanel>
 									<StackPanel Name="spCheckboxes" Grid.Row="1" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
@@ -391,10 +394,10 @@
 
 									<StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
 										<TextBlock VerticalAlignment="Center">Total Plates:</TextBlock>
-										<xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates}" Name="udTotalPlates" Margin="5" />
+										<xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates, Mode=TwoWay}" Name="udTotalPlates" Margin="5" />
 
 										<TextBlock VerticalAlignment="Center">Current Plate:</TextBlock>
-										<xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CurrentPlate}" Name="udCurrentPlate"  Margin="5" />
+										<xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CurrentPlate, Mode=TwoWay}" Name="udCurrentPlate"  Margin="5" />
 										<!--<TextBlock VerticalAlignment="Center">Cycle Delay (s):</TextBlock>
 									<xctk:IntegerUpDown Name="UpDown" Margin="5" />-->
 										<!--<Button Margin="5"	Padding="5" Content="Single Cycle"></Button>-->
@@ -437,14 +440,14 @@
 										<xctk:IntegerUpDown Value= "{util:SettingBinding tlEndInterval}" Minimum="0" Name="udEndInterval" Margin="5" />
 										<ComboBox Height="22"
 										SelectedValue="{util:SettingBinding tlEndIntervalType}"
-										ItemsSource="{Binding IntervalList, Mode=OneTime}"
+										ItemsSource="{Binding IntervalList, Mode=OneWay}"
 										SelectedValuePath="Key"
 										DisplayMemberPath="Value" />
 										<TextBlock VerticalAlignment="Center" Margin="5">Run Every:</TextBlock>
 										<xctk:IntegerUpDown Height="22" Value= "{util:SettingBinding tlInterval}" Minimum="0" Name="udTlInterval" Margin="5" />
 										<ComboBox Height="22"
 										SelectedValue="{util:SettingBinding tlIntervalType}"
-										ItemsSource="{Binding IntervalList, Mode=OneTime}"
+										ItemsSource="{Binding IntervalList, Mode=OneWay}"
 										SelectedValuePath="Key"
 										DisplayMemberPath="Value" />
 										<!--<ComboBox  SelectedIndex="0" Height="22">

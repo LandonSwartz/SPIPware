@@ -30,6 +30,11 @@ namespace OpenCNCPilot
         public VimbaHelper VimbaHelper { get => m_VimbaHelper; set => m_VimbaHelper = value; }
         public CameraInfo SelectedItem { get => selectedItem; set => selectedItem = value; }
         //Add log message to logging list box
+
+        public void shutdownVimba()
+        {
+            m_VimbaHelper.Shutdown();
+        }
         public void LogMessage(string message)
         {
             if (null == message)
@@ -134,7 +139,7 @@ namespace OpenCNCPilot
         public void loadCameraSettings()
         {
             string cameraSettingsFileName = Directory.GetCurrentDirectory() + @"\Resources\CameraSettings\" + Properties.Settings.Default.CameraSettingsPath;
-            if (cameraSettingsFileName != previousSettingsDir) 
+            if (!String.Equals(cameraSettingsFileName, previousSettingsDir))
             {
                 previousSettingsDir = cameraSettingsFileName;
                 forceSettingsReload();
@@ -151,7 +156,9 @@ namespace OpenCNCPilot
                 LogMessage("Loading camera settings");
                 if (VimbaHelper != null && selectedItem != null)
                 {
+                    Console.WriteLine(selectedItem.ID);
                     VimbaHelper.loadCamSettings(cameraSettingsFileName, selectedItem.ID);
+                    LogMessage("Loaded Camera Settings");
                 }
                 else
                 {
@@ -249,10 +256,10 @@ namespace OpenCNCPilot
         public async void CapSaveImage()
         {
 
-            if (!settingsLoaded)
-            {
+            //if (!settingsLoaded)
+            //{
                 loadCameraSettings();
-            }
+            //}
             try
             {
                 //Determine selected camera

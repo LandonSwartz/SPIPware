@@ -2,6 +2,7 @@
 using OpenCNCPilot.GCode;
 using OpenCNCPilot.Util;
 using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -65,6 +66,8 @@ namespace OpenCNCPilot
                 machine.homeMachinePos = (decimal)machine.MachinePosition.X;
                 cameraControl.home = true;
                 cameraControl.firstRun = false;
+                machine.setBackLightStatus(true);
+                Thread.Sleep(300);
                 targetLocation = machine.sendMotionCommand(currentIndex);
             }
             else

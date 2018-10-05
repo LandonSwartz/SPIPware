@@ -589,27 +589,68 @@ namespace OpenCNCPilot.Communication
             Console.WriteLine(sb.ToString());
             return sb.ToString();
         }
-
-        public decimal sendMotionCommand(int position, decimal offset)
+        private String buildCommand(decimal distance, bool growLightOn, bool backLightOn)
         {
 
+            StringBuilder sb = new StringBuilder();
+            sb.Append("G90");
+            sb.Append(Properties.Settings.Default.PrimaryAxis);
+            // homeMachinePos
+            //decimal distance = homeMachinePos + Properties.Settings.Default.startDistance + (Properties.Settings.Default.betweenDistance * position) + offset;
+            sb.Append(distance + " ");
+       
+            sb.Append("F" + Properties.Settings.Default.Speed);
+            Console.WriteLine(sb.ToString());
+            return sb.ToString();
+        }
+        private void growLightOff()
+        {
+            //SendLine("G91Z1");
+        }
+        private void growLightOn()
+        {
+            //SendLine("G91Z-1");
+        }
+        private void backLightOff()
+        {
+            SendLine("G91Y1");
+        }
+        private void backLightOn()
+        {
+            SendLine("G91Y-1");
+        }
+        
+        public void setBackLightStatus(bool status)
+        {
+            if (status)
+            {
+                backLightOn();
+            }
+            else { backLightOff(); }
+        }
 
+        public void setGrowLightStatus(bool status, bool daytime)
+        {
+            if (status && daytime)
+            {
+                growLightOn();
+            }
+            else { growLightOff(); }
+        }
+        public decimal sendMotionCommand(int position, bool growLightOn, bool backLightOn)
+        {
+            return 0;
+        }
+        public decimal sendMotionCommand(int position, decimal offset)
+        {
             decimal distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
-
             SendLine(buildCommand(distance));
             return distance;
 
         }
         public decimal sendMotionCommand(int position)
         {
-
-
-            decimal distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position);
-
-
-            SendLine(buildCommand(distance));
-            return distance;
-
+           return sendMotionCommand(position, 0);
         }
 
         public void SendLine(string line)
