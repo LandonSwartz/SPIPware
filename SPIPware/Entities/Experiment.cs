@@ -43,12 +43,12 @@ namespace OpenCNCPilot.Entities
                 Properties.Settings.Default.SelectAll = experiment.selectAll;
                 Properties.Settings.Default.CurrentLocation = experiment.currentLocation;
                 Properties.Settings.Default.CameraName = experiment.cameraName;
-                Properties.Settings.Default.tlStartDate = experiment.tlStartDate;
-                Properties.Settings.Default.tlEndDate = experiment.tlEndDate;
-                Properties.Settings.Default.StartNow = experiment.startNow;
-                Properties.Settings.Default.tlEndInterval = experiment.tlEndInterval;
-                Properties.Settings.Default.tlEndIntervalType = experiment.tlEndIntervalType;
-                Properties.Settings.Default.tlIntervalType = experiment.tlIntervalType;
+                //Properties.Settings.Default.tlStartDate = experiment.tlStartDate;
+                //Properties.Settings.Default.tlEndDate = experiment.tlEndDate;
+                //Properties.Settings.Default.StartNow = experiment.startNow;
+                //Properties.Settings.Default.tlEndInterval = experiment.tlEndInterval;
+                //Properties.Settings.Default.tlEndIntervalType = experiment.tlEndIntervalType;
+                //Properties.Settings.Default.tlIntervalType = experiment.tlIntervalType;
 
                 Properties.Settings.Default.Save();
             }

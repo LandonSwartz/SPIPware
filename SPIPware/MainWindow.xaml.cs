@@ -35,7 +35,7 @@ namespace OpenCNCPilot
         public static bool runningTimeLapse = false;
 
 
-        private bool goToFirstPlate = true;
+        //private bool goToFirstPlate = true;
         private bool firstRun = true;
 
 
@@ -53,11 +53,13 @@ namespace OpenCNCPilot
 
         public MainWindow()
         {
+        
 
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
             InitializeComponent();
             updateSerialPortComboBox();
 
+            startVimba();
             Properties.Settings.Default.tlStartDate = DateTime.Now;
             Properties.Settings.Default.tlEndDate = DateTime.Now.AddHours(1);
 
@@ -100,8 +102,6 @@ namespace OpenCNCPilot
 
             machine.ProbeFinished += Machine_ProbeFinished_UserOutput;
 
-            LoadMacros();
-
             settingsWindow.SendLine += machine.SendLine;
 
             CheckBoxUseExpressions_Changed(null, null);
@@ -109,7 +109,8 @@ namespace OpenCNCPilot
             UpdateCheck.CheckForUpdate();
             //cameraControl.m_CameraList = m_CameraList;
             cameraControl.m_PictureBox = m_PictureBox;
-            startVimba();
+  
+
 
         }
 
@@ -127,8 +128,6 @@ namespace OpenCNCPilot
                 //Text += String.Format(" Vimba .NET API Version {0}", vimbaHelper.GetVersion());
                 m_VimbaHelper = vimbaHelper;
                 cameraControl.VimbaHelper = m_VimbaHelper;
-
-
                 try
                 {
                     cameraControl.UpdateCameraList();
@@ -411,13 +410,13 @@ namespace OpenCNCPilot
         private void disableCameraControlButtons()
         {
             btnCapture.IsEnabled = false;
-            btnCameraSettingsReload.IsEnabled = false;
+            //btnCameraSettingsReload.IsEnabled = false;
 
         }
         private void enableCameraControlButtons()
         {
             btnCapture.IsEnabled = true;
-            btnCameraSettingsReload.IsEnabled = false;
+            //btnCameraSettingsReload.IsEnabled = false;
         }
 
         private void stopTimeLapse()
@@ -594,9 +593,6 @@ namespace OpenCNCPilot
                 bool isPlateFound = FindCheckedBox(currentIndex, true);
                 if (!isPlateFound) return;
 
-              
-
-
                 if (firstRun)
                 {
                     machine.SendLine("$H");
@@ -701,6 +697,7 @@ namespace OpenCNCPilot
         {
 
             int numBoxes = Properties.Settings.Default.NumLocations;
+            spCheckboxes.Children.Clear();
             for (int i = 0; i < numBoxes; i++)
             {
                 CheckBox tempCB = new CheckBox();
@@ -708,7 +705,7 @@ namespace OpenCNCPilot
                 tempCB.IsChecked = true;
                 checkBoxes.Add(tempCB);
                 TextBlock tempText = new TextBlock();
-                tempText.Text = i.ToString();
+                tempText.Text = (i + 1).ToString();
                 tempText.VerticalAlignment = VerticalAlignment.Center;
                 tempText.Margin = new Thickness(5);
                 textBlocks.Add(tempText);
@@ -836,61 +833,6 @@ namespace OpenCNCPilot
             }
         }
 
-        private void ButtonRapidOverride_Click(object sender, RoutedEventArgs e)
-        {
-            //Button b = sender as Button;
-
-            //if (b == null)
-            //	return;
-
-            //switch(b.Content as string)
-            //{
-            //	case "100%":
-            //		machine.SendControl(0x95);
-            //		break;
-            //	case "50%":
-            //		machine.SendControl(0x96);
-            //		break;
-            //	case "25%":
-            //		machine.SendControl(0x97);
-            //		break;
-            //}
-        }
-
-        private void ButtonFeedOverride_Click(object sender, RoutedEventArgs e)
-        {
-            //Button b = sender as Button;
-
-            //if (b == null)
-            //	return;
-
-            //switch (b.Tag as string)
-            //{
-            //	case "100%":
-            //		machine.SendControl(0x90);
-            //		break;
-            //	case "+10%":
-            //		machine.SendControl(0x91);
-            //		break;
-            //	case "-10%":
-            //		machine.SendControl(0x92);
-            //		break;
-            //	case "+1%":
-            //		machine.SendControl(0x93);
-            //		break;
-            //	case "-1%":
-            //		machine.SendControl(0x94);
-            //		break;
-            //}
-        }
-
-        private void ButtonResetViewport_Click(object sender, RoutedEventArgs e)
-        {
-            //viewport.Camera.Position = new System.Windows.Media.Media3D.Point3D(50, -150, 250);
-            //viewport.Camera.LookDirection = new System.Windows.Media.Media3D.Vector3D(-50, 150, -250);
-            //viewport.Camera.UpDirection = new System.Windows.Media.Media3D.Vector3D(0, 0, 1);
-        }
-
         private void ButtonSaveTLOPos_Click(object sender, RoutedEventArgs e)
         {
             if (machine.Mode != Machine.OperatingMode.Manual)
@@ -974,5 +916,9 @@ namespace OpenCNCPilot
             startVimba();
         }
 
+        private void ListBoxHistory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -1,0 +1,11 @@
+<FixedPage Width="299.68" Height="299.68" xmlns="http://schemas.openxps.org/oxps/v1.0" xml:lang="und">
+	<!-- Microsoft XPS Document Converter (MXDC) Generated! Version: 0.3.17134.191 -->
+	<Path Data="F1 M 0,0 C 0,52.16 -27.84,100.48 -73.12,126.56 -118.4,152.8 -174.08,152.8 -219.36,126.56
+		 -264.64,100.48 -292.48,52.16 -292.48,0 -292.48,-52.32 -264.64,-100.64 -219.36,-126.72 -174.08,-152.8 -118.4,-152.8 -73.12,-126.72
+		 -27.84,-100.64 0,-52.32 0,0 z" RenderTransform="1,0,0,1,295.84,150.24" Stroke="#ff00d400" StrokeThickness="3.68" StrokeLineJoin="Miter" StrokeMiterLimit="4" />
+	<Path Data="M 3.36,4 L 296.16,4 296.16,296.8 3.36,296.8 z"  Clip="M 3.36,4 L 296,4 296,296.64 3.36,296.64 z" >
+		<Path.Fill>
+			<ImageBrush ImageSource="../Resources/Images/1.PNG" Viewbox="0,0,915,915" TileMode="None" ViewboxUnits="Absolute" ViewportUnits="Absolute" Viewport="3.36,4,292.8,292.8" />
+		</Path.Fill>
+	</Path>
+</FixedPage>
