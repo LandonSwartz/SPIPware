@@ -34,7 +34,7 @@
 		</Grid.ColumnDefinitions>-->
 
 
-		<Ribbon SelectedIndex="0" Grid.ColumnSpan="2">
+		<Ribbon SelectedIndex="0" Grid.ColumnSpan="2" SelectionChanged="Ribbon_SelectionChanged">
 			<Ribbon.HelpPaneContent>
 				<RibbonButton Label="Help">
 					<StackPanel>
@@ -75,10 +75,20 @@
 							</DrawingImage.Drawing>
 						</DrawingImage>
 					</RibbonApplicationMenu.SmallImageSource>
-					<RibbonApplicationMenuItem Header="New" Click="BtnExperimentFileOpen_Click"></RibbonApplicationMenuItem>
+					<RibbonApplicationMenuItem Header="New" Click="BtnExperimentFileOpen_Click">
+						
+					</RibbonApplicationMenuItem>
 					<RibbonApplicationMenuItem Header="Open" Click="ButtonLoadExperiment_Click"></RibbonApplicationMenuItem>
-					<RibbonApplicationMenuItem Header="Save"  Click="ButtonSaveExperiment_Click"></RibbonApplicationMenuItem>
-					<RibbonApplicationMenuItem Header="Save As" Click="ButtonSaveAsExperiment_Click"></RibbonApplicationMenuItem>
+					<RibbonApplicationSplitMenuItem Header="Save"  Click="ButtonSaveExperiment_Click">
+						<RibbonApplicationMenuItem Header="Save"  Click="ButtonSaveExperiment_Click"></RibbonApplicationMenuItem>
+						<RibbonApplicationMenuItem Header="Save As" Click="ButtonSaveAsExperiment_Click"></RibbonApplicationMenuItem>
+					</RibbonApplicationSplitMenuItem>
+					
+					<RibbonSeparator></RibbonSeparator>
+					<RibbonApplicationSplitMenuItem Header="Load Defaults"  Click="ButtonLoadExperimentDefaults_Click">
+						<RibbonApplicationMenuItem Header="Load Defaults" Click="ButtonLoadExperimentDefaults_Click"></RibbonApplicationMenuItem>
+						<RibbonApplicationMenuItem Header="Save Defaults" Click="ButtonSaveExperimentDefaults_Click"></RibbonApplicationMenuItem>
+					</RibbonApplicationSplitMenuItem>
 				</RibbonApplicationMenu>
 			</Ribbon.ApplicationMenu>
 
@@ -102,12 +112,16 @@
 			<RibbonTab Header="Control">
 				<RibbonGroup Header="Connect">
 					<StackPanel Orientation="Horizontal">
-						<StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,5,5,5">
-							<Button Name="ButtonConnect" Content="Connect" Style="{StaticResource styleButton}" Click="ButtonConnect_Click"/>
-							<Button Name="ButtonDisconnect" Visibility="Collapsed" Content="Disconnect" Style="{StaticResource styleButton}" Click="ButtonDisconnect_Click"/>
-							
+						<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+							<Button Name="ButtonConnect" Style="{StaticResource bigButton}"  Click="ButtonConnect_Click">
+								<ContentControl Template="{StaticResource Connect}"/>
+							</Button>
+							<Button Name="ButtonDisconnect" Visibility="Collapsed"  Style="{StaticResource bigButton}" Click="ButtonDisconnect_Click">
+								<ContentControl Template="{StaticResource Disconnect}"/>
+							</Button>
+
 						</StackPanel>
-						<StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,5,5,0">
+						<StackPanel Orientation="Vertical" VerticalAlignment="Center" >
 							<ComboBox Name="SerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="75"   SelectedItem="{util:SettingBinding P,Mode=TwoWay}" DropDownOpened="cbSerialOpen">
 							</ComboBox>
 							<!--<Label Content="Port" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top"/>-->
@@ -116,37 +130,43 @@
 				</RibbonGroup>
 				
 
-				<RibbonGroup Header="Machine">
-					<StackPanel Orientation="Horizontal">
+				<RibbonGroup Header="Machine" VerticalContentAlignment="Stretch">
+					
+					<!--<DockPanel  >-->
 
-						<StackPanel Orientation="Vertical" Margin="5,5,5,0" VerticalAlignment="Center">
-							<Button Name="ButtonStatus" Content="Disconnected" Click="ButtonStatus_Click" Style="{StaticResource styleButton}" Margin="0,5"  ToolTip="Machine Status - Click to send $X to unlock"/>
+						<!--<StackPanel Orientation="Vertical"  Margin="5,5,5,0" VerticalAlignment="Center">-->
+							<Label Margin="0,15" BorderBrush="Black" BorderThickness="1.5" Name="ButtonStatus" Content="Disconnected"   ToolTip="Machine Status"/>
 								<!--<TextBlock Text="GRBL Status" HorizontalAlignment="Center"/>-->
-							</StackPanel>
+							<!--</StackPanel>-->
 						
-					</StackPanel>
+					<!--</DockPanel>-->
 				</RibbonGroup>
 				<RibbonGroup Header="Machine Commands">
 					<StackPanel Orientation="Horizontal">
-						<Button  Name="ButtonManualResetG10" Click="ButtonReset_Click" Style="{StaticResource styleButton}"  
-									    ToolTip="Soft Reset System" Height="48">
+						<Button Name="ButtonStop" Click="ButtonStop_Click" Style="{StaticResource bigButton}"  >
+							<!--<ContentControl Template="{StaticResource Stop}"></ContentControl>-->
+							<Image Source="Resources/Images/stop-icon.png" Style="{StaticResource ImageEnabled}">
+							</Image>
+						</Button>
+						<Button  Name="ButtonManualResetG10" Click="ButtonReset_Click" Style="{StaticResource bigButton}"  
+									    ToolTip="Soft Reset System" >
+							<!--<ContentControl Template="{StaticResource Reset}"></ContentControl>-->
 							<Image Source="pack://application:,,,/Resources/Images/reset-icon.png" Style="{StaticResource ImageEnabled}">
 							</Image>
 						</Button>
 						<!--<Button Name="ButtonCycleStart" Click="ButtonCycleStart_Click" Content="Start" Style="{StaticResource styleButton}" Margin="5,5,0,5"/>-->
-						<Button   Name="ButtonUnlock" Click="ButtonUnlock_Click" Style="{StaticResource styleButton}" Height="48">
+						<Button   Name="ButtonUnlock" Click="ButtonUnlock_Click" Style="{StaticResource bigButton}" >
 							<Image Source="pack://application:,,,/Resources/Images/unlock-icon.png" Style="{StaticResource ImageEnabled}">
 							</Image>
 							<!--<ContentControl Template="{StaticResource Unlock}"></ContentControl>-->
 						</Button>
-						<Button Name="ButtonHome" Click="ButtonHome_Click" Style="{StaticResource styleButton}" Height="48">
+						<Button Name="ButtonHome" Click="ButtonHome_Click" Style="{StaticResource bigButton}">
+							<!--<ContentControl Template="{StaticResource Home}"></ContentControl>-->
 							<Image Source="pack://application:,,,/Resources/Images/Home-icon.png" Style="{StaticResource ImageEnabled}">
 							</Image>
 						</Button>
-						<Button Name="ButtonStop" Click="ButtonStop_Click" Style="{StaticResource styleButton}" Height="48" >
-							<Image Source="Resources/Images/stop-icon.png" Style="{StaticResource ImageEnabled}">
-							</Image>
-						</Button>
+				
+					
 
 						
 					</StackPanel>
@@ -155,9 +175,9 @@
 				<RibbonGroup Header="Camera">
 					<StackPanel Orientation="Horizontal" >
 
-						<StackPanel Orientation="Vertical" Margin="5,5,0,0" >
-							<Image Height="36" Margin="2" Source="pack://application:,,,/Resources/Icons/Button_Icon_Red.png"></Image>
-							<TextBlock Text="{util:SettingBinding CameraState, Mode=OneWay}"></TextBlock>
+						<StackPanel Orientation="Vertical" Margin="5" >
+							<Image Height="36" Margin="2" Name="cameraStatusIcon" Source="pack://application:,,,/Resources/Icons/Button_Icon_Yellow.png"></Image>
+							<TextBlock Text="{util:SettingBinding CameraState, Mode=OneWay, NotifyOnTargetUpdated=True}" TargetUpdated="cameraStatusUpdated"></TextBlock>
 							<!--<Label Content="Camera" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>-->
 						</StackPanel>
 					</StackPanel>
@@ -171,60 +191,8 @@
 
 				</RibbonGroup>-->
 
-				
-
-
-
 			</RibbonTab>
-			<!--<RibbonTab Header="Configuration">
-				--><!--<RibbonGroup Header="Plate Calibraton">
-					<StackPanel Orientation="Horizontal">
-						<Label Content="First Plate Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-						-->
-				<!--<ComboBox Name="Box_FirstPlateOffset" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="ComboBox_DropDownOpened">
-							
-						</ComboBox>-->
-				<!--
-						<xctk:IntegerUpDown Name="udPlateOffset" Value="{util:SettingBinding PlateOffset}" Width="65" Margin="5" />
-						<Button Name="btnTestFirst" Content="Test" Style="{StaticResource styleButton}" Click="btnTestFirst_Click"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label Content="Between Plates:  " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
-						-->
-				<!--<ComboBox Name="Box_BetweenPlateDistance" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="120"   SelectedItem="{util:SettingBinding SerialPortName,Mode=TwoWay}" DropDownOpened="ComboBox_DropDownOpened">
-
-						</ComboBox>-->
-				<!--
-						<xctk:IntegerUpDown Name="udBetweenDistance" Value="{util:SettingBinding BetweenDistance}" Width="65" Margin="5" />
-						<Button Name="btnTestBetween" Content="Test" Style="{StaticResource styleButton}" Click="btnTestBetween_Click" />
-					</StackPanel>
-				</RibbonGroup>
-				<RibbonGroup Header="Camera Configucration">
-					<StackPanel Orientation="Vertical">
-
-						<StackPanel Orientation="Vertical">
-
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="Camera Settings: " VerticalAlignment="Center" />
-
-
-								<ComboBox Name="cameraSettingsCB" Width="150" Text="{util:SettingBinding CameraSettingsPath}"  VerticalContentAlignment="Center" Height="22" DropDownOpened="cameraSettingsCB_DropDownOpened" SelectionChanged="cameraSettingsCB_SelectionChanged"/>
-
-							</StackPanel>
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-								<Button Name="btnCameraSettingsReload" Content="Refresh Settings" Style="{StaticResource styleButton}" Width="100" Margin=" 5" Click="btnCameraSettingsReload_Click" />
-							</StackPanel>
-							-->
-				<!--<StackPanel Orientation="Horizontal">
-								<TextBlock VerticalAlignment="Center">Live View:</TextBlock>
-								<Button Content="Off" Style="{StaticResource styleButton}" Width="40" Margin=" 5" />
-							</StackPanel>-->
-				<!--
-
-						</StackPanel>
-					</StackPanel>
-				</RibbonGroup>--><!--
-			</RibbonTab>-->
+			
 			<RibbonTab Header="Advanced">
 				<RibbonGroup Header="G-Code Terminal">
 					<StackPanel>
@@ -356,17 +324,19 @@
 								<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
 
 									<!--<TextBlock VerticalAlignment="Center" Margin="5">Root Folder:</TextBlock>-->
-									<Button Name="btnSaveFolder" Margin="5" Padding="5"  Click="BtnSaveFolderOpen_Click">
+									<Button Name="btnSaveFolder" Style="{StaticResource smallButton}"  Click="BtnSaveFolderOpen_Click">
 										<StackPanel>
-											<ContentControl Template="{StaticResource FolderOpen}"></ContentControl>
+											<ContentControl Template="{StaticResource FolderOpen}" ></ContentControl>
 											<!--<materialDesign:PackIcon Kind="FolderOpen" Height="24" Width="24" />-->
 											<!--<TextBlock>Disconnect from Server</TextBlock>-->
 										</StackPanel>
 									</Button>
-
-
-									<TextBox  Name="tbFolderPath" Width="300" Text="{util:SettingBinding SaveFolderPath}" IsReadOnly="True" 
-											   Height="22" IsEnabled="False" />
+									<!--<Label BorderThickness="0" BorderBrush="LightSkyBlue" VerticalAlignment="Center">-->
+										
+										<TextBox Style="{StaticResource CustomFileText}"  x:Name="tbFolderPath" Width="300" Text="{util:SettingBinding SaveFolderPath}"
+											   VerticalAlignment="Center" IsEnabled="False" IsReadOnly="True" />
+									<!--</Label>-->
+									
 								</StackPanel>
 							</GroupBox>
 							<GroupBox>
@@ -514,13 +484,14 @@
 
 									<!--<TextBlock VerticalAlignment="Center" Margin="5">Experiment File:</TextBlock>-->
 
-									<Button Name="btnTimeLapseExperimentFile" Margin="5" Padding="5" Click="BtnTlExperimentFileOpen_Click">
+									<Button Name="btnTimeLapseExperimentFile" Style="{StaticResource smallButton}"  Click="BtnTlExperimentFileOpen_Click">
 										<StackPanel>
 											<ContentControl Template="{StaticResource FolderOpen}"></ContentControl>
 
 										</StackPanel>
 									</Button>
-									<TextBox  Name="tbTimeLapseExperimentPath" Width="300" Text="{util:SettingBinding tlExperimentPath}" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+									<TextBox  Name="tbTimeLapseExperimentPath" Width="300" Text="{util:SettingBinding tlExperimentPath}" IsReadOnly="True" 
+											  IsEnabled="False" VerticalAlignment="Center" Style="{StaticResource CustomFileText}" />
 
 								</StackPanel>
 						</GroupBox>
@@ -633,17 +604,19 @@
 							</GroupBox.Header>
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 								<StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-									<Button Margin="5"	Padding="5" FontSize="26" Name="btnRunCycle" Width="64" Height="64" Click="ButtonStartCycle_Click">
+									<Button Style="{StaticResource bigButton}" Name="btnRunCycle"
+											Width="64" Height="64" Click="ButtonStartCycle_Click">
 										<ContentControl Template="{StaticResource Run}"></ContentControl>
 									</Button>
-									<Button Margin="5"	Padding="5" FontSize="26" Name="btnStopCycle"  Width="64" Height="64" Click="ButtonStopCycle_Click">
+									<Button Style="{StaticResource bigButton}"  FontSize="26" Name="btnStopCycle" 
+											Visibility="Collapsed" Width="64" Height="64" Click="ButtonStopCycle_Click">
 										<ContentControl Template="{StaticResource Stop}"></ContentControl>
 									</Button>
 								</StackPanel>
 								<StackPanel Orientation="Vertical" Margin="5,5,5,0" VerticalAlignment="Center">
 									<!--<TextBlock Text="Cycle Status:" HorizontalAlignment="Center" Margin="0,0,0,5"/>-->
-									<Image Height="36" Margin="2" Source="pack://application:,,,/Resources/Icons/Button_Icon_Yellow.png"></Image>
-									<TextBox Name="cycleStatus" Width="75" Text="Not Running" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+									<Image Name="cycleStatusIcon" Height="36" Margin="2" Source="pack://application:,,,/Resources/Icons/Button_Icon_Yellow.png"></Image>
+									<TextBlock Name="cycleStatus" Width="75" Text="Not Running" TextAlignment="Center" Height="22"/>
 								</StackPanel>
 
 
@@ -672,17 +645,19 @@
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 							
 									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-										<Button Click="ButtonStartTimeLapse_Click" Margin="5" Padding="5" FontSize="16" Name="btnRunTimeLapse" Width="48">
+									<Button Click="ButtonStartTimeLapse_Click" Style="{StaticResource bigButton}" 
+												 Name="btnRunTimeLapse" Width="64" Height="64">
 											<ContentControl Template="{StaticResource RunTimelapse}"></ContentControl>
 										</Button>
-										<Button Click="ButtonStopTimeLapse_Click" Margin="5" Padding="5" FontSize="16" Name="btnStopTimeLapse" Width="48">
+									<Button Click="ButtonStopTimeLapse_Click" Style="{StaticResource bigButton}" 
+												Visibility="Collapsed"  Name="btnStopTimeLapse" Width="64" Height="64">
 											<ContentControl Template="{StaticResource StopTimelapse}"></ContentControl>
 										</Button>
 									</StackPanel>
-									<StackPanel Orientation="Vertical">
+								<StackPanel Orientation="Vertical" Margin="5,5,5,0">
 										<!--<TextBlock Text="Timelapse Status: "  VerticalAlignment="Center"/>-->
-										<Image Height="36" Margin="2" Source="pack://application:,,,/Resources/Icons/Button_Icon_Red.png"></Image>
-										<TextBox Name="timeLapseStatus" Width="75" Text="Running"  IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+										<Image Height="36" Margin="2" Name="timeLapseStatusIcon" Source="pack://application:,,,/Resources/Icons/Button_Icon_Yellow.png"></Image>
+										<TextBlock TextAlignment="Center" Name="timeLapseStatus" Width="75" Text="Not Running"   Height="22"/>
 									</StackPanel>
 
 		

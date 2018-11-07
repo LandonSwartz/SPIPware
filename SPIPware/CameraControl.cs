@@ -56,6 +56,18 @@ namespace OpenCNCPilot
             //MessageBox.Show(message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         List<CameraInfo> cameras;
+        public void updateCameraState(bool cameraReady)
+        {
+            if (cameraReady)
+            {
+                Properties.Settings.Default.CameraState = "Ready";
+                
+            }
+            else
+            {
+                Properties.Settings.Default.CameraState = "Not Ready";
+            }
+        }
         public void UpdateCameraList()
         {
             //Remember the old selection (if there was any)y
@@ -67,14 +79,12 @@ namespace OpenCNCPilot
             if (cameras.Any())
             {
                 //CameraInfo newSelectedItem = cameras[0];
-
-                Properties.Settings.Default.CameraState = "Ready";
+                updateCameraState(true);
                 //Console.WriteLine("New Selected Camera" + newSelectedItem);
             }
             else
             {
-                Properties.Settings.Default.CameraState = "Not Ready";
-
+                updateCameraState(false);
             }
             //foreach (CameraInfo cameraInfo in cameras)
             //{

@@ -14,6 +14,9 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using OpenCNCPilot.Entities;
+using System.Windows.Media.Imaging;
+using System.Windows.Data;
+using System.Globalization;
 
 namespace OpenCNCPilot
 {
@@ -21,18 +24,26 @@ namespace OpenCNCPilot
     {
         Machine machine = new Machine();
 
-        OpenFileDialog openFileDialogGCode = new OpenFileDialog() { Filter = Constants.FileFilterGCode };
-        SaveFileDialog saveFileDialogGCode = new SaveFileDialog() { Filter = Constants.FileFilterGCode };
-        OpenFileDialog openFileDialogHeightMap = new OpenFileDialog() { Filter = Constants.FileFilterHeightMap };
-        SaveFileDialog saveFileDialogHeightMap = new SaveFileDialog() { Filter = Constants.FileFilterHeightMap };
+        //OpenFileDialog openFileDialogGCode = new OpenFileDialog() { Filter = Constants.FileFilterGCode };
+        //SaveFileDialog saveFileDialogGCode = new SaveFileDialog() { Filter = Constants.FileFilterGCode };
+        //OpenFileDialog openFileDialogHeightMap = new OpenFileDialog() { Filter = Constants.FileFilterHeightMap };
+        //SaveFileDialog saveFileDialogHeightMap = new SaveFileDialog() { Filter = Constants.FileFilterHeightMap };
 
-        GCodeFile ToolPath { get; set; } = GCodeFile.Empty;
+        //GCodeFile ToolPath { get; set; } = GCodeFile.Empty;
         //HeightMap Map { get; set; }
 
         private decimal targetLocation = 0;
         private int currentIndex = 0;
         public static bool runningCycle = false;
         public static bool runningTimeLapse = false;
+
+        public const string GREEN_STATUS = "pack://application:,,,/Resources/Icons/Button_Icon_Green.png";
+        public const string YELLOW_STATUS = "pack://application:,,,/Resources/Icons/Button_Icon_Yellow.png";
+        public const string RED_STATUS = "pack://application:,,,/Resources/Icons/Button_Icon_Red.png";
+
+        BitmapImage GREEN_IMAGE = new BitmapImage(new Uri(GREEN_STATUS, UriKind.Absolute));
+        BitmapImage YELLOW_IMAGE = new BitmapImage(new Uri(YELLOW_STATUS, UriKind.Absolute));
+        BitmapImage RED_IMAGE = new BitmapImage(new Uri(RED_STATUS, UriKind.Absolute));
 
 
         //private bool goToFirstPlate = true;
@@ -60,15 +71,15 @@ namespace OpenCNCPilot
             updateSerialPortComboBox();
 
             startVimba();
-            Properties.Settings.Default.tlStartDate = DateTime.Now;
-            Properties.Settings.Default.tlEndDate = DateTime.Now.AddHours(1);
+            //Properties.Settings.Default.tlStartDate = DateTime.Now;
+            //Properties.Settings.Default.tlEndDate = DateTime.Now.AddHours(1);
 
         
 
 
             //SerialPortSelect.SelectedValue = port[0];
-            openFileDialogGCode.FileOk += OpenFileDialogGCode_FileOk;
-            saveFileDialogGCode.FileOk += SaveFileDialogGCode_FileOk;
+            //openFileDialogGCode.FileOk += OpenFileDialogGCode_FileOk;
+            //saveFileDialogGCode.FileOk += SaveFileDialogGCode_FileOk;
             //openFileDialogHeightMap.FileOk += OpenFileDialogHeightMap_FileOk;
             //saveFileDialogHeightMap.FileOk += SaveFileDialogHeightMap_FileOk;
 
@@ -88,7 +99,7 @@ namespace OpenCNCPilot
             machine.PlaneChanged += Machine_PlaneChanged;
             machine.BufferStateChanged += Machine_BufferStateChanged;
             machine.OperatingModeChanged += Machine_OperatingMode_Changed;
-            machine.FileChanged += Machine_FileChanged;
+            //machine.FileChanged += Machine_FileChanged;
             //machine.FilePositionChanged += Machine_FilePositionChanged;
             //machine.ProbeFinished += Machine_ProbeFinished;
             machine.OverrideChanged += Machine_OverrideChanged;
@@ -202,13 +213,22 @@ namespace OpenCNCPilot
         }
         private void BtnSaveFolderOpen_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.SaveFolderPath = getFolderResult(); 
+            string folderResult = getFolderResult();
+            if(folderResult != null)
+            {
+                Properties.Settings.Default.SaveFolderPath = folderResult;
+            }
+           
         }
         private void BtnExperimentFileOpen_Click(object sender, RoutedEventArgs e)
         {
             var dialog = openSaveDialog();
             saveAsSettingsToFile(dialog);
-            Properties.Settings.Default.ExperimentPath = dialog.FileName;
+            if(dialog != null)
+            {
+                Properties.Settings.Default.ExperimentPath = dialog.FileName;
+            }
+
         }
         private void BtnTlExperimentFileOpen_Click(object sender, RoutedEventArgs e)
         {
@@ -298,11 +318,11 @@ namespace OpenCNCPilot
             }
 
 
-            if (!cameraSettingsCB.Items.Contains(Properties.Settings.Default.CameraSettingsPath))
-            {
-                cameraSettingsCB.SelectedItem = 0;
-                cameraSettingsCB.SelectedIndex = 0;
-            }
+            //if (!cameraSettingsCB.Items.Contains(Properties.Settings.Default.CameraSettingsPath))
+            //{
+            //    cameraSettingsCB.SelectedItem = 0;
+            //    cameraSettingsCB.SelectedIndex = 0;
+            //}
 
 
         }
@@ -427,6 +447,8 @@ namespace OpenCNCPilot
                 tokenSource.Cancel();
             }
             runningTimeLapse = false;
+            updateTimeLapseStatus(runningTimeLapse);
+           
         }
         bool growLightsOn = false;
         async Task waitForStartNow()
@@ -490,7 +512,8 @@ namespace OpenCNCPilot
                 catch (TaskCanceledException e)
                 {
                     Console.WriteLine("TimeLapse Cancelled");
-                    runningTimeLapse = false;
+                    //runningTimeLapse = false;
+                    stopTimeLapse();
                     updateTimeLapseStatus(runningTimeLapse);
                     return;
                 }
@@ -527,26 +550,76 @@ namespace OpenCNCPilot
             timeLapseStatus.Text = parseStatus(timeLapseRunning);
             if (timeLapseRunning)
             {
-                btnStopTimeLapse.IsEnabled = true;
-                btnRunTimeLapse.IsEnabled = false;
+                //btnStopTimeLapse.IsEnabled = true;
+                //btnRunTimeLapse.IsEnabled = false;
+                timeLapseStatusIcon.Source = GREEN_IMAGE;
             }
             else
             {
-                btnStopTimeLapse.IsEnabled = false;
-                btnRunTimeLapse.IsEnabled = true;
+                //btnStopTimeLapse.IsEnabled = false;
+                //btnRunTimeLapse.IsEnabled = true;
+                timeLapseCount.Text = parseStatus(timeLapseRunning);
+                timeLapseEnd.Text = timeLapseCount.Text;
                 enableMachineControlButtons();
+                timeLapseStatusIcon.Source = YELLOW_IMAGE;
             }
+            toggleTimeLapseButton(timeLapseRunning);
+        }
+        public void toggleTimeLapseButton(bool running)
+        {
+            if (running)
+            {
+                btnRunTimeLapse.Visibility = Visibility.Collapsed;
+                btnStopTimeLapse.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnRunTimeLapse.Visibility = Visibility.Visible;
+                btnStopTimeLapse.Visibility = Visibility.Collapsed;
+            }
+
         }
         public void updateCycleStatus(bool cycleRunning)
         {
             if (!cycleRunning)
             {
                 enableMachineControlButtons();
+                cycleStatusIcon.Source = YELLOW_IMAGE;
+            }
+            else
+            {
+                cycleStatusIcon.Source = GREEN_IMAGE;
             }
           
             cycleStatus.Text = parseStatus(cycleRunning);
+            toggleImageCycleButton(cycleRunning);
+         
         }
-     
+        public void updateCameraStatus(string cameraStatus)
+        {
+            if (string.Equals("Not Ready", cameraStatus))
+            {
+                cameraStatusIcon.Source = RED_IMAGE;
+            }
+            else
+            {
+                cameraStatusIcon.Source = GREEN_IMAGE;
+            }
+        }
+        public void toggleImageCycleButton(bool running)
+        {
+            if (running)
+            {
+                btnRunCycle.Visibility = Visibility.Collapsed;
+                btnStopCycle.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnRunCycle.Visibility = Visibility.Visible;
+                btnStopCycle.Visibility = Visibility.Collapsed;
+            }
+
+        }
         public async void startTimeLapse()
         {
             btnRunTimeLapse.IsEnabled = false;
@@ -564,9 +637,9 @@ namespace OpenCNCPilot
             DateTime endDate = Properties.Settings.Default.tlStartDate.AddMilliseconds(endTime);
             timeLapseEnd.Text = endDate.ToString();
 
-
+            timeLapseCount.Text = Properties.Settings.Default.tlStartDate.ToString();
             handleTimelapseCalculations(timeLapseInterval, endTime);
-            timeLapseCount.Text = "Not Running";
+            //timeLapseCount.Text = "Not Running";
 
 
         }
@@ -582,7 +655,7 @@ namespace OpenCNCPilot
         }
         public void startCycle()
         {
-            if (machine.Connected)
+            //if (machine.Connected)
             {
                 
                 btnRunCycle.IsEnabled = false;
@@ -610,10 +683,10 @@ namespace OpenCNCPilot
                     targetLocation = machine.sendMotionCommand(currentIndex);
                 }
             }
-            else
-            {
-                Machine_NonFatalException("Machine not connected");
-            }
+            //else
+            //{
+            //    Machine_NonFatalException("Machine not connected");
+            //}
            
 
         }
@@ -623,6 +696,7 @@ namespace OpenCNCPilot
             updateCycleStatus(runningCycle);
             currentIndex = 0;
             machine.sendMotionCommand(0);
+            machine.SendLine("$H");
             enableMachineControlButtons();
             machine.setBackLightStatus(false);
             machine.setGrowLightStatus(true, !isNightTime());
@@ -636,7 +710,7 @@ namespace OpenCNCPilot
             }
      
         }
-
+      
         public void saveSettingsToFile()
         {
             Experiment.createExperimentFromSettings(Properties.Settings.Default.ExperimentPath);
@@ -662,9 +736,10 @@ namespace OpenCNCPilot
         {
             if(dialog != null)
             {
+               
                 Experiment.createExperimentFromSettings(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
-           
+                Console.Write(Properties.Settings.Default.ExperimentPath);
             }
                   
              
@@ -674,9 +749,21 @@ namespace OpenCNCPilot
             var dialog = getFileResult();
             if(dialog!= null)
             {
+                Console.Write(dialog.FileName);
                 Experiment.loadExperimentToSettings(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
             }
+        }
+        public const string DEFAULT_SETTINGS_PATH = @"Resources\defaultSettings.bin";
+        public void loadDefaults()
+        {
+            Experiment.loadExperimentToSettings(DEFAULT_SETTINGS_PATH);
+            Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
+        }
+        public void saveDefaults()
+        {
+            Experiment.createExperimentFromSettings(DEFAULT_SETTINGS_PATH);
+            Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
         }
         List<CheckBox> checkBoxes = new List<CheckBox>();
         List<TextBlock> textBlocks = new List<TextBlock>();
@@ -700,15 +787,25 @@ namespace OpenCNCPilot
             spCheckboxes.Children.Clear();
             for (int i = 0; i < numBoxes; i++)
             {
+                //StackPanel stackPanel = new StackPanel();
+                //stackPanel.Orientation = Orientation.Vertical;
+                //stackPanel.Margin = new Thickness(5);
+
                 CheckBox tempCB = new CheckBox();
                 tempCB.VerticalAlignment = VerticalAlignment.Center;
                 tempCB.IsChecked = true;
                 checkBoxes.Add(tempCB);
+
                 TextBlock tempText = new TextBlock();
                 tempText.Text = (i + 1).ToString();
                 tempText.VerticalAlignment = VerticalAlignment.Center;
                 tempText.Margin = new Thickness(5);
                 textBlocks.Add(tempText);
+
+                //stackPanel.Children.Add(checkBoxes[i]);
+                //stackPanel.Children.Add(textBlocks[i]);
+
+                //spCheckboxes.Children.Add(stackPanel);
 
                 spCheckboxes.Children.Add(checkBoxes[i]);
                 spCheckboxes.Children.Add(textBlocks[i]);
@@ -898,6 +995,14 @@ namespace OpenCNCPilot
         {
             saveSettingsToFile();
         }
+        private void ButtonSaveExperimentDefaults_Click(object sender, RoutedEventArgs e)
+        {
+            saveDefaults();
+        }
+        private void ButtonLoadExperimentDefaults_Click(object sender, RoutedEventArgs e)
+        {
+            loadDefaults();
+        }
         private void ButtonSaveAsExperiment_Click(object sender, RoutedEventArgs e)
         {
             var dialog = openSaveDialog();
@@ -920,5 +1025,47 @@ namespace OpenCNCPilot
         {
 
         }
+        private void cameraStatusUpdated(object sender, DataTransferEventArgs e)
+        {
+            TextBlock text = (TextBlock)sender;
+            updateCameraStatus(text.Text);
+        }
+
+        private void Ribbon_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
+    public class FileNameConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value != null && value is string)
+                return System.IO.Path.GetFileName((string)value);
+
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class FilePathConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value != null && value is string)
+                return System.IO.Path.GetDirectoryName((string)value);
+
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

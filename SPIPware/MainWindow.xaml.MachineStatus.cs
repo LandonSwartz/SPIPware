@@ -2,9 +2,11 @@
 using OpenCNCPilot.GCode;
 using OpenCNCPilot.Util;
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
@@ -258,90 +260,90 @@ namespace OpenCNCPilot
 		//	ListViewFile.ScrollIntoView(ListViewFile.SelectedItem);
 		//}
 
-		private void Machine_FileChanged()
-		{
-			try
-			{
-				ToolPath = GCodeFile.FromList(machine.File);
-				GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced); // prevents considerable increase in memory usage
-			}
-			catch(Exception ex)
-			{
-				MessageBox.Show("Could not parse GCode File, no preview/editing available\nrun this file at your own risk\n" + ex.Message);
-			}
+		//private void Machine_FileChanged()
+		//{
+		//	try
+		//	{
+		//		ToolPath = GCodeFile.FromList(machine.File);
+		//		GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced); // prevents considerable increase in memory usage
+		//	}
+		//	catch(Exception ex)
+		//	{
+		//		MessageBox.Show("Could not parse GCode File, no preview/editing available\nrun this file at your own risk\n" + ex.Message);
+		//	}
 
-			if(Properties.Settings.Default.EnableCodePreview)
-				//ToolPath.GetModel(ModelLine, ModelRapid, ModelArc);
+		//	if(Properties.Settings.Default.EnableCodePreview)
+		//		//ToolPath.GetModel(ModelLine, ModelRapid, ModelArc);
 
-			//RunFileLength.Text = machine.File.Count.ToString();
-			//RunFileDuration.Text = ToolPath.TotalTime.ToString(@"hh\:mm\:ss");
-			FileRunTime = TimeSpan.Zero;
+		//	//RunFileLength.Text = machine.File.Count.ToString();
+		//	//RunFileDuration.Text = ToolPath.TotalTime.ToString(@"hh\:mm\:ss");
+		//	FileRunTime = TimeSpan.Zero;
 
-			int digits = (int)Math.Ceiling(Math.Log10(machine.File.Count));
+		//	int digits = (int)Math.Ceiling(Math.Log10(machine.File.Count));
 
-			string format = "D" + digits;
+		//	string format = "D" + digits;
 
 
-			//ListViewFile.Items.Clear();
+		//	//ListViewFile.Items.Clear();
 
-			for(int line = 0; line < machine.File.Count; line++)
-			{
-				TextBlock tb = new TextBlock() { Text = $"{(line + 1).ToString(format)} : {machine.File[line]}" };
+		//	for(int line = 0; line < machine.File.Count; line++)
+		//	{
+		//		TextBlock tb = new TextBlock() { Text = $"{(line + 1).ToString(format)} : {machine.File[line]}" };
 
-				if (machine.PauseLines[line])
-					tb.Background = Brushes.YellowGreen;
+		//		if (machine.PauseLines[line])
+		//			tb.Background = Brushes.YellowGreen;
 
-				//ListViewFile.Items.Add(tb);
-			}
+		//		//ListViewFile.Items.Add(tb);
+		//	}
 
-			if (ToolPath.ContainsMotion)
-			{
-				//ModelFileBoundary.Points.Clear();
-				Point3DCollection boundary = new Point3DCollection();
+		//	if (ToolPath.ContainsMotion)
+		//	{
+		//		//ModelFileBoundary.Points.Clear();
+		//		Point3DCollection boundary = new Point3DCollection();
 
-				Vector3 MinPoint = ToolPath.MinFeed;
-				Vector3 MaxPoint = ToolPath.MaxFeed;
+		//		Vector3 MinPoint = ToolPath.MinFeed;
+		//		Vector3 MaxPoint = ToolPath.MaxFeed;
 
-				for (int ax = 0; ax < 3; ax++)
-				{
-					for (int mask = 0; mask < 4; mask++)
-					{
-						Vector3 point = MinPoint;
+		//		for (int ax = 0; ax < 3; ax++)
+		//		{
+		//			for (int mask = 0; mask < 4; mask++)
+		//			{
+		//				Vector3 point = MinPoint;
 
-						for (int i = 0; i < 2; i++)
-						{
-							// binary integer logic? hell yeah!
-							if (((mask >> i) & 0x01) == 1)
-							{
-								point[(ax + i + 1) % 3] = MaxPoint[(ax + i + 1) % 3];
-							}
-						}
+		//				for (int i = 0; i < 2; i++)
+		//				{
+		//					// binary integer logic? hell yeah!
+		//					if (((mask >> i) & 0x01) == 1)
+		//					{
+		//						point[(ax + i + 1) % 3] = MaxPoint[(ax + i + 1) % 3];
+		//					}
+		//				}
 
-						boundary.Add(point.ToPoint3D());
+		//				boundary.Add(point.ToPoint3D());
 
-						point[ax] = MaxPoint[ax];
-						boundary.Add(point.ToPoint3D());
-					}
-				}
+		//				point[ax] = MaxPoint[ax];
+		//				boundary.Add(point.ToPoint3D());
+		//			}
+		//		}
 
-				//ModelFileBoundary.Points = boundary;
+		//		//ModelFileBoundary.Points = boundary;
 
-				//ModelTextMinPoint.Text = string.Format(Constants.DecimalOutputFormat, "({0:0.###}, {1:0.###}, {2:0.###})", MinPoint.X, MinPoint.Y, MinPoint.Z);
-				//ModelTextMaxPoint.Text = string.Format(Constants.DecimalOutputFormat, "({0:0.###}, {1:0.###}, {2:0.###})", MaxPoint.X, MaxPoint.Y, MaxPoint.Z);
-				//ModelTextMinPoint.Position = MinPoint.ToPoint3D();
-				//ModelTextMaxPoint.Position = MaxPoint.ToPoint3D();
-				//ModelFileBoundaryPoints.Points.Clear();
-				//ModelFileBoundaryPoints.Points.Add(MinPoint.ToPoint3D());
-				//ModelFileBoundaryPoints.Points.Add(MaxPoint.ToPoint3D());
-			}
-			else
-			{
-				//ModelFileBoundary.Points.Clear();
-				//ModelFileBoundaryPoints.Points.Clear();
-				//ModelTextMinPoint.Text = "";
-				//ModelTextMaxPoint.Text = "";
-			}
-		}
+		//		//ModelTextMinPoint.Text = string.Format(Constants.DecimalOutputFormat, "({0:0.###}, {1:0.###}, {2:0.###})", MinPoint.X, MinPoint.Y, MinPoint.Z);
+		//		//ModelTextMaxPoint.Text = string.Format(Constants.DecimalOutputFormat, "({0:0.###}, {1:0.###}, {2:0.###})", MaxPoint.X, MaxPoint.Y, MaxPoint.Z);
+		//		//ModelTextMinPoint.Position = MinPoint.ToPoint3D();
+		//		//ModelTextMaxPoint.Position = MaxPoint.ToPoint3D();
+		//		//ModelFileBoundaryPoints.Points.Clear();
+		//		//ModelFileBoundaryPoints.Points.Add(MinPoint.ToPoint3D());
+		//		//ModelFileBoundaryPoints.Points.Add(MaxPoint.ToPoint3D());
+		//	}
+		//	else
+		//	{
+		//		//ModelFileBoundary.Points.Clear();
+		//		//ModelFileBoundaryPoints.Points.Clear();
+		//		//ModelTextMinPoint.Text = "";
+		//		//ModelTextMaxPoint.Text = "";
+		//	}
+		//}
 
 		private void Machine_OperatingMode_Changed()
 		{
@@ -432,4 +434,5 @@ namespace OpenCNCPilot
 			//LabelStateProbe.Visibility = machine.PinStateProbe ? Visibility.Visible : Visibility.Collapsed;
 		}
 	}
+    
 }
