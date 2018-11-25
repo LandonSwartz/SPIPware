@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace OpenCNCPilot.Entities
+namespace SPIPware.Entities
 {
     [Serializable]
     class Experiment

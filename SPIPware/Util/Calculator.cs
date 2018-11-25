@@ -1,11 +1,11 @@
-﻿using OpenCNCPilot.Communication;
+﻿using SPIPware.Communication;
 using System;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections.Generic;
 using martin2250.Calculator;
 
-namespace OpenCNCPilot.Util
+namespace SPIPware.Util
 {
 	class Calculator
 	{

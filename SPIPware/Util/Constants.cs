@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace OpenCNCPilot.Util
+namespace SPIPware.Util
 {
 	public class Constants
 	{

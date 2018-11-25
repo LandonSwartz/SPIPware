@@ -5,9 +5,9 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using OpenCNCPilot.Properties;
+using SPIPware.Properties;
 
-namespace OpenCNCPilot
+namespace SPIPware
 {
 	/// <summary>
 	/// Interaction logic for App.xaml
@@ -16,12 +16,12 @@ namespace OpenCNCPilot
 	{
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
-			if(Settings.Default.SettingsUpdateRequired)
-			{
-				Settings.Default.Upgrade();
-				Settings.Default.SettingsUpdateRequired = false;
-				Settings.Default.Save();
-			}
+			//if(Settings.Default.SettingsUpdateRequired)
+			//{
+			//	Settings.Default.Upgrade();
+			//	Settings.Default.SettingsUpdateRequired = false;
+			//	Settings.Default.Save();
+			//}
 		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
-namespace OpenCNCPilot.Util
+namespace SPIPware.Util
 {
 	public struct Vector2 : IEquatable<Vector2>
 	{

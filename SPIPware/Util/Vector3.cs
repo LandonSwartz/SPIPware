@@ -24,7 +24,7 @@ using System.Windows.Media.Media3D;
 /// </Changes>
 /// 
 
-namespace OpenCNCPilot.Util
+namespace SPIPware.Util
 {
 	[Serializable]
 	public struct Vector3 : IComparable, IComparable<Vector3>, IEquatable<Vector3>, IFormattable

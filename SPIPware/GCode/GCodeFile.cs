@@ -1,16 +1,16 @@
-﻿using OpenCNCPilot.GCode.GCodeCommands;
+﻿using SPIPware.GCode.GCodeCommands;
 using System.Collections.Generic;
 using System.Linq;
 //using HelixToolkit.Wpf;
 using System.Windows.Media.Media3D;
-using OpenCNCPilot.Properties;
+using SPIPware.Properties;
 using System.Globalization;
 using System.IO;
-using OpenCNCPilot.Util;
+using SPIPware.Util;
 using System.Collections.ObjectModel;
 using System;
 
-namespace OpenCNCPilot.GCode
+namespace SPIPware.GCode
 {
 	class GCodeFile
 	{

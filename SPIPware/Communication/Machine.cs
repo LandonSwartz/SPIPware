@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
-using OpenCNCPilot.Util;
+using SPIPware.Util;
 using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows;
 using System.Text.RegularExpressions;
-using OpenCNCPilot.GCode;
-using OpenCNCPilot.GCode.GCodeCommands;
+using SPIPware.GCode;
+using SPIPware.GCode.GCodeCommands;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCNCPilot.Communication
+namespace SPIPware.Communication
 {
 	enum ConnectionType
 	{

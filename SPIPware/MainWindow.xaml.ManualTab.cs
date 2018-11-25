@@ -1,5 +1,5 @@
-﻿using OpenCNCPilot.Communication;
-using OpenCNCPilot.Util;
+﻿using SPIPware.Communication;
+using SPIPware.Util;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace OpenCNCPilot
+namespace SPIPware
 {
 	partial class MainWindow
 	{

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenCNCPilot.Properties {
+namespace SPIPware.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -50,9 +50,9 @@ namespace OpenCNCPilot.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Serial")]
-        public global::OpenCNCPilot.Communication.ConnectionType ConnectionType {
+        public global::SPIPware.Communication.ConnectionType ConnectionType {
             get {
-                return ((global::OpenCNCPilot.Communication.ConnectionType)(this["ConnectionType"]));
+                return ((global::SPIPware.Communication.ConnectionType)(this["ConnectionType"]));
             }
             set {
                 this["ConnectionType"] = value;
@@ -380,18 +380,6 @@ namespace OpenCNCPilot.Properties {
             }
             set {
                 this["SettingsSendDelay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SettingsUpdateRequired {
-            get {
-                return ((bool)(this["SettingsUpdateRequired"]));
-            }
-            set {
-                this["SettingsUpdateRequired"] = value;
             }
         }
         
@@ -852,6 +840,54 @@ namespace OpenCNCPilot.Properties {
             }
             set {
                 this["AcquisitionExperimentPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingsUpdateRequired {
+            get {
+                return ((bool)(this["SettingsUpdateRequired"]));
+            }
+            set {
+                this["SettingsUpdateRequired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("COM5")]
+        public string PeripheralSP {
+            get {
+                return ((string)(this["PeripheralSP"]));
+            }
+            set {
+                this["PeripheralSP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("115200")]
+        public int PeripheralBaud {
+            get {
+                return ((int)(this["PeripheralBaud"]));
+            }
+            set {
+                this["PeripheralBaud"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Serial")]
+        public global::SPIPware.Communication.ConnectionType PeripheralConType {
+            get {
+                return ((global::SPIPware.Communication.ConnectionType)(this["PeripheralConType"]));
+            }
+            set {
+                this["PeripheralConType"] = value;
             }
         }
     }

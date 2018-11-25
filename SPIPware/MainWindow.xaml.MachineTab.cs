@@ -1,12 +1,13 @@
-﻿using OpenCNCPilot.Entities;
+﻿using SPIPware.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
-namespace OpenCNCPilot
+namespace SPIPware
 {
     partial class MainWindow
     {
@@ -17,7 +18,38 @@ namespace OpenCNCPilot
 
             new SettingsWindow().ShowDialog();
         }
+        private void updateSerialPortComboBox(ComboBox cb)
+        {
+            
+            cb.Items.Clear();
+            foreach (string port in System.IO.Ports.SerialPort.GetPortNames())
+                cb.Items.Add(port);
+            if(string.Equals(cb.Name, "PeripheralSerialPortSelect") &&
+               !cb.Items.Contains(Properties.Settings.Default.PeripheralSP))
+            {
+                cb.SelectedItem = 0;
+                cb.SelectedIndex = 0;
+            }
+            else if (string.Equals(cb.Name, "SerialPortSelect") && 
+                !cb.Items.Contains(Properties.Settings.Default.P))
+            {
+                cb.SelectedItem = 0;
+                cb.SelectedIndex = 0;
+            }
 
+
+        }
+
+        private void cbPeripheralSerialOpen(object sender, EventArgs e)
+        {
+            updateSerialPortComboBox(PeripheralSerialPortSelect);
+
+        }
+        private void cbSerialOpen(object sender, EventArgs e)
+        {
+            updateSerialPortComboBox(SerialPortSelect);
+
+        }
         private void ButtonConnect_Click(object sender, RoutedEventArgs e)
         {
             try

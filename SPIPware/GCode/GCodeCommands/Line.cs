@@ -1,11 +1,11 @@
-﻿using OpenCNCPilot.Util;
+﻿using SPIPware.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenCNCPilot.GCode.GCodeCommands
+namespace SPIPware.GCode.GCodeCommands
 {
 	class Line : Motion
 	{

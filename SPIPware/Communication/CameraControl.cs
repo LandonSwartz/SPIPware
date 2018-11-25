@@ -10,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace OpenCNCPilot
+namespace SPIPware
 {
 
     class CameraControl

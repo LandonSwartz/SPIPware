@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenCNCPilot.GCode.GCodeCommands;
+using SPIPware.GCode.GCodeCommands;
 using System.IO;
 using System.Text.RegularExpressions;
-using OpenCNCPilot.Util;
+using SPIPware.Util;
 
-namespace OpenCNCPilot.GCode
+namespace SPIPware.GCode
 {
 	public enum ParseDistanceMode
 	{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 
-namespace OpenCNCPilot.Util
+namespace SPIPware.Util
 {
 	static class GrblCodeTranslator
 	{

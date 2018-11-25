@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace OpenCNCPilot
+namespace SPIPware
 {
 	public partial class GrblSettingsWindow : Window
     {

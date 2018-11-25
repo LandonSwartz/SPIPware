@@ -1,6 +1,6 @@
 ﻿using System.Windows.Data;
 
-namespace OpenCNCPilot.Util
+namespace SPIPware.Util
 {
 	public class SettingBindingExtension : Binding
 	{

@@ -1,18 +1,14 @@
-﻿using OpenCNCPilot.Communication;
-using OpenCNCPilot.GCode;
-using OpenCNCPilot.Util;
+﻿using SPIPware.Communication;
+using SPIPware.Util;
 using System;
-using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
-namespace OpenCNCPilot
+namespace SPIPware
 {
 	partial class MainWindow
 	{

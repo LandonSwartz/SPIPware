@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OpenCNCPilot.Util
+namespace SPIPware.Util
 {
 	static class UpdateCheck
 	{

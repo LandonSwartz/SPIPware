@@ -1,4 +1,4 @@
-﻿namespace OpenCNCPilot.GCode.GCodeCommands
+﻿namespace SPIPware.GCode.GCodeCommands
 {
 	public interface Command
 	{

@@ -1,8 +1,8 @@
-﻿using OpenCNCPilot.Util;
+﻿using SPIPware.Util;
 using System;
 using System.Collections.Generic;
 
-namespace OpenCNCPilot.GCode.GCodeCommands
+namespace SPIPware.GCode.GCodeCommands
 {
 	public enum ArcPlane
 	{

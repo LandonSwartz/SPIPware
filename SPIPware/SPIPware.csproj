@@ -7,7 +7,7 @@
     <ProjectGuid>{BA3CA6C1-34A3-4582-9EE3-64DA5F144C3D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenCNCPilot</RootNamespace>
+    <RootNamespace>SPIPware</RootNamespace>
     <AssemblyName>SPIPware</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -103,11 +103,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CameraControl.cs" />
+    <Compile Include="Communication\CameraControl.cs" />
     <Compile Include="Communication\Machine.cs" />
-    <Compile Include="EnterNumberWindow.xaml.cs">
-      <DependentUpon>EnterNumberWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Communication\PeripheralControl.cs" />
     <Compile Include="Entities\Experiment.cs" />
     <Compile Include="GCode\GCodeCommands\Arc.cs" />
     <Compile Include="GCode\GCodeCommands\Command.cs" />
@@ -122,6 +120,15 @@
     <Compile Include="GrblSettingsWindow.xaml.cs">
       <DependentUpon>GrblSettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainWindow.xaml.Camera.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.xaml.CycleControl.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.xaml.Experiment.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.MachineStatus.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -131,24 +138,28 @@
     <Compile Include="MainWindow.xaml.ManualTab.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainWindow.xaml.PeripheralControl.cs">
+    <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.StatusBar.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainWindow.xaml.Timelapse.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\Calculator.cs" />
     <Compile Include="Util\Constants.cs" />
+    <Compile Include="Util\FileConverter.cs" />
     <Compile Include="Util\GrblCodeTranslator.cs" />
     <Compile Include="Util\SettingsBinding.cs" />
     <Compile Include="Util\UpdateCheck.cs" />
     <Compile Include="Util\Vector2.cs" />
     <Compile Include="Util\Vector3.cs" />
-    <Compile Include="VimbaHelper.cs" />
-    <Page Include="EnterNumberWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="Communication\VimbaHelper.cs" />
     <Page Include="GrblSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

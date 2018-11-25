@@ -1,7 +1,7 @@
-﻿using OpenCNCPilot.Util;
+﻿using SPIPware.Util;
 using System.Collections.Generic;
 
-namespace OpenCNCPilot.GCode.GCodeCommands
+namespace SPIPware.GCode.GCodeCommands
 {
 	abstract class Motion : Command
 	{ 

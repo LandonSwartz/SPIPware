@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OpenCNCPilot.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SPIPware.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="P" Type="System.String" Scope="User">
@@ -8,7 +8,7 @@
     <Setting Name="SerialPortBaud" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">115200</Value>
     </Setting>
-    <Setting Name="ConnectionType" Type="OpenCNCPilot.Communication.ConnectionType" Scope="User">
+    <Setting Name="ConnectionType" Type="SPIPware.Communication.ConnectionType" Scope="User">
       <Value Profile="(Default)">Serial</Value>
     </Setting>
     <Setting Name="ControllerBufferSize" Type="System.Int32" Scope="User">
@@ -92,9 +92,6 @@ G92Z0;</Value>
     </Setting>
     <Setting Name="SettingsSendDelay" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
-    </Setting>
-    <Setting Name="SettingsUpdateRequired" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="TLSUseActualPos" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -212,6 +209,18 @@ G92Z0;</Value>
     </Setting>
     <Setting Name="AcquisitionExperimentPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\</Value>
+    </Setting>
+    <Setting Name="SettingsUpdateRequired" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="PeripheralSP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM5</Value>
+    </Setting>
+    <Setting Name="PeripheralBaud" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">115200</Value>
+    </Setting>
+    <Setting Name="PeripheralConType" Type="SPIPware.Communication.ConnectionType" Scope="User">
+      <Value Profile="(Default)">Serial</Value>
     </Setting>
   </Settings>
 </SettingsFile>
