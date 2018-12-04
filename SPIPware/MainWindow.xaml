@@ -679,7 +679,7 @@
 										<!--<TextBlock>Goto Plate</TextBlock>-->
 										<!--<Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Width="300" Margin="5" />-->
 										<TextBlock VerticalAlignment="Center" Margin="5">Number of Locations:</TextBlock>
-										<xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" ValueChanged="updatePlateClick"  />
+										<xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" ValueChanged="UpdatePlateClick"  />
 						
 
 									</StackPanel>

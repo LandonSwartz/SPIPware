@@ -14,6 +14,7 @@ namespace SPIPware
         private CancellationTokenSource tokenSource;
 
         public static bool runningTimeLapse = false;
+        bool growLightsOn = false;
 
         public  void startTimeLapse()
         {
@@ -38,16 +39,7 @@ namespace SPIPware
 
 
         }
-        public bool isNightTime()
-        {
-            TimeSpan startOfNight = TimeSpan.Parse("23:00:00");
-            TimeSpan endOfNight = TimeSpan.Parse("07:00:00");
-            TimeSpan now = DateTime.Now.TimeOfDay;
-
-            Console.WriteLine(now.TotalHours);
-            return (now >= startOfNight || now <= endOfNight) ? true : false;
-
-        }
+       
         async Task waitForStartNow()
         {
             await Task.Delay(5000);
@@ -60,16 +52,16 @@ namespace SPIPware
                 timeLapseCount.Text = duration.TotalMinutes.ToString() + " minute(s)";
                 if (duration.TotalMinutes <= 1)
                 {
-                    disableMachineControlButtons();
+                    DisableMachineControlButtons();
                 }
-                if (!isNightTime() && !growLightsOn)
+                if (!peripheral.IsNightTime() && !growLightsOn)
                 {
-                    peripheralControl.SetLight(Peripheral.GrowLight, true, true);
+                    peripheral.SetLight(Peripheral.GrowLight, true, true);
                     growLightsOn = true;
                 }
-                else if (isNightTime() && growLightsOn)
+                else if (peripheral.IsNightTime() && growLightsOn)
                 {
-                    peripheralControl.SetLight(Peripheral.GrowLight, false, false);
+                    peripheral.SetLight(Peripheral.GrowLight, false, false);
                     growLightsOn = false;
                 }
                 await Task.Delay(60 * 1000, token);
@@ -99,16 +91,16 @@ namespace SPIPware
             {
                 tokenSource = new CancellationTokenSource();
                 Experiment.loadExperimentToSettings(Properties.Settings.Default.tlExperimentPath);
-                peripheralControl.SetLight(Peripheral.Backlight, true);
+                peripheral.SetLight(Peripheral.Backlight, true);
                 Thread.Sleep(300);
-                startCycle();
+                StartCycle();
                 try
                 {
                     await runSingleTimeLapse(timeLapseInterval, tokenSource.Token);
                 }
                 catch (TaskCanceledException e)
                 {
-                    Console.WriteLine("TimeLapse Cancelled");
+                    Console.WriteLine("TimeLapse Cancelled: " + e);
                     //runningTimeLapse = false;
                     stopTimeLapse();
                     updateTimeLapseStatus(runningTimeLapse);
@@ -151,7 +143,7 @@ namespace SPIPware
                 //btnRunTimeLapse.IsEnabled = true;
                 timeLapseCount.Text = parseStatus(timeLapseRunning);
                 timeLapseEnd.Text = timeLapseCount.Text;
-                enableMachineControlButtons();
+                EnableMachineControlButtons();
                 timeLapseStatusIcon.Source = YELLOW_IMAGE;
             }
             toggleButtonVisibility(btnRunTimeLapse, btnStopTimeLapse, timeLapseRunning);
@@ -172,7 +164,7 @@ namespace SPIPware
         //}
         private void stopTimeLapse()
         {
-            stopCycle();
+            StopCycle();
             if (tokenSource != null)
             {
                 tokenSource.Cancel();

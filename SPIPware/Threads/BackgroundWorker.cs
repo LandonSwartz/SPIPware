@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPIPware.Communication
+namespace SPIPware.Threads
 {
-    class MachineControl
+    class BackgroundWorker
     {
-        Machine machine = Machine.Instance;
-
     }
 }

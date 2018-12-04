@@ -6,12 +6,15 @@ using System.ComponentModel;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Controls;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SPIPware
 {
     public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
     {
         Machine machine = Machine.Instance;
+        CameraControl camera = CameraControl.Instance;
+        CycleControl cycle = new CycleControl();
 
 
         GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
@@ -24,15 +27,21 @@ namespace SPIPware
 
         public MainWindow()
         {
-        
 
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
             InitializeComponent();
+
+            cycle.StatusUpdate += UpdateCycleStatus;
             updateSerialPortComboBox(PeripheralSerialPortSelect);
             updateSerialPortComboBox(SerialPortSelect);
 
-            new Thread (() => startVimba()).Start();
-            new Thread (() => UpdateCheck.CheckForUpdate()).Start();
+            Task task = new Task(() => camera.StartVimba());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
+            //camera.StartVimba();
+            Task task2 = new Task(() => UpdateCheck.CheckForUpdate());
+            task2.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task2.Start();
 
             machine.ConnectionStateChanged += Machine_ConnectionStateChanged;
 
@@ -70,7 +79,7 @@ namespace SPIPware
             //updatePlateCheckboxes();
             
             //cameraControl.m_CameraList = m_CameraList;
-            cameraControl.m_PictureBox = m_PictureBox;
+            camera.m_PictureBox = m_PictureBox;
 
         }
 
@@ -87,7 +96,11 @@ namespace SPIPware
             RaisePropertyChanged("LastProbePosMachine");
             RaisePropertyChanged("LastProbePosWork");
         }
-        
+        static void ExceptionHandler(Task task)
+        {
+            var exception = task.Exception;
+            Console.WriteLine(exception);
+        }
         private void UnhandledException(object sender, UnhandledExceptionEventArgs ea)
         {
             Exception e = (Exception)ea.ExceptionObject;
@@ -270,7 +283,9 @@ namespace SPIPware
 
         private void btnCameraSettingsReload_Click(object sender, RoutedEventArgs e)
         {
-           new Thread(()=> cameraControl.forceSettingsReload()).Start();
+            Task task = new Task(() => camera.forceSettingsReload());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
 
         private void cameraSettingsCB_DropDownOpened(object sender, EventArgs e)
@@ -280,48 +295,66 @@ namespace SPIPware
 
         private void cameraSettingsCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            cameraControl.loadCameraSettings();
+            Task task = new Task(() => camera.loadCameraSettings());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonStartTimeLapse_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(()=>startTimeLapse()).Start();
+            Task task = new Task(() => startTimeLapse());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonStopTimeLapse_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(()=>stopTimeLapse()).Start();
+            Task task = new Task(() => stopTimeLapse());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonStopCycle_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(()=>stopCycle()).Start();
+            StopCycle();
         }
         private void ButtonSaveExperiment_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => saveSettingsToFile()).Start();
+            Task task = new Task(() => SaveSettingsToFile());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonSaveExperimentDefaults_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => saveDefaults()).Start();
+            Task task = new Task(() => SaveDefaults());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonLoadExperimentDefaults_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => loadDefaults()).Start();
+            Task task = new Task(() => LoadDefaults());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonSaveAsExperiment_Click(object sender, RoutedEventArgs e)
         {
             var dialog = openSaveDialog();
-            saveAsSettingsToFile(dialog);
+            SaveAsSettingsToFile(dialog);
         }
         private void ButtonLoadExperiment_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => loadSettingsFromFile()).Start();
+            Task task = new Task(() => LoadSettingsFromFile());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonCameraDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => cameraControl.shutdownVimba()).Start();
+            Task task = new Task(() => camera.ShutdownVimba());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonCameraConnect_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => startVimba()).Start() ;
+            Task task = new Task(() => camera.StartVimba());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ListBoxHistory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

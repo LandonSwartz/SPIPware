@@ -12,37 +12,10 @@ namespace SPIPware
 {
     partial class MainWindow
     {
-        private static VimbaHelper m_VimbaHelper = null;
-        private CameraControl cameraControl = new CameraControl();
+        //private static VimbaHelper m_VimbaHelper = null;
+       
 
-        private void startVimba()
-        {
-            //cameraControl = new CameraControl();
-            //TODO Refactor to raise event
-            //updateCameraSettingsOptions();
-            try
-            {
-                //Start up Vimba API
-                VimbaHelper vimbaHelper = new VimbaHelper();
-                vimbaHelper.Startup(cameraControl.OnCameraListChanged);
-                //Text += String.Format(" Vimba .NET API Version {0}", vimbaHelper.GetVersion());
-                m_VimbaHelper = vimbaHelper;
-                cameraControl.VimbaHelper = m_VimbaHelper;
-                try
-                {
-                    cameraControl.UpdateCameraList();
-
-                }
-                catch (Exception exception)
-                {
-                    cameraControl.LogError("Could not update camera list. Reason: " + exception.Message);
-                }
-            }
-            catch (Exception exception)
-            {
-                cameraControl.LogError("Could not startup Vimba API. Reason: " + exception.Message);
-            }
-        }
+       
         private void updateCameraSettingsOptions()
         {
             cameraSettingsCB.Items.Clear();

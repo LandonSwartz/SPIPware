@@ -13,12 +13,24 @@ using System.Windows.Threading;
 namespace SPIPware
 {
 
-    class CameraControl
+    public sealed class CameraControl
     {
-        public int currentIndex = 0;
+        private static readonly CameraControl instance = new CameraControl();
+        static CameraControl()
+        {
+
+        }
+        public static CameraControl Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+        //public int currentIndex = 0;
         //public static bool runningCycle = false;
         //public bool home = false;
-        public bool goToFirstPlate = true;
+        //public bool goToFirstPlate = true;
         //public bool firstRun = true;
         public bool settingsLoaded = false;
 
@@ -30,10 +42,50 @@ namespace SPIPware
         public VimbaHelper VimbaHelper { get => m_VimbaHelper; set => m_VimbaHelper = value; }
         public CameraInfo SelectedItem { get => selectedItem; set => selectedItem = value; }
         //Add log message to logging list box
-
-        public void shutdownVimba()
+        public void StartVimba()
         {
-            m_VimbaHelper.Shutdown();
+            //cameraControl = new CameraControl();
+            //TODO Refactor to raise event
+            //updateCameraSettingsOptions();
+            try
+            {
+                //Start up Vimba API
+                VimbaHelper vimbaHelper = new VimbaHelper();
+                vimbaHelper.Startup(OnCameraListChanged);
+                //Text += String.Format(" Vimba .NET API Version {0}", vimbaHelper.GetVersion());
+                m_VimbaHelper = vimbaHelper;
+                VimbaHelper = m_VimbaHelper;
+                try
+                {
+                    UpdateCameraList();
+
+                }
+                catch (Exception exception)
+                {
+                    LogError("Could not update camera list. Reason: " + exception.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                LogError("Could not startup Vimba API. Reason: " + exception.Message);
+            }
+        }
+        public void ShutdownVimba()
+        {
+            if (null != m_VimbaHelper)
+            {
+                try
+                {
+                    //Shutdown Vimba API when application exits
+                    m_VimbaHelper.Shutdown();
+
+                    m_VimbaHelper = null;
+                }
+                catch (Exception exception)
+                {
+                    LogError("Could not shutdown Vimba API. Reason: " + exception.Message);
+                }
+            }
         }
         public void LogMessage(string message)
         {
@@ -56,7 +108,7 @@ namespace SPIPware
             //MessageBox.Show(message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         List<CameraInfo> cameras;
-        public void updateCameraState(bool cameraReady)
+        public void UpdateCameraState(bool cameraReady)
         {
             if (cameraReady)
             {
@@ -79,12 +131,12 @@ namespace SPIPware
             if (cameras.Any())
             {
                 //CameraInfo newSelectedItem = cameras[0];
-                updateCameraState(true);
+                UpdateCameraState(true);
                 //Console.WriteLine("New Selected Camera" + newSelectedItem);
             }
             else
             {
-                updateCameraState(false);
+                UpdateCameraState(false);
             }
             //foreach (CameraInfo cameraInfo in cameras)
             //{
@@ -186,37 +238,43 @@ namespace SPIPware
         }
         public Task UpdateImageBox(System.Drawing.Image image)
         {
-            BitmapImage bi;
-            using (var ms = new MemoryStream())
+            Task task = new Task(() =>
             {
-                image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                BitmapImage bi;
+                using (var ms = new MemoryStream())
+                {
+                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
-                ms.Position = 0;
+                    ms.Position = 0;
 
-                bi = new BitmapImage();
-                bi.BeginInit();
-                bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.StreamSource = ms;
-                bi.EndInit();
+                    bi = new BitmapImage();
+                    bi.BeginInit();
+                    bi.CacheOption = BitmapCacheOption.OnLoad;
+                    bi.StreamSource = ms;
+                    bi.EndInit();
 
 
-            }
+                }
 
-            //Display image
-            m_PictureBox.Source = bi;
-            return Task.FromResult(0);
+                //Display image
+                m_PictureBox.Source = bi;
+            });
+            return task;
 
         }
         public Task WriteBitmapToFile(BitmapImage image, string filePath)
         {
-            BitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(image));
-
-            using (var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+            Task task = new Task(() =>
             {
-                encoder.Save(fileStream);
-            }
-            return Task.FromResult(0);
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(image));
+
+                using (var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+                {
+                    encoder.Save(fileStream);
+                }
+            });
+            return task;
         }
         public String createFilePath()
         {
@@ -239,37 +297,34 @@ namespace SPIPware
         }
       public Task WriteImageToFile(System.Drawing.Image  image)
         {
-            StringBuilder sb = new StringBuilder();
-            if (Properties.Settings.Default.CurrentPlateSave == true)
-            {
-                string currentPlateStr = Properties.Settings.Default.CurrentPlate.ToString();
-                sb.Append(currentPlateStr + "_");
-            }
-            string currentDate = DateTime.Now.ToString("yyyy-MM-dd--H-mm-ss");
-            ImageFormat fileType = ImageFormat.Png;
+            Task task = new Task(()=>{
+                StringBuilder sb = new StringBuilder();
+                if (Properties.Settings.Default.CurrentPlateSave == true)
+                {
+                    string currentPlateStr = Properties.Settings.Default.CurrentPlate.ToString();
+                    sb.Append(currentPlateStr + "_");
+                }
+                string currentDate = DateTime.Now.ToString("yyyy-MM-dd--H-mm-ss");
+                ImageFormat fileType = ImageFormat.Png;
 
 
-            sb.Append(currentDate + "--");
-            sb.Append(Properties.Settings.Default.FileName);
-            sb.Append("." + fileType.ToString().ToLower());
+                sb.Append(currentDate + "--");
+                sb.Append(Properties.Settings.Default.FileName);
+                sb.Append("." + fileType.ToString().ToLower());
 
-            String filePath = Path.Combine(Properties.Settings.Default.SaveFolderPath, sb.ToString());
-            //Console.WriteLine("Image written to: " + filePath);
-            // Console.WriteLine("File Name: " + sb.ToString());
-            
-            image.Save(filePath, fileType);
-            Console.WriteLine("Image written to: " + filePath);
-            LogMessage("Image acquired synchonously.");
+                String filePath = Path.Combine(Properties.Settings.Default.SaveFolderPath, sb.ToString());
+                //Console.WriteLine("Image written to: " + filePath);
+                // Console.WriteLine("File Name: " + sb.ToString());
 
-            return Task.FromResult(0);
+                image.Save(filePath, fileType);
+                Console.WriteLine("Image written to: " + filePath);
+                LogMessage("Image acquired synchonously.");
+            });
+
+            return task;
         }
-        public async void CapSaveImage()
+        public void CapSaveImage()
         {
-
-            //if (!settingsLoaded)
-            //{
-                loadCameraSettings();
-            //}
             try
             {
                 //Determine selected camera
@@ -284,11 +339,16 @@ namespace SPIPware
                 //Acquire an image synchronously (snap) from selected camera
                 System.Drawing.Image image = VimbaHelper.AcquireSingleImage(SelectedItem.ID);
 
-                await UpdateImageBox(image);
+                Task uib = UpdateImageBox(image);
+                uib.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+                uib.Start();
+
                 String filePath = createFilePath();
                 if (Directory.Exists(Properties.Settings.Default.SaveFolderPath))
                 {
-                    await WriteImageToFile(image);
+                    Task witf = WriteImageToFile(image);
+                    witf.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+                    witf.Start();
 
                 }
                 else
@@ -303,5 +363,11 @@ namespace SPIPware
                 LogError("Could not acquire image. Reason: " + exception.Message);
             }
         }
+        static void ExceptionHandler(Task task)
+        {
+            var exception = task.Exception;
+            Console.WriteLine(exception);
+        }
     }
+   
 }

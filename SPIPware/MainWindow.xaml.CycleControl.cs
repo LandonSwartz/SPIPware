@@ -12,161 +12,68 @@ namespace SPIPware
 {
     partial class MainWindow
     {
-        MachineControl machineControl = new MachineControl();
-        private decimal targetLocation = 0;
-        private int currentIndex = 0;
-        public static bool runningCycle = false;
-        private bool firstRun = true;
 
-        bool foundPlate = false;
-        bool growLightsOn = false;
-
-        private List<int> imagePositions = new List<int>();
-
-        private void updatePositionList()
+        
+        public void StartCycle()
         {
-            imagePositions = new List<int>();
-            for (var i = 0; i < checkBoxes.Count; i++)
-            {
-                if (checkBoxes[i].IsChecked == true)
-                {
-                    imagePositions.Add(i);
-                }
-            }
+            cycle.UpdatePositionList(checkBoxes);
+            Task task = new Task(cycle.Start);
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
 
         }
-        private bool FindCheckedBox(int index, bool firstBox)
+        public void StopCycle()
         {
-            if (!firstBox)
-            {
-                index++;
-            }
-            while (index < Properties.Settings.Default.NumLocations)
-            {
-
-                if (checkBoxes[index].IsChecked == true)
-                {
-                    Console.WriteLine("Box " + (index + 1) + " checked");
-                    currentIndex = index;
-                    return true;
-                }
-                else
-                {
-                    index++;
-                }
-
-            }
-            Console.WriteLine("No more boxes checked");
-            return false;
+            Task task = new Task(cycle.Stop);
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
-        public void startCycle()
+
+        public void CheckCycle()
         {
-            //if (machine.Connected)
-            {
-
-                btnRunCycle.IsEnabled = false;
-                if (runningCycle) stopCycle();
-                runningCycle = true;
-                updateCycleStatus(runningCycle);
-                currentIndex = 0;
-                bool isPlateFound = FindCheckedBox(currentIndex, true);
-                if (!isPlateFound) return;
-
-                if (firstRun)
-                {
-                    machine.SendLine("$H");
-                    peripheralControl.SetLight(Peripheral.GrowLight,false, false);
-                    //Properties.Settings.Default.CurrentPlate = 1;
-                    firstRun = false;
-                }
-                else
-                {
-                    peripheralControl.SetLight(Peripheral.Backlight, true);
-                    peripheralControl.SetLight(Peripheral.GrowLight, false, false);
-                    Thread.Sleep(300);
-                    targetLocation = machine.sendMotionCommand(currentIndex);
-                }
-            }
-            //else
-            //{
-            //    Machine_NonFatalException("Machine not connected");
-            //}
-
-
+            Task task = new Task(cycle.Check);
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
-        public void endCycle()
+     
+        //private bool FindCheckedBox(int index, bool firstBox)
+        //{
+        //    if (!firstBox)
+        //    {
+        //        index++;
+        //    }
+        //    while (index < Properties.Settings.Default.NumLocations)
+        //    {
+
+        //        if (checkBoxes[index].IsChecked == true)
+        //        {
+        //            Console.WriteLine("Box " + (index + 1) + " checked");
+        //            currentIndex = index;
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            index++;
+        //        }
+
+        //    }
+        //    Console.WriteLine("No more boxes checked");
+        //    return false;
+        //}
+        public void UpdateCycleStatus()
         {
-            runningCycle = false;
-            updateCycleStatus(runningCycle);
-            currentIndex = 0;
-            //machine.sendMotionCommand(0);
-            machine.SendLine("$H");
-            enableMachineControlButtons();
-            peripheralControl.SetLight(Peripheral.Backlight, false);
-            peripheralControl.SetLight(Peripheral.GrowLight, true, !isNightTime());
+            UpdateCycleStatus(cycle.CycleStatus);
         }
-        public void stopCycle()
-        {
-            endCycle();
-            if (machine.Connected)
-            {
-                machine.SoftReset();
-            }
-
-        }
-        public void checkCycle()
-        {
-
-            if (runningCycle)
-            {
-                if (machine.Status == "Home")
-                {
-                    //cameraControl.home = true;
-                    //cameraControl.firstRun = false;
-                    peripheralControl.SetLight(Peripheral.Backlight, true);
-                    //Thread.Sleep(300);
-                    targetLocation = machine.sendMotionCommand(currentIndex);
-                }
-
-                else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
-                {
-                    Console.WriteLine("Current Index" + currentIndex);
-                    peripheralControl.SetLight(Peripheral.Backlight, true);
-                    cameraControl.CapSaveImage();
-                    if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
-                    {
-                        Properties.Settings.Default.CurrentPlate++;
-                    }
-                    else
-                    {
-                        Properties.Settings.Default.CurrentPlate = 1;
-                    }
-
-                    //Console.WriteLine("Found Plate: " + foundPlate);
-                    foundPlate = FindCheckedBox(currentIndex, false);
-                    if (foundPlate)
-                    {
-                        targetLocation = machine.sendMotionCommand(currentIndex);
-                    }
-                    else endCycle();
-
-                }
-
-            }
-            else
-            {
-                return;
-            }
-        }
-        public void updateCycleStatus(bool cycleRunning)
+        public void UpdateCycleStatus(bool cycleRunning)
         {
             if (!cycleRunning)
             {
-                enableMachineControlButtons();
+                EnableMachineControlButtons();
                 cycleStatusIcon.Source = YELLOW_IMAGE;
             }
             else
             {
+                btnRunCycle.IsEnabled = false;
                 cycleStatusIcon.Source = GREEN_IMAGE;
             }
 
@@ -188,7 +95,7 @@ namespace SPIPware
         //    }
 
         //}
-        private void disableMachineControlButtons()
+        private void DisableMachineControlButtons()
         {
             btnMove.IsEnabled = false;
             btnRunCycle.IsEnabled = false;
@@ -196,7 +103,7 @@ namespace SPIPware
             btnTestFirst.IsEnabled = false;
             btnTestBetween.IsEnabled = false;
         }
-        private void enableMachineControlButtons()
+        private void EnableMachineControlButtons()
         {
             btnMove.IsEnabled = true;
             btnRunCycle.IsEnabled = true;

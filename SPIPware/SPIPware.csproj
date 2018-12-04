@@ -104,8 +104,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Communication\CameraControl.cs" />
+    <Compile Include="Communication\EventExtensions.cs" />
     <Compile Include="Communication\Machine.cs" />
-    <Compile Include="Communication\MachineControl.cs" />
+    <Compile Include="Communication\CycleControl.cs" />
     <Compile Include="Communication\PeripheralControl.cs" />
     <Compile Include="Communication\TimelapseControl.cs" />
     <Compile Include="Entities\Experiment.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Threads\BackgroundWorker.cs" />
     <Compile Include="Util\Calculator.cs" />
     <Compile Include="Util\Constants.cs" />
     <Compile Include="Util\FileConverter.cs" />

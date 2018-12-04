@@ -12,32 +12,36 @@ namespace SPIPware
 {
     partial class MainWindow
     {
-        PeripheralControl peripheralControl = new PeripheralControl();
+        PeripheralControl peripheral = Instance;
         private void ButtonGrowLightOn_Click(object sender, RoutedEventArgs e)
         {
-           Thread t = new Thread (() => peripheralControl.SetLight(Peripheral.GrowLight, true));
-            t.Start();
+            Task task = new Task(() => peripheral.SetLight(Peripheral.GrowLight, true));
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonGrowLightOff_Click(object sender, RoutedEventArgs e)
         {
-            Thread t = new Thread(() => peripheralControl.SetLight(Peripheral.GrowLight, false));
-            t.Start();
+            Task task = new Task(() => peripheral.SetLight(Peripheral.GrowLight, false));
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonBackLightOn_Click(object sender, RoutedEventArgs e)
         {
-            Thread t = new Thread(() => peripheralControl.SetLight(Peripheral.Backlight, true));
-            t.Start();
+            Task task = new Task(() => peripheral.SetLight(Peripheral.Backlight, true));
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonBackightOff_Click(object sender, RoutedEventArgs e)
         {
-            Thread t = new Thread(() => peripheralControl.SetLight(Peripheral.Backlight, false));
-            t.Start();
+            Task task = new Task(() => peripheral.SetLight(Peripheral.Backlight, false));
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
         }
         private void ButtonPeripheralConnect_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                peripheralControl.Connect();
+                peripheral.Connect();
                 toggleButtonVisibility(ButtonPeripheralConnect, ButtonPeripheralDisconnect, true);
             }
             catch (Exception ex)
@@ -51,7 +55,7 @@ namespace SPIPware
             try
             {
 
-                peripheralControl.Disconnect();
+                peripheral.Disconnect();
                 toggleButtonVisibility(ButtonPeripheralConnect, ButtonPeripheralDisconnect, false);
             }
             catch (Exception ex)

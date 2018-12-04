@@ -57,7 +57,7 @@ namespace SPIPware
             {
 
                 machine.Connect();
-                peripheralControl.Connect();
+                peripheral.Connect();
             }
             catch (Exception ex)
             {
@@ -70,7 +70,7 @@ namespace SPIPware
             try
             {
                 machine.Disconnect();
-                peripheralControl.Disconnect();
+                peripheral.Disconnect();
             }
             catch (Exception ex)
             {
@@ -91,20 +91,7 @@ namespace SPIPware
             }
 
             settingsWindow.Close();
-            if (null != m_VimbaHelper)
-            {
-                try
-                {
-                    //Shutdown Vimba API when application exits
-                    m_VimbaHelper.Shutdown();
-
-                    m_VimbaHelper = null;
-                }
-                catch (Exception exception)
-                {
-                    cameraControl.LogError("Could not shutdown Vimba API. Reason: " + exception.Message);
-                }
-            }
+            camera.ShutdownVimba();
             Application.Current.Shutdown();
         }
 
@@ -126,11 +113,8 @@ namespace SPIPware
         }
         private void ButtonStartCycle_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() =>
-            {
                 Experiment.loadExperimentToSettings(Properties.Settings.Default.AcquisitionExperimentPath);
-                startCycle();
-            }).Start();
+                StartCycle();
         }
     }
     }

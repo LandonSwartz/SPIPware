@@ -41,8 +41,8 @@ namespace SPIPware
            
             if (machine.Status == "Alarm")
             {
-                new Thread(()=>stopCycle()).Start();
-                firstRun = true;
+                StopCycle();
+                cycle.firstRun = true;
                 ButtonStatus.Foreground = Brushes.Red;
                 //CameraControl.runningCycle = false;
                 //cameraControl.firstRun = true;
@@ -74,7 +74,7 @@ namespace SPIPware
 				FileRunTime += DateTime.Now - LastFileStart;
 				StopRuntimeOnIdle = false;
 			}
-             checkCycle();
+            CheckCycle();
         }
 
 		private void Machine_PositionUpdateReceived()
@@ -146,12 +146,8 @@ namespace SPIPware
 		}
         public void LogMessage(string message)
         {
-            if (null == message)
-            {
-                throw new ArgumentNullException("message");
-            }
             var listBoxItem = new ListBoxItem();
-            listBoxItem.Content = message;
+            listBoxItem.Content = message ?? throw new ArgumentNullException("message");
             Console.WriteLine(message);
             //int index = m_LogList.Items.Add(string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}: {1}", DateTime.Now, message));
             //m_LogList.TopIndex = index;

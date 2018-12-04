@@ -15,19 +15,19 @@ namespace SPIPware
         List<TextBlock> textBlocks = new List<TextBlock>();
         public const string DEFAULT_SETTINGS_PATH = @"Resources\defaultSettings.bin";
 
-        public void updatePlateClick(object sender, RoutedEventArgs e)
+        public void UpdatePlateClick(object sender, RoutedEventArgs e)
         {
             if (spCheckboxes != null)
             {
                 spCheckboxes.Children.Clear();
                 checkBoxes.Clear();
                 textBlocks.Clear();
-                updatePlateCheckboxes();
+                UpdatePlateCheckboxes();
 
             }
 
         }
-        public void updatePlateCheckboxes()
+        public void UpdatePlateCheckboxes()
         {
 
             int numBoxes = Properties.Settings.Default.NumLocations;
@@ -76,17 +76,17 @@ namespace SPIPware
                 }
             }
         }
-        public void loadDefaults()
+        public void LoadDefaults()
         {
             Experiment.loadExperimentToSettings(DEFAULT_SETTINGS_PATH);
             Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
         }
-        public void saveDefaults()
+        public void SaveDefaults()
         {
             Experiment.createExperimentFromSettings(DEFAULT_SETTINGS_PATH);
             Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
         }
-        public void saveSettingsToFile()
+        public void SaveSettingsToFile()
         {
             Experiment.createExperimentFromSettings(Properties.Settings.Default.ExperimentPath);
         }
@@ -107,7 +107,7 @@ namespace SPIPware
             }
 
         }
-        public void saveAsSettingsToFile(System.Windows.Forms.SaveFileDialog dialog)
+        public void SaveAsSettingsToFile(System.Windows.Forms.SaveFileDialog dialog)
         {
             if (dialog != null)
             {
@@ -116,7 +116,7 @@ namespace SPIPware
                 Console.Write(Properties.Settings.Default.ExperimentPath);
             }
         }
-        public void loadSettingsFromFile()
+        public void LoadSettingsFromFile()
         {
             var dialog = getFileResult();
             if (dialog != null)
@@ -126,7 +126,7 @@ namespace SPIPware
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
             }
         }
-        private string getFolderResult()
+        private string GetFolderResult()
         {
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
@@ -176,7 +176,7 @@ namespace SPIPware
         }
         private void BtnSaveFolderOpen_Click(object sender, RoutedEventArgs e)
         {
-            string folderResult = getFolderResult();
+            string folderResult = GetFolderResult();
             if (folderResult != null)
             {
                 Properties.Settings.Default.SaveFolderPath = folderResult;
@@ -195,7 +195,7 @@ namespace SPIPware
         private void BtnExperimentFileOpen_Click(object sender, RoutedEventArgs e)
         {
             var dialog = openSaveDialog();
-            saveAsSettingsToFile(dialog);
+            SaveAsSettingsToFile(dialog);
             if (dialog != null)
             {
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
