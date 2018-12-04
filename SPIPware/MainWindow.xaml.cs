@@ -5,13 +5,14 @@ using SPIPware.Util;
 using System.ComponentModel;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Controls;
-
+using System.Threading;
 
 namespace SPIPware
 {
     public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
     {
-        Machine machine = new Machine();
+        Machine machine = Machine.Instance;
+
 
         GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -30,7 +31,8 @@ namespace SPIPware
             updateSerialPortComboBox(PeripheralSerialPortSelect);
             updateSerialPortComboBox(SerialPortSelect);
 
-            startVimba();
+            new Thread (() => startVimba()).Start();
+            new Thread (() => UpdateCheck.CheckForUpdate()).Start();
 
             machine.ConnectionStateChanged += Machine_ConnectionStateChanged;
 
@@ -66,7 +68,7 @@ namespace SPIPware
 
             CheckBoxUseExpressions_Changed(null, null);
             //updatePlateCheckboxes();
-            UpdateCheck.CheckForUpdate();
+            
             //cameraControl.m_CameraList = m_CameraList;
             cameraControl.m_PictureBox = m_PictureBox;
 
@@ -268,7 +270,7 @@ namespace SPIPware
 
         private void btnCameraSettingsReload_Click(object sender, RoutedEventArgs e)
         {
-            cameraControl.forceSettingsReload();
+           new Thread(()=> cameraControl.forceSettingsReload()).Start();
         }
 
         private void cameraSettingsCB_DropDownOpened(object sender, EventArgs e)
@@ -282,27 +284,27 @@ namespace SPIPware
         }
         private void ButtonStartTimeLapse_Click(object sender, RoutedEventArgs e)
         {
-            startTimeLapse();
+            new Thread(()=>startTimeLapse()).Start();
         }
         private void ButtonStopTimeLapse_Click(object sender, RoutedEventArgs e)
         {
-            stopTimeLapse();
+            new Thread(()=>stopTimeLapse()).Start();
         }
         private void ButtonStopCycle_Click(object sender, RoutedEventArgs e)
         {
-            stopCycle();
+            new Thread(()=>stopCycle()).Start();
         }
         private void ButtonSaveExperiment_Click(object sender, RoutedEventArgs e)
         {
-            saveSettingsToFile();
+            new Thread(() => saveSettingsToFile()).Start();
         }
         private void ButtonSaveExperimentDefaults_Click(object sender, RoutedEventArgs e)
         {
-            saveDefaults();
+            new Thread(() => saveDefaults()).Start();
         }
         private void ButtonLoadExperimentDefaults_Click(object sender, RoutedEventArgs e)
         {
-            loadDefaults();
+            new Thread(() => loadDefaults()).Start();
         }
         private void ButtonSaveAsExperiment_Click(object sender, RoutedEventArgs e)
         {
@@ -311,15 +313,15 @@ namespace SPIPware
         }
         private void ButtonLoadExperiment_Click(object sender, RoutedEventArgs e)
         {
-            loadSettingsFromFile();
+            new Thread(() => loadSettingsFromFile()).Start();
         }
         private void ButtonCameraDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            cameraControl.shutdownVimba();
+            new Thread(() => cameraControl.shutdownVimba()).Start();
         }
         private void ButtonCameraConnect_Click(object sender, RoutedEventArgs e)
         {
-            startVimba();
+            new Thread(() => startVimba()).Start() ;
         }
         private void ListBoxHistory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

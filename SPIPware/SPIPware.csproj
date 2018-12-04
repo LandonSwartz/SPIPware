@@ -105,7 +105,9 @@
     </ApplicationDefinition>
     <Compile Include="Communication\CameraControl.cs" />
     <Compile Include="Communication\Machine.cs" />
+    <Compile Include="Communication\MachineControl.cs" />
     <Compile Include="Communication\PeripheralControl.cs" />
+    <Compile Include="Communication\TimelapseControl.cs" />
     <Compile Include="Entities\Experiment.cs" />
     <Compile Include="GCode\GCodeCommands\Arc.cs" />
     <Compile Include="GCode\GCodeCommands\Command.cs" />
@@ -139,7 +141,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.PeripheralControl.cs">
-    <DependentUpon>MainWindow.xaml</DependentUpon>
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.StatusBar.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -318,7 +320,16 @@
     <Resource Include="sunbearlogov6.ico" />
   </ItemGroup>
   <ItemGroup>
-    <SplashScreen Include="Resources\Images\SunBearLogoText.png" />
+    <None Include="Resources\Images\SunBearLogoText.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\sunbearlogov8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Entities\SunBearLogoTextv3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Resources\Images\SunBearLogoTextv3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

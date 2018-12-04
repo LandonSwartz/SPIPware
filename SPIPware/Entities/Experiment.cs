@@ -22,7 +22,7 @@ namespace SPIPware.Entities
         private DateTime tlStartDate;
         private DateTime tlEndDate;
         private bool startNow;
-        private int tlInterval;
+        //private int tlInterval;
         private int tlEndInterval;
         private long tlEndIntervalType;
         private long tlIntervalType;

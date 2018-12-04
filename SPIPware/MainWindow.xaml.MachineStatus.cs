@@ -38,14 +38,14 @@ namespace SPIPware
 		private void Machine_StatusChanged()
 		{
 			ButtonStatus.Content = machine.Status;
-            checkCycle();
+           
             if (machine.Status == "Alarm")
             {
-                stopCycle();
+                new Thread(()=>stopCycle()).Start();
                 firstRun = true;
                 ButtonStatus.Foreground = Brushes.Red;
-                CameraControl.runningCycle = false;
-                cameraControl.firstRun = true;
+                //CameraControl.runningCycle = false;
+                //cameraControl.firstRun = true;
             }
                 
                 
@@ -62,11 +62,7 @@ namespace SPIPware
             else if (machine.Status == "Home")
             {
                 machine.homeMachinePos = (decimal)machine.MachinePosition.X;
-                cameraControl.home = true;
-                cameraControl.firstRun = false;
-                machine.setBackLightStatus(true);
-                Thread.Sleep(300);
-                targetLocation = machine.sendMotionCommand(currentIndex);
+              
             }
             else
                 ButtonStatus.Foreground = Brushes.Black;
@@ -78,13 +74,14 @@ namespace SPIPware
 				FileRunTime += DateTime.Now - LastFileStart;
 				StopRuntimeOnIdle = false;
 			}
-		}
+             checkCycle();
+        }
 
 		private void Machine_PositionUpdateReceived()
 		{
             //ModelTool.Point1 = (machine.WorkPosition + new Vector3(0, 0, 10)).ToPoint3D();
             //ModelTool.Point2 = machine.WorkPosition.ToPoint3D();
-            checkCycle();
+            //checkCycle();
 			var nfi = Constants.DecimalOutputFormat;
 
 			LabelPosX.Text = machine.WorkPosition.X.ToString("N", nfi);
@@ -370,9 +367,9 @@ namespace SPIPware
 			ButtonManualSetG92Zero.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 			ButtonManualResetG10.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 
-			if (machine.Mode != Machine.OperatingMode.Manual)
-				CheckBoxEnableJog.IsChecked = false;
-			CheckBoxEnableJog.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
+			//if (machine.Mode != Machine.OperatingMode.Manual)
+			//	CheckBoxEnableJog.IsChecked = false;
+			//CheckBoxEnableJog.IsEnabled = machine.Mode == Machine.OperatingMode.Manual;
 
 			//ButtonEditSimplify.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;
 			//ButtonEditArcToLines.IsEnabled = machine.Mode != Machine.OperatingMode.SendFile;

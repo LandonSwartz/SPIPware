@@ -17,7 +17,9 @@ namespace SPIPware
 
         private void startVimba()
         {
-            updateCameraSettingsOptions();
+            //cameraControl = new CameraControl();
+            //TODO Refactor to raise event
+            //updateCameraSettingsOptions();
             try
             {
                 //Start up Vimba API

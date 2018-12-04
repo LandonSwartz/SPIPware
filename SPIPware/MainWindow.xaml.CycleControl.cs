@@ -1,15 +1,18 @@
-﻿using System;
+﻿using SPIPware.Communication;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using static SPIPware.Communication.PeripheralControl;
 
 namespace SPIPware
 {
     partial class MainWindow
     {
+        MachineControl machineControl = new MachineControl();
         private decimal targetLocation = 0;
         private int currentIndex = 0;
         public static bool runningCycle = false;
@@ -18,7 +21,20 @@ namespace SPIPware
         bool foundPlate = false;
         bool growLightsOn = false;
 
+        private List<int> imagePositions = new List<int>();
 
+        private void updatePositionList()
+        {
+            imagePositions = new List<int>();
+            for (var i = 0; i < checkBoxes.Count; i++)
+            {
+                if (checkBoxes[i].IsChecked == true)
+                {
+                    imagePositions.Add(i);
+                }
+            }
+
+        }
         private bool FindCheckedBox(int index, bool firstBox)
         {
             if (!firstBox)
@@ -59,16 +75,14 @@ namespace SPIPware
                 if (firstRun)
                 {
                     machine.SendLine("$H");
-
-                    //machine.setGrowLightStatus(false, false);
-
+                    peripheralControl.SetLight(Peripheral.GrowLight,false, false);
                     //Properties.Settings.Default.CurrentPlate = 1;
                     firstRun = false;
                 }
                 else
                 {
-                    machine.setBackLightStatus(true);
-                    //machine.setGrowLightStatus(false, false);
+                    peripheralControl.SetLight(Peripheral.Backlight, true);
+                    peripheralControl.SetLight(Peripheral.GrowLight, false, false);
                     Thread.Sleep(300);
                     targetLocation = machine.sendMotionCommand(currentIndex);
                 }
@@ -88,8 +102,8 @@ namespace SPIPware
             //machine.sendMotionCommand(0);
             machine.SendLine("$H");
             enableMachineControlButtons();
-            machine.setBackLightStatus(false);
-            machine.setGrowLightStatus(true, !isNightTime());
+            peripheralControl.SetLight(Peripheral.Backlight, false);
+            peripheralControl.SetLight(Peripheral.GrowLight, true, !isNightTime());
         }
         public void stopCycle()
         {
@@ -105,14 +119,19 @@ namespace SPIPware
 
             if (runningCycle)
             {
-                if (machine.Status == "Home") return;
+                if (machine.Status == "Home")
+                {
+                    //cameraControl.home = true;
+                    //cameraControl.firstRun = false;
+                    peripheralControl.SetLight(Peripheral.Backlight, true);
+                    //Thread.Sleep(300);
+                    targetLocation = machine.sendMotionCommand(currentIndex);
+                }
 
-                if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
+                else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
                 {
                     Console.WriteLine("Current Index" + currentIndex);
-                    //machine.setBackLightStatus(true);
-
-
+                    peripheralControl.SetLight(Peripheral.Backlight, true);
                     cameraControl.CapSaveImage();
                     if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
                     {
@@ -123,7 +142,7 @@ namespace SPIPware
                         Properties.Settings.Default.CurrentPlate = 1;
                     }
 
-                    Console.WriteLine("Found Plate: " + foundPlate);
+                    //Console.WriteLine("Found Plate: " + foundPlate);
                     foundPlate = FindCheckedBox(currentIndex, false);
                     if (foundPlate)
                     {

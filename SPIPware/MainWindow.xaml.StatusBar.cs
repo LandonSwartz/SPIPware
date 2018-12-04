@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,7 +33,7 @@ namespace SPIPware
 
 		private void ButtonSoftReset_Click(object sender, RoutedEventArgs e)
 		{
-			machine.SoftReset();
+			new Thread(()=>machine.SoftReset()).Start();
 		}
         public void toggleButtonVisibility(Button connectButton, Button disconnectButton, bool connected)
         {

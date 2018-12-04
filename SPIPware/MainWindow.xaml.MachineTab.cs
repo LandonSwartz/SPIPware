@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -54,7 +55,9 @@ namespace SPIPware
         {
             try
             {
+
                 machine.Connect();
+                peripheralControl.Connect();
             }
             catch (Exception ex)
             {
@@ -66,8 +69,8 @@ namespace SPIPware
         {
             try
             {
-
                 machine.Disconnect();
+                peripheralControl.Disconnect();
             }
             catch (Exception ex)
             {
@@ -123,8 +126,11 @@ namespace SPIPware
         }
         private void ButtonStartCycle_Click(object sender, RoutedEventArgs e)
         {
-            Experiment.loadExperimentToSettings(Properties.Settings.Default.AcquisitionExperimentPath);
-            startCycle();
+            new Thread(() =>
+            {
+                Experiment.loadExperimentToSettings(Properties.Settings.Default.AcquisitionExperimentPath);
+                startCycle();
+            }).Start();
         }
     }
     }

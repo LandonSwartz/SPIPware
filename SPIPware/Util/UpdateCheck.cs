@@ -39,6 +39,7 @@ namespace SPIPware.Util
 
 				if (!m.Success)
 				{
+                    Console.WriteLine(e.Result);
 					Console.WriteLine("No matching tag_id found");
 					return;
 				}
@@ -57,7 +58,7 @@ namespace SPIPware.Util
 				{
 					Match urlMatch = releaseRegex.Match(e.Result);
 
-					string url = "https://github.com/martin2250/OpenCNCPilot/releases";
+					string url = "https://api.github.com/repos/alexbeattie42/SPIPware/releases";
 
 					if (urlMatch.Success)
 					{

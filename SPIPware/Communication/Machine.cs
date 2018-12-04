@@ -20,9 +20,21 @@ namespace SPIPware.Communication
 		Serial
 	}
 
-	class Machine
+	public sealed class Machine
 	{
-		public enum OperatingMode
+        private static readonly Machine instance = new Machine();
+        static Machine()
+        {
+
+        }
+        public static Machine Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+        public enum OperatingMode
 		{
 			Manual,
 			SendFile,
@@ -72,7 +84,7 @@ namespace SPIPware.Communication
 		public double CurrentTLO { get; private set; } = 0;
 
 		private Calculator _calculator;
-		public Calculator Calculator { get { return _calculator; } }
+		private Calculator Calculator { get { return _calculator; } }
 
 		private ReadOnlyCollection<bool> _pauselines = new ReadOnlyCollection<bool>(new bool[0]);
 		public ReadOnlyCollection<bool> PauseLines
@@ -227,8 +239,7 @@ namespace SPIPware.Communication
 				catch { throw; }
 			}
 		}
-
-		public Machine()
+		private Machine()
 		{
 			_calculator = new Calculator(this);
 		}
@@ -620,23 +631,7 @@ namespace SPIPware.Communication
             SendLine("G91Y-1");
         }
         
-        public void setBackLightStatus(bool status)
-        {
-            if (status)
-            {
-                backLightOn();
-            }
-            else { backLightOff(); }
-        }
-
-        public void setGrowLightStatus(bool status, bool daytime)
-        {
-            if (status && daytime)
-            {
-                growLightOn();
-            }
-            else { growLightOff(); }
-        }
+    
         public decimal sendMotionCommand(int position, bool growLightOn, bool backLightOn)
         {
             return 0;

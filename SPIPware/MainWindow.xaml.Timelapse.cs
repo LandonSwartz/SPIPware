@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static SPIPware.Communication.PeripheralControl;
 
 namespace SPIPware
 {
@@ -14,7 +15,7 @@ namespace SPIPware
 
         public static bool runningTimeLapse = false;
 
-        public async void startTimeLapse()
+        public  void startTimeLapse()
         {
             btnRunTimeLapse.IsEnabled = false;
             Console.WriteLine("Timelapse Starting");
@@ -63,12 +64,12 @@ namespace SPIPware
                 }
                 if (!isNightTime() && !growLightsOn)
                 {
-                    machine.setGrowLightStatus(true, true);
+                    peripheralControl.SetLight(Peripheral.GrowLight, true, true);
                     growLightsOn = true;
                 }
                 else if (isNightTime() && growLightsOn)
                 {
-                    machine.setGrowLightStatus(false, false);
+                    peripheralControl.SetLight(Peripheral.GrowLight, false, false);
                     growLightsOn = false;
                 }
                 await Task.Delay(60 * 1000, token);
@@ -98,7 +99,7 @@ namespace SPIPware
             {
                 tokenSource = new CancellationTokenSource();
                 Experiment.loadExperimentToSettings(Properties.Settings.Default.tlExperimentPath);
-                machine.setBackLightStatus(true);
+                peripheralControl.SetLight(Peripheral.Backlight, true);
                 Thread.Sleep(300);
                 startCycle();
                 try

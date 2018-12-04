@@ -6,13 +6,8 @@ namespace SPIPware.Communication
     class PeripheralControl
     {
         SerialPort port;
-        //private PeripheralControl()
-        //{
-        //    Connect();
-
-        //}
-        public const int COMMAND_SIZE = 30;
-        public enum Peripheral {Backlight = 3, Fan = 4 };
+     
+        public enum Peripheral {Backlight = 1, GrowLight =6 };
         public void Connect()
         {
             switch (Properties.Settings.Default.PeripheralConType)
@@ -21,14 +16,24 @@ namespace SPIPware.Communication
                     port = new SerialPort(Properties.Settings.Default.PeripheralSP, Properties.Settings.Default.PeripheralBaud, Parity.None,8,StopBits.One);
                     port.DataReceived += new SerialDataReceivedEventHandler(peripheral_DataReceived);
                     port.Open();
-                    setLight(Peripheral.Backlight, true);
+                    //setLight(Peripheral.Backlight, true);
                     break;
                 default:
                     throw new Exception("Invalid Connection Type");
             }
 
         }
-        public void setLight(Peripheral peripheral, bool value)
+
+
+        public void SetLight(Peripheral peripheral, bool status, bool daytime)
+        {
+            if (status && daytime)
+            {
+                SetLight(Peripheral.GrowLight,status);
+            }
+            else { SetLight(Peripheral.GrowLight, false); }
+        }
+        public void SetLight(Peripheral peripheral, bool value)
         {
             string cmdStr = "S1P" + peripheral.ToString("D") + "V" + btoi(value);
             Console.WriteLine(cmdStr);

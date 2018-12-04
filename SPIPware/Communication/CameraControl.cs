@@ -16,10 +16,10 @@ namespace SPIPware
     class CameraControl
     {
         public int currentIndex = 0;
-        public static bool runningCycle = false;
-        public bool home = false;
+        //public static bool runningCycle = false;
+        //public bool home = false;
         public bool goToFirstPlate = true;
-        public bool firstRun = true;
+        //public bool firstRun = true;
         public bool settingsLoaded = false;
 
         string previousSettingsDir;

@@ -110,7 +110,7 @@
 
 			</Ribbon.ApplicationMenu>-->
 			<RibbonTab Header="Control">
-				<RibbonGroup Header="Machine Connect">
+				<RibbonGroup Header="Connect">
 					<StackPanel Orientation="Horizontal">
 						<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 							<Button Name="ButtonConnect" Style="{StaticResource bigButton}"  Click="ButtonConnect_Click">
@@ -122,13 +122,22 @@
 
 						</StackPanel>
 						<StackPanel Orientation="Vertical" VerticalAlignment="Center" >
+							<Label Content="Machine:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+					
+								<Label Content="Peripherals:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+						</StackPanel>
+						<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 							<ComboBox Name="SerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="75"   SelectedItem="{util:SettingBinding P,Mode=TwoWay}" DropDownOpened="cbSerialOpen">
 							</ComboBox>
-							<!--<Label Content="Port" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top"/>-->
+							<ComboBox Name="PeripheralSerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="75"  
+									  SelectedItem="{util:SettingBinding PeripheralSP,Mode=TwoWay}" DropDownOpened="cbPeripheralSerialOpen">
+							</ComboBox>
+
 						</StackPanel>
 					</StackPanel>
 				</RibbonGroup>
-				<RibbonGroup Header="Peripheral Connect">
+				<!--<RibbonGroup Header="Peripheral Connect">
 					<StackPanel Orientation="Horizontal">
 						<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 							<Button Name="ButtonPeripheralConnect" Style="{StaticResource bigButton}"  Click="ButtonPeripheralConnect_Click">
@@ -140,13 +149,10 @@
 
 						</StackPanel>
 						<StackPanel Orientation="Vertical" VerticalAlignment="Center" >
-							<ComboBox Name="PeripheralSerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="75"  
-									  SelectedItem="{util:SettingBinding PeripheralSP,Mode=TwoWay}" DropDownOpened="cbPeripheralSerialOpen">
-							</ComboBox>
-							<!--<Label Content="Port" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top"/>-->
+							
 						</StackPanel>
 					</StackPanel>
-				</RibbonGroup>
+				</RibbonGroup>-->
 
 
 				<RibbonGroup Header="Machine Status" VerticalContentAlignment="Stretch">
@@ -154,7 +160,7 @@
 					<!--<DockPanel  >-->
 
 						<!--<StackPanel Orientation="Vertical"  Margin="5,5,5,0" VerticalAlignment="Center">-->
-							<Label Margin="0,15" Width="100" HorizontalContentAlignment="Center" BorderBrush="Black" BorderThickness="1.5" Name="ButtonStatus" Content="Disconnected"   ToolTip="Machine Status"/>
+							<Label Margin="0,15" Width="100" HorizontalContentAlignment="Center" BorderBrush="Black" BorderThickness="1.25" Name="ButtonStatus" Content="Disconnected"   ToolTip="Machine Status"/>
 								<!--<TextBlock Text="GRBL Status" HorizontalAlignment="Center"/>-->
 							<!--</StackPanel>-->
 						
@@ -235,6 +241,43 @@
 			</RibbonTab>
 			
 			<RibbonTab Header="Advanced">
+				<RibbonGroup Header="Machine Connect">
+					<StackPanel Orientation="Horizontal">
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+							<Button Name="ButtonMachineConnect" Style="{StaticResource bigButton}"  Click="ButtonConnect_Click">
+								<ContentControl Template="{StaticResource Connect}"/>
+							</Button>
+							<Button Name="ButtonMachineDisconnect"  Style="{StaticResource bigButton}" Click="ButtonDisconnect_Click">
+								<ContentControl Template="{StaticResource Disconnect}"/>
+							</Button>
+
+						</StackPanel>
+						<!--<StackPanel Orientation="Vertical" VerticalAlignment="Center" >
+							<ComboBox Name="SerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="75"   SelectedItem="{util:SettingBinding P,Mode=TwoWay}" DropDownOpened="cbSerialOpen">
+							</ComboBox>
+							<Label Content="Port" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top"/>
+						</StackPanel>-->
+					</StackPanel>
+				</RibbonGroup>
+				<RibbonGroup Header="Peripheral Connect">
+					<StackPanel Orientation="Horizontal">
+						<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+							<Button Name="ButtonPeripheralConnect" Style="{StaticResource bigButton}"  Click="ButtonPeripheralConnect_Click">
+								<ContentControl Template="{StaticResource Connect}"/>
+							</Button>
+							<Button Name="ButtonPeripheralDisconnect" Visibility="Collapsed"  Style="{StaticResource bigButton}" Click="ButtonPeripheralDisconnect_Click">
+								<ContentControl Template="{StaticResource Disconnect}"/>
+							</Button>
+
+						</StackPanel>
+						<!--<StackPanel Orientation="Vertical" VerticalAlignment="Center" >
+							<ComboBox Name="PeripheralSerialPortSelect" VerticalAlignment="Top" SelectedIndex="0" HorizontalAlignment="Left" Margin="0,2,0,0" Width="75"  
+									  SelectedItem="{util:SettingBinding PeripheralSP,Mode=TwoWay}" DropDownOpened="cbPeripheralSerialOpen">
+							</ComboBox>
+							<Label Content="Port" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top"/>
+						</StackPanel>-->
+					</StackPanel>
+				</RibbonGroup>
 				<RibbonGroup Header="G-Code Terminal">
 					<StackPanel>
 						<Grid Margin="3,0,3,0">
@@ -281,7 +324,7 @@
 						<Button Name="ButtonSoftReset" Click="ButtonSoftReset_Click" Content="Soft Reset" Style="{StaticResource styleButton}" Margin="5,5,0,5"/>
 					</StackPanel>
 				</RibbonGroup>
-				<RibbonGroup Header="Keyboard Jogging">
+				<!--<RibbonGroup Header="Keyboard Jogging">
 					<GroupBox>
 						<GroupBox.Header>
 							<CheckBox Name="CheckBoxEnableJog" Content="Enable Keyboard Jogging" Checked="CheckBoxEnableJog_Checked" Unchecked="CheckBoxEnableJog_Unchecked" VerticalAlignment="Top"/>
@@ -299,18 +342,18 @@
 									</TextBlock>
 								</TextBox.ToolTip>
 							</TextBox>
-							<!--<Label Content="Feed" HorizontalAlignment="Left" Margin="12,33,0,0" VerticalAlignment="Top"/>
-							<TextBox Name="TextBoxJogFeed" Text="{util:SettingBinding JogFeed}" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="50,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>-->
+							--><!--<Label Content="Feed" HorizontalAlignment="Left" Margin="12,33,0,0" VerticalAlignment="Top"/>
+							<TextBox Name="TextBoxJogFeed" Text="{util:SettingBinding JogFeed}" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="50,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>--><!--
 							<Label Content="Max Distance" HorizontalAlignment="Left" Margin="90,33,0,0" VerticalAlignment="Top"/>
 							<TextBox Name="TextBoxJogDistance" Text="{util:SettingBinding JogDistance}" VerticalContentAlignment="Center"  HorizontalAlignment="Right" Height="23" Margin="0,34,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>
-							<!--<Label Content="CtrlFeed" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top"/>-->
-							<!--<TextBox Name="TextBoxJogFeedFine" Text="{util:SettingBinding JogFeedCtrl}" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="69,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>-->
+							--><!--<Label Content="CtrlFeed" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top"/>-->
+							<!--<TextBox Name="TextBoxJogFeedFine" Text="{util:SettingBinding JogFeedCtrl}" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="69,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>--><!--
 							<Label Content="Distance" HorizontalAlignment="Left" Margin="116,61,0,0" VerticalAlignment="Top"/>
 							<TextBox Name="TextBoxJogDistanceFine" Text="{util:SettingBinding JogDistanceCtrl}" VerticalContentAlignment="Center"  HorizontalAlignment="Right" Height="23" Margin="0,62,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>
 						</Grid>
 					</GroupBox>
 
-				</RibbonGroup>
+				</RibbonGroup>-->
 				<RibbonGroup Header="GRBL Calibration">
 					<StackPanel Orientation="Horizontal">
 						<Button Content="GRBL Settings" Style="{StaticResource styleButton}" Click="ShowGrblSettings_Click" Name="ButtonGrblSettings"/>
@@ -360,7 +403,7 @@
 							<GroupBox>
 								<GroupBox.Header>
 										
-									<TextBlock HorizontalAlignment="Center" >Root Directory:</TextBlock>
+									<TextBlock HorizontalAlignment="Center" >Root Directory</TextBlock>
 								</GroupBox.Header>
 								<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
 
@@ -382,7 +425,7 @@
 							</GroupBox>
 							<GroupBox>
 								<GroupBox.Header >
-									<TextBlock HorizontalAlignment="Center">Image File Name:</TextBlock>
+									<TextBlock HorizontalAlignment="Center">Image File Name</TextBlock>
 								</GroupBox.Header>
 								<StackPanel Orientation="Vertical">
 									
@@ -401,7 +444,7 @@
 							</GroupBox>
 							<GroupBox>
 								<GroupBox.Header >
-									<TextBlock HorizontalAlignment="Center">Camera Settings:</TextBlock>
+									<TextBlock HorizontalAlignment="Center">Camera Settings</TextBlock>
 								</GroupBox.Header>
 								<StackPanel Orientation="Vertical">
 									<StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
@@ -414,7 +457,7 @@
 							</GroupBox>
 							<GroupBox>
 								<GroupBox.Header>
-									<TextBlock>Plate Configuration:</TextBlock>
+									<TextBlock>Plate Tagging</TextBlock>
 								</GroupBox.Header>
 								<StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
 									<StackPanel Orientation="Vertical" Margin="5,5,30,5">
@@ -429,7 +472,7 @@
 							</GroupBox>
 							<GroupBox >
 								<GroupBox.Header >
-									<TextBlock HorizontalAlignment="Center">Imaging Positions:</TextBlock>
+									<TextBlock HorizontalAlignment="Center">Imaging Positions</TextBlock>
 								</GroupBox.Header>
 								<Grid Name="PlateGrid">
 									<Grid.RowDefinitions>
@@ -496,7 +539,7 @@
 						<StackPanel>
 						<GroupBox>
 							<GroupBox.Header>
-									<TextBlock HorizontalAlignment="Center">Start Date and Time:</TextBlock>
+									<TextBlock HorizontalAlignment="Center">Start Date and Time</TextBlock>
 							</GroupBox.Header>
 							<StackPanel Orientation="Vertical">
 
@@ -526,7 +569,7 @@
 						</GroupBox>
 							<GroupBox>
 								<GroupBox.Header>
-									<TextBlock HorizontalAlignment="Center">Duration:</TextBlock>
+									<TextBlock HorizontalAlignment="Center">Duration</TextBlock>
 								</GroupBox.Header>
 								<StackPanel>
 									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
@@ -556,7 +599,7 @@
 							</GroupBox>
 							<GroupBox>
 							<GroupBox.Header>
-								<TextBlock HorizontalAlignment="Center">Experiment File:</TextBlock>
+								<TextBlock HorizontalAlignment="Center">Experiment File</TextBlock>
 							</GroupBox.Header>
 								<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
 
@@ -662,6 +705,28 @@
 						
 
 					</TabItem>
+					<TabItem Header="Peripherals">
+						<StackPanel Orientation="Vertical">
+							<GroupBox  VerticalAlignment="Top">
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Backlight Control</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<Button Style="{StaticResource smallButton}" Content="On" Name="btnBackLightOn" Click="ButtonBackLightOn_Click"></Button>
+									<Button Style="{StaticResource smallButton}" Content="Off" Name="btnBackLightOff" Click="ButtonBackightOff_Click" ></Button>
+								</StackPanel>
+							</GroupBox>
+							<GroupBox  VerticalAlignment="Top">
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Growlight Control</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<Button Style="{StaticResource smallButton}" Content="On" Name="btnGrowLightOn" Click="ButtonGrowLightOn_Click" ></Button>
+									<Button Style="{StaticResource smallButton}" Content="Off" Name="btnGrowLightOff" Click="ButtonGrowLightOff_Click"></Button>
+								</StackPanel>
+							</GroupBox>
+						</StackPanel>
+					</TabItem>
 				
 
 				
@@ -674,7 +739,7 @@
 					<RowDefinition Height="Auto"/>
 
 				</Grid.RowDefinitions>
-				<Image Name="m_PictureBox" Grid.Row="0" Stretch="Uniform" Source="Resources/Images/SunBearLogov6.png" VerticalAlignment="Top" HorizontalAlignment="Center">
+				<Image Name="m_PictureBox" Grid.Row="0" Stretch="Uniform" Source="Resources/Images/SunBearLogov8.png" VerticalAlignment="Top" HorizontalAlignment="Center">
 
 
 				</Image>

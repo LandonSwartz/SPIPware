@@ -45,10 +45,10 @@ namespace SPIPware
 
 		private void UpdateExpressionPreview()
 		{
-			if (Properties.Settings.Default.ManualUseExpressions)
-				TextBoxPreview.Text = machine.Calculator.Evaluate(TextBoxManual.Text, out ManualExpressionSuccess);
+			//if (Properties.Settings.Default.ManualUseExpressions)
+			//	TextBoxPreview.Text = machine.Calculator.Evaluate(TextBoxManual.Text, out ManualExpressionSuccess);
 
-			TextBoxPreview.Background = ManualExpressionSuccess ? Brushes.LightYellow : Brushes.Red;
+			//TextBoxPreview.Background = ManualExpressionSuccess ? Brushes.LightYellow : Brushes.Red;
 		}
 
 		private void TextBoxManual_TextChanged(object sender, TextChangedEventArgs e)
@@ -156,7 +156,7 @@ namespace SPIPware
 		{
 			if(machine.Mode != Machine.OperatingMode.Manual)
 			{
-				CheckBoxEnableJog.IsChecked = false;
+				//CheckBoxEnableJog.IsChecked = false;
 				return;
 			}
 		}
@@ -176,8 +176,8 @@ namespace SPIPware
 			if (e.Key == Key.Escape)
 				machine.SoftReset();
 
-			if (!CheckBoxEnableJog.IsChecked.Value)
-				return;
+			//if (!CheckBoxEnableJog.IsChecked.Value)
+			//	return;
 
 			e.Handled = e.Key != Key.Tab;
 
