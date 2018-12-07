@@ -1,4 +1,5 @@
-﻿using SynchronousGrab;
+﻿using SPIPware.Communication;
+using SynchronousGrab;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -6,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -42,6 +44,10 @@ namespace SPIPware
         public VimbaHelper VimbaHelper { get => m_VimbaHelper; set => m_VimbaHelper = value; }
         public CameraInfo SelectedItem { get => selectedItem; set => selectedItem = value; }
         //Add log message to logging list box
+        public delegate void ImageAcquired();
+        public event EventHandler ImageAcquiredEvent;
+        public delegate void ImageUpdated();
+        public event EventHandler ImageUpdatedEvent;
         public void StartVimba()
         {
             //cameraControl = new CameraControl();
@@ -55,6 +61,8 @@ namespace SPIPware
                 //Text += String.Format(" Vimba .NET API Version {0}", vimbaHelper.GetVersion());
                 m_VimbaHelper = vimbaHelper;
                 VimbaHelper = m_VimbaHelper;
+
+                VimbaHelper.ImageAcquiredEvent += OnImageAcquired;
                 try
                 {
                     UpdateCameraList();
@@ -69,6 +77,10 @@ namespace SPIPware
             {
                 LogError("Could not startup Vimba API. Reason: " + exception.Message);
             }
+        }
+        public void OnImageAcquired(object sender, EventArgs e)
+        {
+            ImageAcquiredEvent.Raise(this, new EventArgs());
         }
         public void ShutdownVimba()
         {
@@ -178,7 +190,7 @@ namespace SPIPware
         {
             //Start an async invoke in case this method was not
             //called by the GUI thread.
-            //if (! m_CameraList.Dispatcher.CheckAccess())
+            //if (!m_CameraList.Dispatcher.CheckAccess())
             //{
             //    m_CameraList.Dispatcher.Invoke(new CameraListChangedHandler(this.OnCameraListChanged), sender, args);
             //    return;
@@ -236,11 +248,10 @@ namespace SPIPware
             settingsLoaded = true;
 
         }
-        public Task UpdateImageBox(System.Drawing.Image image)
+        public BitmapImage bi;
+        public BitmapImage UpdateImageBox(System.Drawing.Image image)
         {
-            Task task = new Task(() =>
-            {
-                BitmapImage bi;
+    
                 using (var ms = new MemoryStream())
                 {
                     image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
@@ -256,10 +267,11 @@ namespace SPIPware
 
                 }
 
-                //Display image
-                m_PictureBox.Source = bi;
-            });
-            return task;
+                //Display imageD
+                //Application.Current.Dispatcher.Invoke(new Action(() => m_PictureBox.Source = bi));
+                ImageUpdatedEvent.Raise(this, new EventArgs());
+
+            return bi;
 
         }
         public Task WriteBitmapToFile(BitmapImage image, string filePath)
@@ -323,7 +335,7 @@ namespace SPIPware
 
             return task;
         }
-        public void CapSaveImage()
+        public BitmapImage CapSaveImage()
         {
             try
             {
@@ -338,15 +350,15 @@ namespace SPIPware
 
                 //Acquire an image synchronously (snap) from selected camera
                 System.Drawing.Image image = VimbaHelper.AcquireSingleImage(SelectedItem.ID);
-
-                Task uib = UpdateImageBox(image);
-                uib.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-                uib.Start();
+                System.Drawing.Image imageCopy = (System.Drawing.Image)image.Clone();
+                BitmapImage img = UpdateImageBox(image);
+               
 
                 String filePath = createFilePath();
                 if (Directory.Exists(Properties.Settings.Default.SaveFolderPath))
                 {
-                    Task witf = WriteImageToFile(image);
+                   
+                    Task witf = WriteImageToFile(imageCopy);
                     witf.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
                     witf.Start();
 
@@ -355,12 +367,13 @@ namespace SPIPware
                 {
                     LogError("Invalid directory selected");
                 }
-               
+                return img;
 
             }
             catch (Exception exception)
             {
                 LogError("Could not acquire image. Reason: " + exception.Message);
+                return bi;
             }
         }
         static void ExceptionHandler(Task task)

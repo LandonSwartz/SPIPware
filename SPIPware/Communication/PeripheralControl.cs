@@ -23,7 +23,7 @@ namespace SPIPware.Communication
 
         SerialPort port;
      
-        public enum Peripheral {Backlight = 1, GrowLight =6 };
+        public enum Peripheral {Backlight = 6, GrowLight =1 };
         public void Connect()
         {
             switch (Properties.Settings.Default.PeripheralConType)
@@ -62,7 +62,15 @@ namespace SPIPware.Communication
         }
         public void SetLight(Peripheral peripheral, bool value)
         {
-            string cmdStr = "S1P" + peripheral.ToString("D") + "V" + BtoI(value);
+            string cmdStr = "";
+            if(peripheral == Peripheral.Backlight)
+            {
+                cmdStr = "S2P" + peripheral.ToString("D") + "V" + BtoI(value);
+            }
+            else if( peripheral == Peripheral.GrowLight)
+            {
+                cmdStr = "S1P" + peripheral.ToString("D") + "V" + BtoI(value);
+            }
             Console.WriteLine(cmdStr);
             SendCommand(cmdStr);
             

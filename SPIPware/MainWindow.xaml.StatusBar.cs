@@ -37,17 +37,19 @@ namespace SPIPware
 		}
         public void toggleButtonVisibility(Button connectButton, Button disconnectButton, bool connected)
         {
-            if (connected)
-            {
-                connectButton.Visibility = Visibility.Collapsed;
-                disconnectButton.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                connectButton.Visibility = Visibility.Visible;
-                disconnectButton.Visibility = Visibility.Collapsed;
-            }
-
+            Dispatcher.Invoke(() =>
+            {//this refer to form in WPF application 
+                if (connected)
+                {
+                    connectButton.Visibility = Visibility.Collapsed;
+                    disconnectButton.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    connectButton.Visibility = Visibility.Visible;
+                    disconnectButton.Visibility = Visibility.Collapsed;
+                }
+            });
         }
     }
 }

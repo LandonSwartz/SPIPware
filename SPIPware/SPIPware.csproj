@@ -154,7 +154,6 @@
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Threads\BackgroundWorker.cs" />
     <Compile Include="Util\Calculator.cs" />
     <Compile Include="Util\Constants.cs" />
     <Compile Include="Util\FileConverter.cs" />

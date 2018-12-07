@@ -14,7 +14,8 @@ namespace SPIPware
     {
         Machine machine = Machine.Instance;
         CameraControl camera = CameraControl.Instance;
-        CycleControl cycle = new CycleControl();
+        CycleControl cycle = CycleControl.Instance;
+        TimelapseControl timelapse = new TimelapseControl();
 
 
         GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
@@ -32,8 +33,12 @@ namespace SPIPware
             InitializeComponent();
 
             cycle.StatusUpdate += UpdateCycleStatus;
+            timelapse.TimeLapseStatus += UpdateTimeLapseStatus;
+            camera.ImageUpdatedEvent += UpdatePictureBox;
+
             updateSerialPortComboBox(PeripheralSerialPortSelect);
             updateSerialPortComboBox(SerialPortSelect);
+            updateCameraSettingsOptions();
 
             Task task = new Task(() => camera.StartVimba());
             task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
@@ -79,7 +84,7 @@ namespace SPIPware
             //updatePlateCheckboxes();
             
             //cameraControl.m_CameraList = m_CameraList;
-            camera.m_PictureBox = m_PictureBox;
+            //camera.m_PictureBox = m_PictureBox;
 
         }
 
@@ -299,18 +304,7 @@ namespace SPIPware
             task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
             task.Start();
         }
-        private void ButtonStartTimeLapse_Click(object sender, RoutedEventArgs e)
-        {
-            Task task = new Task(() => startTimeLapse());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
-        }
-        private void ButtonStopTimeLapse_Click(object sender, RoutedEventArgs e)
-        {
-            Task task = new Task(() => stopTimeLapse());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
-        }
+    
         private void ButtonStopCycle_Click(object sender, RoutedEventArgs e)
         {
             StopCycle();

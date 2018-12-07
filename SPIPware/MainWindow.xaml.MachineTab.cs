@@ -21,24 +21,54 @@ namespace SPIPware
         }
         private void updateSerialPortComboBox(ComboBox cb)
         {
-            
+            string sp = Properties.Settings.Default.P;
+            string psp = Properties.Settings.Default.PeripheralSP;
             cb.Items.Clear();
-            foreach (string port in System.IO.Ports.SerialPort.GetPortNames())
+            String[] ports = System.IO.Ports.SerialPort.GetPortNames();
+            int i = 0;
+            int selectedIndex = 0;
+           
+            foreach (string port in ports )
+            {
+                if (string.Equals(cb.Name, "PeripheralSerialPortSelect") && string.Equals(port, psp)){
+                        selectedIndex = i;
+                }
+                if (string.Equals(cb.Name, "SerialPortSelect") && string.Equals(port, sp))
+                {
+                    selectedIndex = i;
+                }
+               
                 cb.Items.Add(port);
-            if(string.Equals(cb.Name, "PeripheralSerialPortSelect") &&
-               !cb.Items.Contains(Properties.Settings.Default.PeripheralSP))
-            {
-                cb.SelectedItem = 0;
-                cb.SelectedIndex = 0;
+                i++;
             }
-            else if (string.Equals(cb.Name, "SerialPortSelect") && 
-                !cb.Items.Contains(Properties.Settings.Default.P))
-            {
-                cb.SelectedItem = 0;
-                cb.SelectedIndex = 0;
-            }
+            cb.SelectedIndex = selectedIndex;
 
-
+            
+            //if (string.Equals(cb.Name, "PeripheralSerialPortSelect")){
+            //    var match = ports.FirstOrDefault(stringToCheck => stringToCheck.Contains(Properties.Settings.Default.PeripheralSP));
+            //    if (match == null)
+            //    {
+            //        //cb.SelectedItem = 0;
+            //        cb.SelectedIndex = 0;
+            //    }
+            //    else
+            //    {
+            //        cb.SelectedItem = Properties.Settings.Default.PeripheralSP;
+            //    }
+            //}
+            //if (string.Equals(cb.Name, "SerialPortSelect"))
+            //{
+            //    var match = ports.FirstOrDefault(stringToCheck => stringToCheck.Contains(Properties.Settings.Default.P));
+            //    if (match == null)
+            //    {
+            //        //cb.SelectedItem = 0;
+            //        cb.SelectedIndex = 0;
+            //    }
+            //    else
+            //    {
+            //        cb.SelectedItem = Properties.Settings.Default.P;
+            //    }
+            //}
         }
 
         private void cbPeripheralSerialOpen(object sender, EventArgs e)
@@ -92,6 +122,7 @@ namespace SPIPware
 
             settingsWindow.Close();
             camera.ShutdownVimba();
+            Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }
 

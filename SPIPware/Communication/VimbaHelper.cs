@@ -33,7 +33,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using AVT.VmbAPINET;
-
+using SPIPware.Communication;
 
 namespace SynchronousGrab
 {
@@ -44,6 +44,8 @@ namespace SynchronousGrab
     {
         private string m_Name = null;
         private string m_ID = null;
+
+
 
         public CameraInfo(string name, string id)
         {
@@ -447,7 +449,8 @@ namespace SynchronousGrab
             }
             return true;
         }
-    
+        public delegate void ImageAcquired();
+        public event EventHandler ImageAcquiredEvent;
         public Image AcquireSingleImage(string id)
         {
             
@@ -488,6 +491,8 @@ namespace SynchronousGrab
 
                 //Acquire an image synchronously (snap)
                 camera.AcquireSingleImage(ref frame, 2000);
+                ImageAcquiredEvent.Raise(this, new EventArgs());
+
             }
             finally
             {

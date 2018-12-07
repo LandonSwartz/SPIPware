@@ -60,25 +60,29 @@ namespace SPIPware
         //    Console.WriteLine("No more boxes checked");
         //    return false;
         //}
-        public void UpdateCycleStatus()
+        public void UpdateCycleStatus(object sender, EventArgs e)
         {
             UpdateCycleStatus(cycle.CycleStatus);
         }
         public void UpdateCycleStatus(bool cycleRunning)
         {
-            if (!cycleRunning)
-            {
-                EnableMachineControlButtons();
-                cycleStatusIcon.Source = YELLOW_IMAGE;
-            }
-            else
-            {
-                btnRunCycle.IsEnabled = false;
-                cycleStatusIcon.Source = GREEN_IMAGE;
-            }
+            Dispatcher.Invoke(() =>
+            {//this refer to form in WPF application 
 
-            cycleStatus.Text = parseStatus(cycleRunning);
-            toggleButtonVisibility(btnRunCycle, btnStopCycle, cycleRunning);
+                if (!cycleRunning)
+                {
+                    EnableMachineControlButtons();
+                    cycleStatusIcon.Source = YELLOW_IMAGE;
+                }
+                else
+                {
+                    btnRunCycle.IsEnabled = false;
+                    cycleStatusIcon.Source = GREEN_IMAGE;
+                }
+
+                cycleStatus.Text = parseStatus(cycleRunning);
+                toggleButtonVisibility(btnRunCycle, btnStopCycle, cycleRunning);
+            });
 
         }
         //public void toggleImageCycleButton(bool running)

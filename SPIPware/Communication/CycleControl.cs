@@ -5,18 +5,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using static SPIPware.Communication.PeripheralControl;
 
 namespace SPIPware.Communication
 {
     class CycleControl
     {
+        private static readonly CycleControl instance = new CycleControl();
+     
+        static CycleControl()
+        {
+
+        }
+        public static CycleControl Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         public delegate void CycleUpdate();
-        public event CycleUpdate StatusUpdate;
+        public event EventHandler StatusUpdate;
 
         CameraControl camera = CameraControl.Instance;
         Machine machine = Machine.Instance;
-        PeripheralControl peripheral = Instance;
+        PeripheralControl peripheral = PeripheralControl.Instance;
+
         private List<int> imagePositions = new List<int>();
         public bool runningCycle = false;
         public bool firstRun = true;
@@ -29,9 +46,17 @@ namespace SPIPware.Communication
 
         private int posIndex = 0;
 
+        CycleControl()
+        {
+            camera.ImageAcquiredEvent += OnImageAcquired;
+        }
+        public void OnImageAcquired(object sender, EventArgs e)
+        {
+            GoToNextPosition();
+        }
         private bool IsNextIndex(int index)
         {
-            return index <= imagePositions.Count;
+            return index+1 < imagePositions.Count;
         }
         public void UpdatePositionList(List<CheckBox> checkBoxes)
         {
@@ -46,6 +71,10 @@ namespace SPIPware.Communication
             //ImagePositions.ForEach((position) => Console.Write(position + ","));
             //Console.WriteLine();
         }
+        //protected void OnStatusUpdateEvent(EventArgs e)
+        //{
+        //    StatusUpdate?.Invoke(this, e);
+        //}
         public void Start()
         {
             //if (machine.Connected && peripheral.Connected)
@@ -55,7 +84,9 @@ namespace SPIPware.Communication
 
                 runningCycle = true;
                 CycleStatus = runningCycle;
-                StatusUpdate.Raise(this, EventArgs.Empty);
+              
+                StatusUpdate.Raise(this, new EventArgs());
+                
 
                 camera.loadCameraSettings();
                 posIndex = 0;
@@ -67,6 +98,7 @@ namespace SPIPware.Communication
                 if (firstRun)
                 {
                     machine.SendLine("$H");
+                    peripheral.SetLight(Peripheral.Backlight, true);
                     peripheral.SetLight(Peripheral.GrowLight, false, false);
                     //Properties.Settings.Default.CurrentPlate = 1;
                     firstRun = false;
@@ -107,7 +139,7 @@ namespace SPIPware.Communication
                 machine.SoftReset();
             }
         }
-
+        public BitmapImage bi;
         public void Check()
         {
 
@@ -117,7 +149,7 @@ namespace SPIPware.Communication
                 {
                     //cameraControl.home = true;
                     //cameraControl.firstRun = false;
-                    peripheral.SetLight(Peripheral.Backlight, true);
+                    //peripheral.SetLight(Peripheral.Backlight, true);
                     //Thread.Sleep(300);
                     targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
                 }
@@ -125,26 +157,19 @@ namespace SPIPware.Communication
                 else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
                 {
                     //Console.WriteLine("Current Index" + currentIndex);
-                    peripheral.SetLight(Peripheral.Backlight, true);
-                    camera.CapSaveImage();
-                    if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
-                    {
-                        Properties.Settings.Default.CurrentPlate++;
-                    }
-                    else
-                    {
-                        Properties.Settings.Default.CurrentPlate = 1;
-                    }
+                    //peripheral.SetLight(Peripheral.Backlight, true);
+                   bi = camera.CapSaveImage();
+                   
 
                     //Console.WriteLine("Found Plate: " + foundPlate);
                     //foundPlate = FindCheckedBox(currentIndex, false);
-                    foundPlate = IsNextIndex(posIndex);
-                    if (foundPlate)
-                    {
-                        posIndex++;
-                        targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
-                    }
-                    else End();
+                    //foundPlate = IsNextIndex(posIndex);
+                    //if (foundPlate)
+                    //{
+                    //    posIndex++;
+                    //    targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
+                    //}
+                    //else End();
 
                 }
 
@@ -153,6 +178,24 @@ namespace SPIPware.Communication
             {
                 return;
             }
+        }
+        public void GoToNextPosition()
+        {
+            if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
+            {
+                Properties.Settings.Default.CurrentPlate++;
+            }
+            else
+            {
+                Properties.Settings.Default.CurrentPlate = 1;
+            }
+            foundPlate = IsNextIndex(posIndex);
+            if (foundPlate)
+            {
+                posIndex++;
+                targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
+            }
+            else End();
         }
     }
 }
