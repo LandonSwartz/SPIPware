@@ -34,7 +34,7 @@ namespace SPIPware
 
             cycle.StatusUpdate += UpdateCycleStatus;
             timelapse.TimeLapseStatus += UpdateTimeLapseStatus;
-            camera.ImageUpdatedEvent += UpdatePictureBox;
+            cycle.ImageUpdatedEvent += UpdatePictureBox;
 
             updateSerialPortComboBox(PeripheralSerialPortSelect);
             updateSerialPortComboBox(SerialPortSelect);
@@ -82,9 +82,9 @@ namespace SPIPware
 
             CheckBoxUseExpressions_Changed(null, null);
             //updatePlateCheckboxes();
-            
+
             //cameraControl.m_CameraList = m_CameraList;
-            //camera.m_PictureBox = m_PictureBox;
+            camera.m_PictureBox = m_PictureBox;
 
         }
 
@@ -323,9 +323,8 @@ namespace SPIPware
         }
         private void ButtonLoadExperimentDefaults_Click(object sender, RoutedEventArgs e)
         {
-            Task task = new Task(() => LoadDefaults());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
+           LoadDefaults();
+          
         }
         private void ButtonSaveAsExperiment_Click(object sender, RoutedEventArgs e)
         {
@@ -334,9 +333,8 @@ namespace SPIPware
         }
         private void ButtonLoadExperiment_Click(object sender, RoutedEventArgs e)
         {
-            Task task = new Task(() => LoadSettingsFromFile());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
+            LoadSettingsFromFile();
+ 
         }
         private void ButtonCameraDisconnect_Click(object sender, RoutedEventArgs e)
         {

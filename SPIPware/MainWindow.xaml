@@ -84,11 +84,11 @@
 						<RibbonApplicationMenuItem Header="Save As" Click="ButtonSaveAsExperiment_Click"></RibbonApplicationMenuItem>
 					</RibbonApplicationSplitMenuItem>
 					
-					<RibbonSeparator></RibbonSeparator>
+					<!--<RibbonSeparator></RibbonSeparator>
 					<RibbonApplicationSplitMenuItem Header="Load Defaults"  Click="ButtonLoadExperimentDefaults_Click">
 						<RibbonApplicationMenuItem Header="Load Defaults" Click="ButtonLoadExperimentDefaults_Click"></RibbonApplicationMenuItem>
 						<RibbonApplicationMenuItem Header="Save Defaults" Click="ButtonSaveExperimentDefaults_Click"></RibbonApplicationMenuItem>
-					</RibbonApplicationSplitMenuItem>
+					</RibbonApplicationSplitMenuItem>-->
 				</RibbonApplicationMenu>
 			</Ribbon.ApplicationMenu>
 
@@ -643,6 +643,19 @@
 					</TabItem>
 					<TabItem Header="Machine" >
 						<StackPanel Orientation="Vertical">
+							<!--<GroupBox>
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Load Machine Settings From File</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+									<StackPanel Orientation="Horizontal">
+										<CheckBox></CheckBox>
+									</StackPanel>
+									
+
+								</StackPanel>
+
+							</GroupBox>-->
 							<GroupBox>
 								<GroupBox.Header >
 									<TextBlock HorizontalAlignment="Center">Plate Position Calibration</TextBlock>

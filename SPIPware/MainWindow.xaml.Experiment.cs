@@ -78,17 +78,17 @@ namespace SPIPware
         }
         public void LoadDefaults()
         {
-            Experiment.loadExperimentToSettings(DEFAULT_SETTINGS_PATH);
+            Experiment.LoadExperimentToSettings(DEFAULT_SETTINGS_PATH);
             Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
         }
         public void SaveDefaults()
         {
-            Experiment.createExperimentFromSettings(DEFAULT_SETTINGS_PATH);
+            Experiment.CreateExperimentFromSettings(DEFAULT_SETTINGS_PATH);
             Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
         }
         public void SaveSettingsToFile()
         {
-            Experiment.createExperimentFromSettings(Properties.Settings.Default.ExperimentPath);
+            Experiment.CreateExperimentFromSettings(Properties.Settings.Default.ExperimentPath);
         }
         public System.Windows.Forms.SaveFileDialog openSaveDialog()
         {
@@ -111,7 +111,7 @@ namespace SPIPware
         {
             if (dialog != null)
             {
-                Experiment.createExperimentFromSettings(dialog.FileName);
+                Experiment.CreateExperimentFromSettings(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
                 Console.Write(Properties.Settings.Default.ExperimentPath);
             }
@@ -122,7 +122,7 @@ namespace SPIPware
             if (dialog != null)
             {
                 Console.Write(dialog.FileName);
-                Experiment.loadExperimentToSettings(dialog.FileName);
+                Experiment.LoadExperimentToSettings(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
             }
         }

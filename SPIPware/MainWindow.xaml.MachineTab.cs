@@ -144,7 +144,7 @@ namespace SPIPware
         }
         private void ButtonStartCycle_Click(object sender, RoutedEventArgs e)
         {
-                Experiment.loadExperimentToSettings(Properties.Settings.Default.AcquisitionExperimentPath);
+                Experiment.LoadExperimentToSettings(Properties.Settings.Default.AcquisitionExperimentPath);
                 StartCycle();
         }
     }

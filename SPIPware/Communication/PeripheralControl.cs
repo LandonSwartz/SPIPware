@@ -82,7 +82,11 @@ namespace SPIPware.Communication
         private void SendCommand(string commandString)
         {
             //port.DiscardOutBuffer();
-            port.WriteLine(commandString);
+            if (port.IsOpen)
+            {
+                port.WriteLine(commandString);
+            }
+            
         }
         private void Peripheral_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {

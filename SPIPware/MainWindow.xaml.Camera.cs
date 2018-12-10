@@ -57,10 +57,13 @@ namespace SPIPware
         public BitmapImage bi;
         public void UpdatePictureBox(object sender, EventArgs e)
         {
-
+            //cycle.bi.Freeze();
+            m_PictureBox.Dispatcher.Invoke(()=> { m_PictureBox.Source = cycle.bi; });
+            
             //if (Application.Current.Dispatcher.CheckAccess())
             //{
-            //    bi = cycle.bi.Clone();
+
+            //    bi = camera.bi.Clone();
             //    m_PictureBox.Source = camera.bi;
             //}
             //else
@@ -68,9 +71,8 @@ namespace SPIPware
             //    //Other wise re-invoke the method with UI thread access
             //    Application.Current.Dispatcher.Invoke(new System.Action(() =>
             //    {
-            //        Thread.Sleep(300);
-            //        bi = cycle.bi.Clone();
-            //        m_PictureBox.Source = bi;
+            //         camera.bi.Freeze();
+            //        m_PictureBox.Source = camera.bi;
 
             //    }));
             //}

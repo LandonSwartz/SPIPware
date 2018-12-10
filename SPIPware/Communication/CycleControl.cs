@@ -52,7 +52,10 @@ namespace SPIPware.Communication
         }
         public void OnImageAcquired(object sender, EventArgs e)
         {
-            GoToNextPosition();
+            if (runningCycle)
+            {
+                GoToNextPosition();
+            }
         }
         private bool IsNextIndex(int index)
         {
@@ -139,6 +142,8 @@ namespace SPIPware.Communication
                 machine.SoftReset();
             }
         }
+        public delegate void ImageUpdated();
+        public event EventHandler ImageUpdatedEvent;
         public BitmapImage bi;
         public void Check()
         {
@@ -158,8 +163,11 @@ namespace SPIPware.Communication
                 {
                     //Console.WriteLine("Current Index" + currentIndex);
                     //peripheral.SetLight(Peripheral.Backlight, true);
-                   bi = camera.CapSaveImage();
-                   
+                    bi =  camera.CapSaveImage().Clone();
+                    
+                    bi.Freeze();
+
+                    ImageUpdatedEvent.Raise(this, new EventArgs());
 
                     //Console.WriteLine("Found Plate: " + foundPlate);
                     //foundPlate = FindCheckedBox(currentIndex, false);
@@ -181,14 +189,7 @@ namespace SPIPware.Communication
         }
         public void GoToNextPosition()
         {
-            if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
-            {
-                Properties.Settings.Default.CurrentPlate++;
-            }
-            else
-            {
-                Properties.Settings.Default.CurrentPlate = 1;
-            }
+           
             foundPlate = IsNextIndex(posIndex);
             if (foundPlate)
             {

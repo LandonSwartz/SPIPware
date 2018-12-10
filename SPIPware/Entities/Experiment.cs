@@ -11,6 +11,7 @@ namespace SPIPware.Entities
         private int totalPlates;
         private int currentPlate;
         private int plateOffset;
+        private int betweenDistance;
         private string cameraSettingsPath;
         private string fileName;
         private string saveFolderPath;
@@ -27,14 +28,15 @@ namespace SPIPware.Entities
         private long tlEndIntervalType;
         private long tlIntervalType;
 
-        public static void loadExperimentToSettings(string filePath)
+        public static void LoadExperimentToSettings(string filePath)
         {
-            Experiment experiment = loadExperiment(filePath);
+            Experiment experiment = LoadExperiment(filePath);
             if(experiment != null)
             {
                 Properties.Settings.Default.TotalPlates = experiment.totalPlates;
                 Properties.Settings.Default.CurrentPlate = experiment.currentPlate;
                 Properties.Settings.Default.PlateOffset = experiment.plateOffset;
+                Properties.Settings.Default.BetweenDistance = experiment.betweenDistance;
                 Properties.Settings.Default.CameraSettingsPath = experiment.cameraSettingsPath;
                 Properties.Settings.Default.FileName = experiment.fileName;
                 Properties.Settings.Default.SaveFolderPath = experiment.saveFolderPath;
@@ -54,12 +56,13 @@ namespace SPIPware.Entities
             }
      
         }
-        public static void createExperimentFromSettings(string filePath)
+        public static void CreateExperimentFromSettings(string filePath)
         {
             Experiment experiment = new Experiment();
             experiment.totalPlates = Properties.Settings.Default.TotalPlates;
             experiment.currentPlate = Properties.Settings.Default.CurrentPlate;
             experiment.plateOffset = Properties.Settings.Default.PlateOffset;
+            experiment.betweenDistance = Properties.Settings.Default.BetweenDistance;
             experiment.cameraSettingsPath = Properties.Settings.Default.CameraSettingsPath;
             experiment.fileName = Properties.Settings.Default.FileName;
             experiment.saveFolderPath = Properties.Settings.Default.SaveFolderPath;
@@ -75,9 +78,9 @@ namespace SPIPware.Entities
             experiment.tlEndIntervalType = Properties.Settings.Default.tlEndIntervalType;
             experiment.tlIntervalType = Properties.Settings.Default.tlIntervalType;
 
-            saveExperiment(experiment, filePath);
+            SaveExperiment(experiment, filePath);
         }
-        private static Experiment loadExperiment(string filePath)
+        private static Experiment LoadExperiment(string filePath)
         {
             if (FileExists(filePath))
             {
@@ -96,16 +99,25 @@ namespace SPIPware.Entities
             }
 
         }
-        private static bool saveExperiment(Experiment experiment, string filePath)
+        private static bool SaveExperiment(Experiment experiment, string filePath)
         {
             
                 IFormatter formatter = new BinaryFormatter();
+            try
+            {
                 Stream stream = new FileStream(filePath,
-                                         FileMode.Create,
-                                         FileAccess.Write, FileShare.None);
+                                                        FileMode.Create,
+                                                        FileAccess.Write, FileShare.None);
                 formatter.Serialize(stream, experiment);
                 stream.Close();
                 return true;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Unable to save file: " + e);
+                return false;
+            }
+               
        
         
         }

@@ -46,8 +46,7 @@ namespace SPIPware
         //Add log message to logging list box
         public delegate void ImageAcquired();
         public event EventHandler ImageAcquiredEvent;
-        public delegate void ImageUpdated();
-        public event EventHandler ImageUpdatedEvent;
+        
         public void StartVimba()
         {
             //cameraControl = new CameraControl();
@@ -247,18 +246,20 @@ namespace SPIPware
             }
             settingsLoaded = true;
 
+
         }
         public BitmapImage bi;
         public BitmapImage UpdateImageBox(System.Drawing.Image image)
         {
-    
-                using (var ms = new MemoryStream())
+            
+            using (var ms = new MemoryStream())
                 {
-                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    bi = new BitmapImage();
+                     image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
                     ms.Position = 0;
 
-                    bi = new BitmapImage();
+                   
                     bi.BeginInit();
                     bi.CacheOption = BitmapCacheOption.OnLoad;
                     bi.StreamSource = ms;
@@ -267,9 +268,10 @@ namespace SPIPware
 
                 }
 
-                //Display imageD
-                //Application.Current.Dispatcher.Invoke(new Action(() => m_PictureBox.Source = bi));
-                ImageUpdatedEvent.Raise(this, new EventArgs());
+            //Display imageD
+            //m_PictureBox.Source = bi;
+            //Application.Current.Dispatcher.Invoke(new Action(() => ));
+           
 
             return bi;
 
@@ -288,18 +290,17 @@ namespace SPIPware
             });
             return task;
         }
+        ImageFormat fileType = ImageFormat.Png;
         public String createFilePath()
         {
             StringBuilder sb = new StringBuilder();
             if (Properties.Settings.Default.CurrentPlateSave == true)
             {
-                string currentPlateStr = Properties.Settings.Default.CurrentPlate.ToString();
+                string currentPlateStr = (Properties.Settings.Default.CurrentPlate).ToString();
                 sb.Append(currentPlateStr + "_");
             }
             string currentDate = DateTime.Now.ToString("yyyy-MM-dd--H-mm-ss");
-            ImageFormat fileType = ImageFormat.Png;
-
-
+    
             sb.Append(currentDate + "_");
             sb.Append(Properties.Settings.Default.FileName);
             sb.Append("." + fileType.ToString().ToLower());
@@ -310,27 +311,22 @@ namespace SPIPware
       public Task WriteImageToFile(System.Drawing.Image  image)
         {
             Task task = new Task(()=>{
-                StringBuilder sb = new StringBuilder();
-                if (Properties.Settings.Default.CurrentPlateSave == true)
-                {
-                    string currentPlateStr = Properties.Settings.Default.CurrentPlate.ToString();
-                    sb.Append(currentPlateStr + "_");
-                }
-                string currentDate = DateTime.Now.ToString("yyyy-MM-dd--H-mm-ss");
-                ImageFormat fileType = ImageFormat.Png;
-
-
-                sb.Append(currentDate + "--");
-                sb.Append(Properties.Settings.Default.FileName);
-                sb.Append("." + fileType.ToString().ToLower());
-
-                String filePath = Path.Combine(Properties.Settings.Default.SaveFolderPath, sb.ToString());
+               
+                String filePath = createFilePath();
                 //Console.WriteLine("Image written to: " + filePath);
                 // Console.WriteLine("File Name: " + sb.ToString());
 
                 image.Save(filePath, fileType);
                 Console.WriteLine("Image written to: " + filePath);
                 LogMessage("Image acquired synchonously.");
+                if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
+                {
+                    Properties.Settings.Default.CurrentPlate++;
+                }
+                else
+                {
+                    Properties.Settings.Default.CurrentPlate = 1;
+                }
             });
 
             return task;
@@ -373,7 +369,7 @@ namespace SPIPware
             catch (Exception exception)
             {
                 LogError("Could not acquire image. Reason: " + exception.Message);
-                return bi;
+                return null;
             }
         }
         static void ExceptionHandler(Task task)

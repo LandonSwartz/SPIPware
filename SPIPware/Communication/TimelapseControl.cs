@@ -61,16 +61,20 @@ namespace SPIPware.Communication
                 totalMinutes = duration.TotalMinutes;
                 tlCount = duration.TotalMinutes.ToString() + " minute(s)";
                 TimeLapseStatus.Raise(this, new EventArgs());
-                if (!peripheral.IsNightTime() && !growLightsOn)
+                if (!cycle.runningCycle)
                 {
-                    peripheral.SetLight(Peripheral.GrowLight, true, true);
-                    growLightsOn = true;
+                    if (!peripheral.IsNightTime())
+                    {
+                        peripheral.SetLight(Peripheral.GrowLight, true, true);
+                        //growLightsOn = true;
+                    }
+                    else if (peripheral.IsNightTime())
+                    {
+                        peripheral.SetLight(Peripheral.GrowLight, false, false);
+                        //growLightsOn = false;
+                    }
                 }
-                else if (peripheral.IsNightTime() && growLightsOn)
-                {
-                    peripheral.SetLight(Peripheral.GrowLight, false, false);
-                    growLightsOn = false;
-                }
+                
                 await Task.Delay(60 * 1000, token);
                 duration = duration.Subtract(TimeSpan.FromMinutes(1));
             }
@@ -84,8 +88,8 @@ namespace SPIPware.Communication
              && endDuration > 0)
             {
                 tokenSource = new CancellationTokenSource();
-                Experiment.loadExperimentToSettings(Properties.Settings.Default.tlExperimentPath);
-                peripheral.SetLight(Peripheral.Backlight, true);
+                Experiment.LoadExperimentToSettings(Properties.Settings.Default.tlExperimentPath);
+                //peripheral.SetLight(Peripheral.Backlight, true);
                 //Thread.Sleep(300);
                 cycle.Start();
                 try
