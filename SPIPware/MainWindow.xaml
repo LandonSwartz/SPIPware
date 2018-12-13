@@ -738,6 +738,15 @@
 									<Button Style="{StaticResource smallButton}" Content="Off" Name="btnGrowLightOff" Click="ButtonGrowLightOff_Click"></Button>
 								</StackPanel>
 							</GroupBox>
+							<GroupBox  VerticalAlignment="Top">
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Backlight Color</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+									<xctk:ColorCanvas  SelectedColorChanged="ClrCanvas_SelectedColorChanged" Name="ClrCanvas" ></xctk:ColorCanvas>
+									<Button Margin="0,5,0,5" Content="Update" Height="32" Name="btnUpdateColor" Click="Button_UpdateBacklightColor"></Button>
+								</StackPanel>
+							</GroupBox>
 						</StackPanel>
 					</TabItem>
 				

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Windows.Media;
 
 namespace SPIPware.Communication
 {
@@ -74,6 +75,12 @@ namespace SPIPware.Communication
             Console.WriteLine(cmdStr);
             SendCommand(cmdStr);
             
+        }
+        public void SetBacklightColor(Color color)
+        {
+            string cmdStr = "S3P0" + "R" + color.R.ToString() + "G" + color.G.ToString() + "B" + color.B.ToString();
+            Console.WriteLine(cmdStr);
+            SendCommand(cmdStr);
         }
         private int BtoI(bool value)
         {

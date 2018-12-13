@@ -222,5 +222,8 @@ G92Z0;</Value>
     <Setting Name="PeripheralConType" Type="SPIPware.Communication.ConnectionType" Scope="User">
       <Value Profile="(Default)">Serial</Value>
     </Setting>
+    <Setting Name="BacklightColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#00000000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

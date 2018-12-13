@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using static SPIPware.Communication.PeripheralControl;
 
 namespace SPIPware
@@ -36,6 +37,21 @@ namespace SPIPware
             Task task = new Task(() => peripheral.SetLight(Peripheral.Backlight, false));
             task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
             task.Start();
+        }
+        public void UpdateClrCanvas()
+        {
+            ClrCanvas.SelectedColor = Properties.Settings.Default.BacklightColor;
+        }
+        private void Button_UpdateBacklightColor(object sender, RoutedEventArgs e)
+        {
+            peripheral.SetBacklightColor(Properties.Settings.Default.BacklightColor);   
+        } 
+        private void ClrCanvas_SelectedColorChanged(object sender, RoutedEventArgs e)
+        {
+            //TextBox.Text = "#" + ClrPcker_Background.SelectedColor.R.ToString() + ClrPcker_Background.SelectedColor.G.ToString() + ClrPcker_Background.SelectedColor.B.ToString();
+            Properties.Settings.Default.BacklightColor = ClrCanvas.SelectedColor.GetValueOrDefault();
+            //Console.WriteLine(Properties.Settings.Default.BacklightColor);
+            //Console.WriteLine(Properties.Settings.Default.BacklightColor.R.ToString());
         }
         private void ButtonPeripheralConnect_Click(object sender, RoutedEventArgs e)
         {

@@ -39,6 +39,7 @@ namespace SPIPware
             updateSerialPortComboBox(PeripheralSerialPortSelect);
             updateSerialPortComboBox(SerialPortSelect);
             updateCameraSettingsOptions();
+            UpdateClrCanvas();
 
             Task task = new Task(() => camera.StartVimba());
             task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
