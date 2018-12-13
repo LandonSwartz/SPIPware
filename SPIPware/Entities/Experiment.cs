@@ -28,7 +28,7 @@ namespace SPIPware.Entities
         private int tlEndInterval;
         private long tlEndIntervalType;
         private long tlIntervalType;
-        private Color BacklightColor;
+        //private Color BacklightColor;
 
         public static void LoadExperimentToSettings(string filePath)
         {
@@ -47,15 +47,18 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.SelectAll = experiment.selectAll;
                 Properties.Settings.Default.CurrentLocation = experiment.currentLocation;
                 Properties.Settings.Default.CameraName = experiment.cameraName;
-                Properties.Settings.Default.BacklightColor = experiment.BacklightColor;
-                //Properties.Settings.Default.tlStartDate = experiment.tlStartDate;
-                //Properties.Settings.Default.tlEndDate = experiment.tlEndDate;
-                //Properties.Settings.Default.StartNow = experiment.startNow;
-                //Properties.Settings.Default.tlEndInterval = experiment.tlEndInterval;
-                //Properties.Settings.Default.tlEndIntervalType = experiment.tlEndIntervalType;
-                //Properties.Settings.Default.tlIntervalType = experiment.tlIntervalType;
+                //if (experiment.BacklightColor != null)
+                //{
+                //    Properties.Settings.Default.BacklightColor = experiment.BacklightColor;
+                //}
+                    //Properties.Settings.Default.tlStartDate = experiment.tlStartDate;
+                    //Properties.Settings.Default.tlEndDate = experiment.tlEndDate;
+                    //Properties.Settings.Default.StartNow = experiment.startNow;
+                    //Properties.Settings.Default.tlEndInterval = experiment.tlEndInterval;
+                    //Properties.Settings.Default.tlEndIntervalType = experiment.tlEndIntervalType;
+                    //Properties.Settings.Default.tlIntervalType = experiment.tlIntervalType;
 
-                Properties.Settings.Default.Save();
+                    Properties.Settings.Default.Save();
             }
      
         }
@@ -80,7 +83,8 @@ namespace SPIPware.Entities
             experiment.tlEndInterval = Properties.Settings.Default.tlEndInterval;
             experiment.tlEndIntervalType = Properties.Settings.Default.tlEndIntervalType;
             experiment.tlIntervalType = Properties.Settings.Default.tlIntervalType;
-            experiment.BacklightColor = Properties.Settings.Default.BacklightColor;
+            //experiment.BacklightColor = Properties.Settings.Default.BacklightColor;
+
 
             SaveExperiment(experiment, filePath);
         }
@@ -89,10 +93,12 @@ namespace SPIPware.Entities
             if (FileExists(filePath))
             {
                 IFormatter formatter = new BinaryFormatter();
+
                 Stream stream = new FileStream(filePath,
                                           FileMode.Open,
                                           FileAccess.Read,
                                           FileShare.Read);
+                //stream.Position = 0;
                 Experiment experiment = (Experiment)formatter.Deserialize(stream);
                 stream.Close();
                 return experiment;

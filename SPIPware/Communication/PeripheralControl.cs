@@ -57,9 +57,9 @@ namespace SPIPware.Communication
         {
             if (status && daytime)
             {
-                SetLight(Peripheral.GrowLight,status);
+                SetLight(peripheral,status);
             }
-            else { SetLight(Peripheral.GrowLight, false); }
+            else { SetLight(peripheral, false); }
         }
         public void SetLight(Peripheral peripheral, bool value)
         {
@@ -78,9 +78,12 @@ namespace SPIPware.Communication
         }
         public void SetBacklightColor(Color color)
         {
-            string cmdStr = "S3P0" + "R" + color.R.ToString() + "G" + color.G.ToString() + "B" + color.B.ToString();
+            string cmdStr = "S3P0R" + color.R.ToString() + "G" + color.G.ToString() + "B" + color.B.ToString();
             Console.WriteLine(cmdStr);
             SendCommand(cmdStr);
+            //string cmdStr2 = "S4P0L" + color.A.ToString();
+            //Console.WriteLine(cmdStr2);
+            //SendCommand(cmdStr2);
         }
         private int BtoI(bool value)
         {
@@ -89,7 +92,8 @@ namespace SPIPware.Communication
         private void SendCommand(string commandString)
         {
             //port.DiscardOutBuffer();
-            if (port.IsOpen)
+
+            if (port!= null && port.IsOpen)
             {
                 port.WriteLine(commandString);
             }

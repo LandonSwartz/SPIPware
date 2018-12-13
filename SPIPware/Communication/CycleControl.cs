@@ -98,18 +98,18 @@ namespace SPIPware.Communication
                 //bool isPlateFound = FindCheckedBox(currentIndex, true);
                 if (!ImagePositions.Any()) return;
 
+                peripheral.SetLight(Peripheral.Backlight, true);
+                peripheral.SetLight(Peripheral.GrowLight, false, false);
+                peripheral.SetBacklightColor(Properties.Settings.Default.BacklightColor);
                 if (firstRun)
                 {
                     machine.SendLine("$H");
-                    peripheral.SetLight(Peripheral.Backlight, true);
-                    peripheral.SetLight(Peripheral.GrowLight, false, false);
+                    
                     //Properties.Settings.Default.CurrentPlate = 1;
                     firstRun = false;
                 }
                 else
                 {
-                    peripheral.SetLight(Peripheral.Backlight, true);
-                    peripheral.SetLight(Peripheral.GrowLight, false, false);
                     //Thread.Sleep(300);
                     targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
                 }

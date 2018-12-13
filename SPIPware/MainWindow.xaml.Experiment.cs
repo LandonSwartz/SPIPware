@@ -80,7 +80,7 @@ namespace SPIPware
         {
             Experiment.LoadExperimentToSettings(DEFAULT_SETTINGS_PATH);
             Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
-            UpdateClrCanvas();
+            //UpdateClrCanvas();
         }
         public void SaveDefaults()
         {
@@ -125,7 +125,7 @@ namespace SPIPware
                 Console.Write(dialog.FileName);
                 Experiment.LoadExperimentToSettings(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
-                UpdateClrCanvas();
+                //UpdateClrCanvas();
             }
         }
         private string GetFolderResult()
