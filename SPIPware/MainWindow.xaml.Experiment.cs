@@ -13,15 +13,12 @@ namespace SPIPware
     {
         List<CheckBox> checkBoxes = new List<CheckBox>();
         List<TextBlock> textBlocks = new List<TextBlock>();
-        public const string DEFAULT_SETTINGS_PATH = @"Resources\defaultSettings.bin";
+        
 
         public void UpdatePlateClick(object sender, RoutedEventArgs e)
         {
             if (spCheckboxes != null)
             {
-                spCheckboxes.Children.Clear();
-                checkBoxes.Clear();
-                textBlocks.Clear();
                 UpdatePlateCheckboxes();
 
             }
@@ -32,6 +29,8 @@ namespace SPIPware
 
             int numBoxes = Properties.Settings.Default.NumLocations;
             spCheckboxes.Children.Clear();
+            checkBoxes.Clear();
+            textBlocks.Clear();
             for (int i = 0; i < numBoxes; i++)
             {
                 //StackPanel stackPanel = new StackPanel();
@@ -40,7 +39,16 @@ namespace SPIPware
 
                 CheckBox tempCB = new CheckBox();
                 tempCB.VerticalAlignment = VerticalAlignment.Center;
-                tempCB.IsChecked = true;
+
+                if (cycle.ImagePositions.Contains(i) || Properties.Settings.Default.SelectAll)
+                {
+                    tempCB.IsChecked = true;
+                }
+                else
+                {
+                    tempCB.IsChecked = false;
+                }
+               
                 checkBoxes.Add(tempCB);
 
                 TextBlock tempText = new TextBlock();
@@ -78,24 +86,32 @@ namespace SPIPware
         }
         public void LoadDefaults()
         {
-            Experiment.LoadExperimentToSettings(DEFAULT_SETTINGS_PATH);
-            Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
-            //UpdateClrCanvas();
+            Experiment.LoadDefaults();
+            ExperimentUpdated();
+
         }
         public void SaveDefaults()
         {
-            Experiment.CreateExperimentFromSettings(DEFAULT_SETTINGS_PATH);
-            Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
+            SaveSettingsToFile(Experiment.DEFAULT_SETTINGS_PATH);
+            //Properties.Settings.Default.ExperimentPath = Experiment.DEFAULT_SETTINGS_PATH;
+
         }
         public void SaveSettingsToFile()
         {
-            Experiment.CreateExperimentFromSettings(Properties.Settings.Default.ExperimentPath);
+            SaveSettingsToFile(Properties.Settings.Default.ExperimentPath);
+        }
+        public void SaveSettingsToFile( string filePath)
+        {
+            Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes));
+            
+            Experiment experiment = new Experiment();
+            experiment.SaveExperiment(filePath);
         }
         public System.Windows.Forms.SaveFileDialog openSaveDialog()
         {
             using (var dialog = new System.Windows.Forms.SaveFileDialog())
             {
-                dialog.Filter = "Binary|*.bin";
+                dialog.Filter = "JSON|*.json";
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 switch (result)
                 {
@@ -112,7 +128,8 @@ namespace SPIPware
         {
             if (dialog != null)
             {
-                Experiment.CreateExperimentFromSettings(dialog.FileName);
+                Experiment experiment = new Experiment();
+                experiment.SaveExperiment(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
                 Console.Write(Properties.Settings.Default.ExperimentPath);
             }
@@ -123,10 +140,26 @@ namespace SPIPware
             if (dialog != null)
             {
                 Console.Write(dialog.FileName);
-                Experiment.LoadExperimentToSettings(dialog.FileName);
+                LoadSettings(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
                 //UpdateClrCanvas();
             }
+        }
+        public void ExperimentUpdated(object sender, EventArgs e)
+        {
+            ExperimentUpdated();
+        }
+        public void ExperimentUpdated()
+        {
+            UpdatePlateCheckboxes();
+            UpdateClrCanvas();
+        }
+        public void LoadSettings(string fileName)
+        {
+
+            //Experiment experiment = new Experiment(fileName);
+            Experiment experiment = Experiment.LoadExperiment(fileName);
+            ExperimentUpdated();
         }
         private string GetFolderResult()
         {
@@ -211,6 +244,33 @@ namespace SPIPware
             {
                 Properties.Settings.Default.tlExperimentPath = getFileResultName(dialog);
             }
+
+        }
+        private void ButtonSaveExperiment_Click(object sender, RoutedEventArgs e)
+        {
+            Task task = new Task(() => SaveSettingsToFile());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
+        }
+        private void ButtonSaveExperimentDefaults_Click(object sender, RoutedEventArgs e)
+        {
+            Task task = new Task(() => SaveDefaults());
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
+        }
+        private void ButtonLoadExperimentDefaults_Click(object sender, RoutedEventArgs e)
+        {
+            LoadDefaults();
+
+        }
+        private void ButtonSaveAsExperiment_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = openSaveDialog();
+            SaveAsSettingsToFile(dialog);
+        }
+        private void ButtonLoadExperiment_Click(object sender, RoutedEventArgs e)
+        {
+            LoadSettingsFromFile();
 
         }
     }

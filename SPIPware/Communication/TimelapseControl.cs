@@ -14,16 +14,26 @@ namespace SPIPware.Communication
         private CancellationTokenSource tokenSource;
         PeripheralControl peripheral = PeripheralControl.Instance;
         CycleControl cycle = CycleControl.Instance;
-
+        
         public bool runningTimeLapse = false;
-        bool growLightsOn = false;
+        public bool runningSingleCycle = false;
+        //bool growLightsOn = false;
 
         public string tlEnd;
         public string tlCount;
         public double totalMinutes;
+        private Experiment tempExperiment;
 
         public delegate void TimeLapseUpdate();
         public event EventHandler TimeLapseStatus;
+
+        public delegate void ExperimentUpdate();
+        public event EventHandler ExperimentStatus;
+
+        public TimelapseControl()
+        {
+            cycle.StatusUpdate += CycleStatusUpdated;
+        }
         public void Start()
         {
             
@@ -80,6 +90,15 @@ namespace SPIPware.Communication
             }
 
         }
+        public void CycleStatusUpdated(object sender, EventArgs e)
+        {
+            if(!cycle.runningCycle && runningSingleCycle)
+            {
+                runningSingleCycle = false;
+                tempExperiment.SaveExperimentToSettings();
+                ExperimentStatus.Raise(this, new EventArgs());
+            }
+        }
 
         public async void HandleTimelapseCalculations(TimeSpan timeLapseInterval, Double endDuration)
         {
@@ -88,9 +107,13 @@ namespace SPIPware.Communication
              && endDuration > 0)
             {
                 tokenSource = new CancellationTokenSource();
-                Experiment.LoadExperimentToSettings(Properties.Settings.Default.tlExperimentPath);
+                tempExperiment = new Experiment();
+                Experiment experiment = Experiment.LoadExperiment(Properties.Settings.Default.tlExperimentPath);
+                //experiment.SaveExperimentToSettings();
+                ExperimentStatus.Raise(this, new EventArgs());
                 //peripheral.SetLight(Peripheral.Backlight, true);
                 //Thread.Sleep(300);
+                runningSingleCycle = true;
                 cycle.Start();
                 try
                 {

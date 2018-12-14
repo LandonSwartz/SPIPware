@@ -30,6 +30,8 @@ namespace SPIPware.Communication
         public delegate void CycleUpdate();
         public event EventHandler StatusUpdate;
 
+        
+
         CameraControl camera = CameraControl.Instance;
         Machine machine = Machine.Instance;
         PeripheralControl peripheral = PeripheralControl.Instance;
@@ -80,7 +82,7 @@ namespace SPIPware.Communication
         //}
         public void Start()
         {
-            //if (machine.Connected && peripheral.Connected)
+            if (machine.Connected && peripheral.Connected)
             {
                 if (runningCycle) Stop();
 

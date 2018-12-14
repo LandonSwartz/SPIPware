@@ -8,7 +8,8 @@ using System.Windows.Data;
 
 namespace SPIPware.Util
 {
-
+    class FileConverter
+    {
         public class FileNameConverter : IValueConverter
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -40,5 +41,5 @@ namespace SPIPware.Util
                 throw new NotImplementedException();
             }
         }
-    
+    }
 }

@@ -24,7 +24,7 @@ namespace SPIPware.Communication
 
         SerialPort port;
      
-        public enum Peripheral {Backlight = 6, GrowLight =1 };
+        public enum Peripheral {Backlight = 6, GrowLight = 1 };
         public void Connect()
         {
             switch (Properties.Settings.Default.PeripheralConType)

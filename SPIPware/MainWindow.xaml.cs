@@ -32,9 +32,14 @@ namespace SPIPware
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
             InitializeComponent();
 
+            LoadDefaults();
+            //UpdatePlateCheckboxes();
+            //cycle.UpdatePositionList(checkBoxes);
+
             cycle.StatusUpdate += UpdateCycleStatus;
             timelapse.TimeLapseStatus += UpdateTimeLapseStatus;
             cycle.ImageUpdatedEvent += UpdatePictureBox;
+            timelapse.ExperimentStatus += ExperimentUpdated;
 
             updateSerialPortComboBox(PeripheralSerialPortSelect);
             updateSerialPortComboBox(SerialPortSelect);
@@ -311,33 +316,7 @@ namespace SPIPware
         {
             StopCycle();
         }
-        private void ButtonSaveExperiment_Click(object sender, RoutedEventArgs e)
-        {
-            Task task = new Task(() => SaveSettingsToFile());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
-        }
-        private void ButtonSaveExperimentDefaults_Click(object sender, RoutedEventArgs e)
-        {
-            Task task = new Task(() => SaveDefaults());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
-        }
-        private void ButtonLoadExperimentDefaults_Click(object sender, RoutedEventArgs e)
-        {
-           LoadDefaults();
-          
-        }
-        private void ButtonSaveAsExperiment_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = openSaveDialog();
-            SaveAsSettingsToFile(dialog);
-        }
-        private void ButtonLoadExperiment_Click(object sender, RoutedEventArgs e)
-        {
-            LoadSettingsFromFile();
- 
-        }
+      
         private void ButtonCameraDisconnect_Click(object sender, RoutedEventArgs e)
         {
             Task task = new Task(() => camera.ShutdownVimba());

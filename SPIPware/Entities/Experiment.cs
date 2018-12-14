@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SPIPware.Communication;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Media;
 
 namespace SPIPware.Entities
@@ -9,6 +9,13 @@ namespace SPIPware.Entities
     [Serializable]
     class Experiment
     {
+        //public delegate void ExperimentUpdate();
+        //public event EventHandler ExperimentStatus;
+        public static string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // current folder the program is running in
+        public static string DEFAULT_SETTINGS_PATH = BaseDirectory + "Resources\\DefaultSettings.json";
+
+
+        private static CycleControl cycle = CycleControl.Instance;
         private int totalPlates;
         private int currentPlate;
         private int plateOffset;
@@ -28,98 +35,144 @@ namespace SPIPware.Entities
         private int tlEndInterval;
         private long tlEndIntervalType;
         private long tlIntervalType;
-        //private Color BacklightColor;
+        private List<int> imagePositions;
+        private Color BacklightColor;
 
-        public static void LoadExperimentToSettings(string filePath)
+        public int TotalPlates { get => totalPlates; set => totalPlates = value; }
+        public int CurrentPlate { get => currentPlate; set => currentPlate = value; }
+        public int PlateOffset { get => plateOffset; set => plateOffset = value; }
+        public int BetweenDistance { get => betweenDistance; set => betweenDistance = value; }
+        public string CameraSettingsPath { get => cameraSettingsPath; set => cameraSettingsPath = value; }
+        public string FileName { get => fileName; set => fileName = value; }
+        public string SaveFolderPath { get => saveFolderPath; set => saveFolderPath = value; }
+        public bool CurrentPlateSave { get => currentPlateSave; set => currentPlateSave = value; }
+        public int NumLocations { get => numLocations; set => numLocations = value; }
+        public bool SelectAll { get => selectAll; set => selectAll = value; }
+        public int CurrentLocation { get => currentLocation; set => currentLocation = value; }
+        public string CameraName { get => cameraName; set => cameraName = value; }
+        public DateTime TlStartDate { get => tlStartDate; set => tlStartDate = value; }
+        public DateTime TlEndDate { get => tlEndDate; set => tlEndDate = value; }
+        public bool StartNow { get => startNow; set => startNow = value; }
+        public int TlEndInterval { get => tlEndInterval; set => tlEndInterval = value; }
+        public long TlEndIntervalType { get => tlEndIntervalType; set => tlEndIntervalType = value; }
+        public long TlIntervalType { get => tlIntervalType; set => tlIntervalType = value; }
+        public List<int> ImagePositions { get => imagePositions; set => imagePositions = value; }
+        public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
+
+        //private Color BacklightColor;
+        public Experiment()
         {
-            Experiment experiment = LoadExperiment(filePath);
-            if(experiment != null)
+            
+            LoadExperiment();
+        }
+        public static void LoadDefaults()
+        { 
+            Experiment experiment = LoadExperiment(DEFAULT_SETTINGS_PATH);
+            //Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
+
+        }
+        //public Experiment(string filePath)
+        //{
+        //     LoadExperiment(filePath);
+        //}
+        public void SaveExperimentToSettings()
+        {
+            //Experiment experiment = LoadExperiment(filePath);
+            if (this != null)
             {
-                Properties.Settings.Default.TotalPlates = experiment.totalPlates;
-                Properties.Settings.Default.CurrentPlate = experiment.currentPlate;
-                Properties.Settings.Default.PlateOffset = experiment.plateOffset;
-                Properties.Settings.Default.BetweenDistance = experiment.betweenDistance;
-                Properties.Settings.Default.CameraSettingsPath = experiment.cameraSettingsPath;
-                Properties.Settings.Default.FileName = experiment.fileName;
-                Properties.Settings.Default.SaveFolderPath = experiment.saveFolderPath;
-                Properties.Settings.Default.CurrentPlateSave = experiment.currentPlateSave;
-                Properties.Settings.Default.NumLocations = experiment.numLocations;
-                Properties.Settings.Default.SelectAll = experiment.selectAll;
-                Properties.Settings.Default.CurrentLocation = experiment.currentLocation;
-                Properties.Settings.Default.CameraName = experiment.cameraName;
+                
+                Properties.Settings.Default.TotalPlates = TotalPlates;
+                Properties.Settings.Default.CurrentPlate = CurrentPlate;
+                Properties.Settings.Default.PlateOffset = PlateOffset;
+                Properties.Settings.Default.BetweenDistance = BetweenDistance;
+                Properties.Settings.Default.CameraSettingsPath = CameraSettingsPath;
+                Properties.Settings.Default.FileName = FileName;
+                Properties.Settings.Default.SaveFolderPath = SaveFolderPath;
+                Properties.Settings.Default.CurrentPlateSave = CurrentPlateSave;
+                Properties.Settings.Default.NumLocations = NumLocations;
+                Properties.Settings.Default.SelectAll = SelectAll;
+                Properties.Settings.Default.CurrentLocation = CurrentLocation;
+                Properties.Settings.Default.CameraName = CameraName;
+                Properties.Settings.Default.BacklightColor = BacklightColor;
+                cycle.ImagePositions = imagePositions;
                 //if (experiment.BacklightColor != null)
                 //{
                 //    Properties.Settings.Default.BacklightColor = experiment.BacklightColor;
                 //}
-                    //Properties.Settings.Default.tlStartDate = experiment.tlStartDate;
-                    //Properties.Settings.Default.tlEndDate = experiment.tlEndDate;
-                    //Properties.Settings.Default.StartNow = experiment.startNow;
-                    //Properties.Settings.Default.tlEndInterval = experiment.tlEndInterval;
-                    //Properties.Settings.Default.tlEndIntervalType = experiment.tlEndIntervalType;
-                    //Properties.Settings.Default.tlIntervalType = experiment.tlIntervalType;
+                //Properties.Settings.Default.tlStartDate = experiment.tlStartDate;
+                //Properties.Settings.Default.tlEndDate = experiment.tlEndDate;
+                //Properties.Settings.Default.StartNow = experiment.startNow;
+                //Properties.Settings.Default.tlEndInterval = experiment.tlEndInterval;
+                //Properties.Settings.Default.tlEndIntervalType = experiment.tlEndIntervalType;
+                //Properties.Settings.Default.tlIntervalType = experiment.tlIntervalType;
 
-                    Properties.Settings.Default.Save();
+                Properties.Settings.Default.Save();
+
+                //ExperimentStatus.Raise(this, new EventArgs());
+
             }
+
      
         }
-        public static void CreateExperimentFromSettings(string filePath)
+        public void LoadExperiment()
         {
-            Experiment experiment = new Experiment();
-            experiment.totalPlates = Properties.Settings.Default.TotalPlates;
-            experiment.currentPlate = Properties.Settings.Default.CurrentPlate;
-            experiment.plateOffset = Properties.Settings.Default.PlateOffset;
-            experiment.betweenDistance = Properties.Settings.Default.BetweenDistance;
-            experiment.cameraSettingsPath = Properties.Settings.Default.CameraSettingsPath;
-            experiment.fileName = Properties.Settings.Default.FileName;
-            experiment.saveFolderPath = Properties.Settings.Default.SaveFolderPath;
-            experiment.currentPlateSave = Properties.Settings.Default.CurrentPlateSave;
-            experiment.numLocations = Properties.Settings.Default.NumLocations;
-            experiment.selectAll = Properties.Settings.Default.SelectAll;
-            experiment.currentLocation = Properties.Settings.Default.CurrentLocation;
-            experiment.cameraName = Properties.Settings.Default.CameraName;
-            experiment.tlStartDate = Properties.Settings.Default.tlStartDate;
-            experiment.tlEndDate = Properties.Settings.Default.tlEndDate;
-            experiment.startNow = Properties.Settings.Default.StartNow;
-            experiment.tlEndInterval = Properties.Settings.Default.tlEndInterval;
-            experiment.tlEndIntervalType = Properties.Settings.Default.tlEndIntervalType;
-            experiment.tlIntervalType = Properties.Settings.Default.tlIntervalType;
-            //experiment.BacklightColor = Properties.Settings.Default.BacklightColor;
-
-
-            SaveExperiment(experiment, filePath);
+            //Experiment experiment = new Experiment();
+            TotalPlates = Properties.Settings.Default.TotalPlates;
+            CurrentPlate = Properties.Settings.Default.CurrentPlate;
+            PlateOffset = Properties.Settings.Default.PlateOffset;
+            BetweenDistance = Properties.Settings.Default.BetweenDistance;
+            CameraSettingsPath = Properties.Settings.Default.CameraSettingsPath;
+            FileName = Properties.Settings.Default.FileName;
+            SaveFolderPath = Properties.Settings.Default.SaveFolderPath;
+            CurrentPlateSave = Properties.Settings.Default.CurrentPlateSave;
+            NumLocations = Properties.Settings.Default.NumLocations;
+            SelectAll = Properties.Settings.Default.SelectAll;
+            CurrentLocation = Properties.Settings.Default.CurrentLocation;
+            CameraName = Properties.Settings.Default.CameraName;
+            TlStartDate = Properties.Settings.Default.tlStartDate;
+            TlEndDate = Properties.Settings.Default.tlEndDate;
+            StartNow = Properties.Settings.Default.StartNow;
+            TlEndInterval = Properties.Settings.Default.tlEndInterval;
+            TlEndIntervalType = Properties.Settings.Default.tlEndIntervalType;
+            TlIntervalType = Properties.Settings.Default.tlIntervalType;
+            BacklightColor = Properties.Settings.Default.BacklightColor;
+            imagePositions = cycle.ImagePositions;
+            //return this;
         }
-        private static Experiment LoadExperiment(string filePath)
+        //public void SaveExperimentFromSettings(Experiment experiment,string filePath)
+        //{
+        //    //Experiment experiment = LoadExperiment();
+        //    //experiment.BacklightColor = Properties.Settings.Default.BacklightColor;
+        //    SaveExperiment(experiment, filePath);
+        //}
+        public static Experiment LoadExperiment(string filePath)
         {
-            if (FileExists(filePath))
+            try
             {
-                IFormatter formatter = new BinaryFormatter();
-
-                Stream stream = new FileStream(filePath,
-                                          FileMode.Open,
-                                          FileAccess.Read,
-                                          FileShare.Read);
-                //stream.Position = 0;
-                Experiment experiment = (Experiment)formatter.Deserialize(stream);
-                stream.Close();
-                return experiment;
+                if (FileExists(filePath))
+                {
+                    Experiment experiment = JSONUtil.LoadJSON<Experiment>(filePath);
+                    experiment.SaveExperimentToSettings();
+                    return experiment;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch(Exception e)
             {
+                Console.WriteLine("Unable to load experiment file: " + e);
                 return null;
             }
 
         }
-        private static bool SaveExperiment(Experiment experiment, string filePath)
+        public bool SaveExperiment( string filePath)
         {
             
-                IFormatter formatter = new BinaryFormatter();
             try
             {
-                Stream stream = new FileStream(filePath,
-                                                        FileMode.Create,
-                                                        FileAccess.Write, FileShare.None);
-                formatter.Serialize(stream, experiment);
-                stream.Close();
+                JSONUtil.SaveJSON(this, filePath);
                 return true;
             }
             catch(Exception e)
