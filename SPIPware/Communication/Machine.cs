@@ -12,6 +12,8 @@ using SPIPware.GCode.GCodeCommands;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
+using log4net;
 
 namespace SPIPware.Communication
 {
@@ -22,6 +24,7 @@ namespace SPIPware.Communication
 
 	public sealed class Machine
 	{
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly Machine instance = new Machine();
         static Machine()
         {
@@ -336,7 +339,7 @@ namespace SPIPware.Communication
 										string send_line = (string)ToSendMacro.Dequeue();
 
 										send_line = Calculator.Evaluate(send_line, out bool success);
-										Console.WriteLine(DateTime.Now.ToLongTimeString());
+										_log.Debug(DateTime.Now.ToLongTimeString());
 
 										if (!success)
 										{
@@ -426,7 +429,7 @@ namespace SPIPware.Communication
 						}
 						else
 						{
-							Console.WriteLine("Received OK without anything in the Sent Buffer");
+							_log.Info("Received OK without anything in the Sent Buffer");
 							BufferState = 0;
 						}
 					}
@@ -597,7 +600,7 @@ namespace SPIPware.Communication
             //decimal distance = homeMachinePos + Properties.Settings.Default.startDistance + (Properties.Settings.Default.betweenDistance * position) + offset;
             sb.Append(distance + " ");
             sb.Append("F" + Properties.Settings.Default.Speed);
-            Console.WriteLine(sb.ToString());
+            _log.Info(sb.ToString());
             return sb.ToString();
         }
         private String buildCommand(decimal distance, bool growLightOn, bool backLightOn)
@@ -611,7 +614,7 @@ namespace SPIPware.Communication
             sb.Append(distance + " ");
        
             sb.Append("F" + Properties.Settings.Default.Speed);
-            Console.WriteLine(sb.ToString());
+            _log.Info(sb.ToString());
             return sb.ToString();
         }
         private void growLightOff()

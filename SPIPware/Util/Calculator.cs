@@ -4,12 +4,15 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections.Generic;
 using martin2250.Calculator;
+using System.Reflection;
+using log4net;
 
 namespace SPIPware.Util
 {
 	class Calculator
 	{
-		private Machine machine;
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private Machine machine;
 		private bool Success = true;
 
 		public Calculator(Machine machine)
@@ -41,7 +44,7 @@ namespace SPIPware.Util
 			catch(Exception ex)
 			{
 				Success = false;
-				Console.WriteLine(ex.Message);
+				_log.Error(ex.Message);
 				return $"[{ex.Message}]";
 			}
 		}

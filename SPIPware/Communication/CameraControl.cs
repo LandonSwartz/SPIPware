@@ -1,10 +1,12 @@
-﻿using SPIPware.Communication;
+﻿using log4net;
+using SPIPware.Communication;
 using SynchronousGrab;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +19,7 @@ namespace SPIPware
 
     public sealed class CameraControl
     {
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly CameraControl instance = new CameraControl();
         static CameraControl()
         {
@@ -105,7 +108,7 @@ namespace SPIPware
                 throw new ArgumentNullException("message");
             }
             
-            Console.WriteLine(message);
+            _log.Info(message);
             //int index = m_LogList.Items.Add(string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}: {1}", DateTime.Now, message));
             //m_LogList.TopIndex = index;
         }
@@ -113,8 +116,12 @@ namespace SPIPware
         //Add an error log message and show an error message box
         public void LogError(string message)
         {
-            LogMessage(message);
-            Console.WriteLine(message);
+            if (null == message)
+            {
+                throw new ArgumentNullException("message");
+            }
+            //LogMessage(message);
+            _log.Error(message);
             //runningCycle = false;
             //MessageBox.Show(message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
@@ -143,7 +150,7 @@ namespace SPIPware
             {
                 //CameraInfo newSelectedItem = cameras[0];
                 UpdateCameraState(true);
-                //Console.WriteLine("New Selected Camera" + newSelectedItem);
+                //_log.info("New Selected Camera" + newSelectedItem);
             }
             else
             {
@@ -229,7 +236,7 @@ namespace SPIPware
                 LogMessage("Loading camera settings");
                 if (VimbaHelper != null && selectedItem != null)
                 {
-                    Console.WriteLine(selectedItem.ID);
+                    _log.Debug(selectedItem.ID);
                     VimbaHelper.loadCamSettings(cameraSettingsFileName, selectedItem.ID);
                     LogMessage("Loaded Camera Settings");
                 }
@@ -313,11 +320,11 @@ namespace SPIPware
             Task task = new Task(()=>{
                
                 String filePath = createFilePath();
-                //Console.WriteLine("Image written to: " + filePath);
-                // Console.WriteLine("File Name: " + sb.ToString());
+                _log.Info("Image written to: " + filePath);
+                //_log.Debug(("File Name: " + sb.ToString());
 
                 image.Save(filePath, fileType);
-                Console.WriteLine("Image written to: " + filePath);
+
                 LogMessage("Image acquired synchonously.");
                 if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
                 {
@@ -375,7 +382,7 @@ namespace SPIPware
         static void ExceptionHandler(Task task)
         {
             var exception = task.Exception;
-            Console.WriteLine(exception);
+            _log.Error(exception);
         }
     }
    

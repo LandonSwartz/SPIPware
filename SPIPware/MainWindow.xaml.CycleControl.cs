@@ -36,30 +36,6 @@ namespace SPIPware
             task.Start();
         }
      
-        //private bool FindCheckedBox(int index, bool firstBox)
-        //{
-        //    if (!firstBox)
-        //    {
-        //        index++;
-        //    }
-        //    while (index < Properties.Settings.Default.NumLocations)
-        //    {
-
-        //        if (checkBoxes[index].IsChecked == true)
-        //        {
-        //            Console.WriteLine("Box " + (index + 1) + " checked");
-        //            currentIndex = index;
-        //            return true;
-        //        }
-        //        else
-        //        {
-        //            index++;
-        //        }
-
-        //    }
-        //    Console.WriteLine("No more boxes checked");
-        //    return false;
-        //}
         public void UpdateCycleStatus(object sender, EventArgs e)
         {
             UpdateCycleStatus(cycle.CycleStatus);

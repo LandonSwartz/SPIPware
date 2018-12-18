@@ -7,6 +7,9 @@ using System.Windows.Controls.Ribbon;
 using System.Windows.Controls;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
+using System.Reflection;
+using log4net.Config;
 
 namespace SPIPware
 {
@@ -17,6 +20,7 @@ namespace SPIPware
         CycleControl cycle = CycleControl.Instance;
         TimelapseControl timelapse = new TimelapseControl();
 
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,13 +32,17 @@ namespace SPIPware
 
         public MainWindow()
         {
-
+            log4net.Config.XmlConfigurator.Configure();
+            _log.Info("Starting SPIPware");
+           
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
             InitializeComponent();
 
             LoadDefaults();
             //UpdatePlateCheckboxes();
             //cycle.UpdatePositionList(checkBoxes);
+
+           
 
             cycle.StatusUpdate += UpdateCycleStatus;
             timelapse.TimeLapseStatus += UpdateTimeLapseStatus;
@@ -44,7 +52,7 @@ namespace SPIPware
             updateSerialPortComboBox(PeripheralSerialPortSelect);
             updateSerialPortComboBox(SerialPortSelect);
             updateCameraSettingsOptions();
-            UpdateClrCanvas();
+            //UpdateClrCanvas();
             Properties.Settings.Default.tlStartDate = DateTime.Now;
 
             Task task = new Task(() => camera.StartVimba());
@@ -111,7 +119,7 @@ namespace SPIPware
         static void ExceptionHandler(Task task)
         {
             var exception = task.Exception;
-            Console.WriteLine(exception);
+            _log.Error(exception);
         }
         private void UnhandledException(object sender, UnhandledExceptionEventArgs ea)
         {
@@ -125,7 +133,7 @@ namespace SPIPware
             info += e.ToString();
 
             MessageBox.Show(info);
-            Console.WriteLine(info);
+            _log.Error(info);
 
             try
             {

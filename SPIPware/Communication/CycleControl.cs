@@ -1,7 +1,9 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -13,6 +15,7 @@ namespace SPIPware.Communication
 {
     class CycleControl
     {
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly CycleControl instance = new CycleControl();
      
         static CycleControl()
@@ -86,7 +89,7 @@ namespace SPIPware.Communication
             {
                 if (runningCycle) Stop();
 
-
+                _log.Info("Starting Cycle");
                 runningCycle = true;
                 CycleStatus = runningCycle;
               
@@ -149,7 +152,7 @@ namespace SPIPware.Communication
         public BitmapImage bi;
         public void Check()
         {
-
+            _log.Info("Checking cycle");
             if (runningCycle)
             {
                 if (machine.Status == "Home")
@@ -163,7 +166,7 @@ namespace SPIPware.Communication
 
                 else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
                 {
-                    //Console.WriteLine("Current Index" + currentIndex);
+                    _log.Debug("Current Index" + imagePositions[posIndex]);
                     //peripheral.SetLight(Peripheral.Backlight, true);
                     bi =  camera.CapSaveImage().Clone();
                     

@@ -1,7 +1,9 @@
-﻿using SPIPware.Communication;
+﻿using log4net;
+using SPIPware.Communication;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Windows.Media;
 
 namespace SPIPware.Entities
@@ -9,6 +11,7 @@ namespace SPIPware.Entities
     [Serializable]
     class Experiment
     {
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         //public delegate void ExperimentUpdate();
         //public event EventHandler ExperimentStatus;
         public static string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // current folder the program is running in
@@ -162,7 +165,7 @@ namespace SPIPware.Entities
             }
             catch(Exception e)
             {
-                Console.WriteLine("Unable to load experiment file: " + e);
+                _log.Error("Unable to load experiment file: " + e);
                 return null;
             }
 
@@ -177,7 +180,7 @@ namespace SPIPware.Entities
             }
             catch(Exception e)
             {
-                Console.WriteLine("Unable to save file: " + e);
+                _log.Error("Unable to save file: " + e);
                 return false;
             }
                

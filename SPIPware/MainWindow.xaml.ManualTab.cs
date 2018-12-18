@@ -104,12 +104,12 @@ namespace SPIPware
 		}
         private void ButtonCaptureImage(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Image capture button clicked");
+            _log.Debug("Image capture button clicked");
             m_PictureBox.Source =  camera.CapSaveImage();
         }
         private void ButtonGotoPosition(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Goto button clicked");
+            _log.Debug("Goto button clicked");
             machine.sendMotionCommand(Properties.Settings.Default.CurrentLocation);
         }
 		private void ButtonManualSetG10Zero_Click(object sender, RoutedEventArgs e)

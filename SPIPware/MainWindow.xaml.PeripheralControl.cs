@@ -40,18 +40,22 @@ namespace SPIPware
         }
         public void UpdateClrCanvas()
         {
-            ClrCanvas.SelectedColor = Properties.Settings.Default.BacklightColor;
+            Dispatcher.Invoke(()=> ClrCanvas.SelectedColor = Properties.Settings.Default.BacklightColor);
+            
         }
         private void Button_UpdateBacklightColor(object sender, RoutedEventArgs e)
         {
-            peripheral.SetBacklightColor(Properties.Settings.Default.BacklightColor);   
+            UpdateBacklightColor();
         } 
+        private void UpdateBacklightColor()
+        {
+            peripheral.SetBacklightColor(Properties.Settings.Default.BacklightColor);
+        }
         private void ClrCanvas_SelectedColorChanged(object sender, RoutedEventArgs e)
         {
             //TextBox.Text = "#" + ClrPcker_Background.SelectedColor.R.ToString() + ClrPcker_Background.SelectedColor.G.ToString() + ClrPcker_Background.SelectedColor.B.ToString();
             Properties.Settings.Default.BacklightColor = ClrCanvas.SelectedColor.GetValueOrDefault();
-            //Console.WriteLine(Properties.Settings.Default.BacklightColor);
-            //Console.WriteLine(Properties.Settings.Default.BacklightColor.R.ToString());
+            _log.Debug(Properties.Settings.Default.BacklightColor);
         }
         private void ButtonPeripheralConnect_Click(object sender, RoutedEventArgs e)
         {
@@ -62,7 +66,7 @@ namespace SPIPware
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _log.Error("Unable to connect" + ex);
             }
         }
 
@@ -76,7 +80,7 @@ namespace SPIPware
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _log.Error("Unable to disconnect" + ex);
             }
         }
 

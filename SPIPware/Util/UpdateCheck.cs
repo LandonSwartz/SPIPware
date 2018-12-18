@@ -1,7 +1,9 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,7 +13,9 @@ namespace SPIPware.Util
 {
 	static class UpdateCheck
 	{
-		static WebClient client;
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        static WebClient client;
 		static Regex versionRegex = new Regex("\"tag_name\":\\s*\"v([0-9\\.]+)\",");
 		static Regex releaseRegex = new Regex("\"html_url\":\\s*\"([^\"]*)\",");
 
@@ -30,8 +34,8 @@ namespace SPIPware.Util
 			{
 				if (e.Error != null)
 				{
-					Console.WriteLine("Error while checking for new version:");
-					Console.WriteLine(e.Error.Message);
+					_log.Error("Error while checking for new version:");
+					_log.Error(e.Error.Message);
 					return;
 				}
 
@@ -39,20 +43,20 @@ namespace SPIPware.Util
 
 				if (!m.Success)
 				{
-                    Console.WriteLine(e.Result);
-					Console.WriteLine("No matching tag_id found");
-					return;
+					_log.Error("No matching tag_id found");
+                    _log.Error(e.Result);
+                    return;
 				}
 
 				Version latest;
 
 				if (!Version.TryParse(m.Groups[1].Value, out latest))
 				{
-					Console.WriteLine($"Error while parsing version string <{m.Groups[1].Value}>");
+					_log.Error($"Error while parsing version string <{m.Groups[1].Value}>");
 					return;
 				}
 
-				Console.WriteLine($"Latest version on GitHub: {latest}");
+				_log.Info($"Latest version on GitHub: {latest}");
 
 				if (System.Reflection.Assembly.GetEntryAssembly().GetName().Version < latest)
 				{
@@ -69,7 +73,9 @@ namespace SPIPware.Util
 						System.Diagnostics.Process.Start(url);
 				}
 			}
-			catch { }	//update check is non-critical and should never interrupt normal application operation
+			catch (Exception ex) {
+                _log.Error("Encountered error checking for updates!" + ex);
+            }	//update check is non-critical and should never interrupt normal application operation
 		}
 	}
 }

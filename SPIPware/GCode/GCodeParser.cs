@@ -5,6 +5,8 @@ using SPIPware.GCode.GCodeCommands;
 using System.IO;
 using System.Text.RegularExpressions;
 using SPIPware.Util;
+using System.Reflection;
+using log4net;
 
 namespace SPIPware.GCode
 {
@@ -50,7 +52,8 @@ namespace SPIPware.GCode
 
 	static class GCodeParser
 	{
-		public static ParserState State;
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        public static ParserState State;
 
 		public static Regex GCodeSplitter = new Regex(@"([A-Z])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
 		private static double[] MotionCommands = new double[] { 0, 1, 2, 3 };
@@ -92,7 +95,7 @@ namespace SPIPware.GCode
 
 			sw.Stop();
 
-			Console.WriteLine("Parsing the GCode File took {0} ms", sw.ElapsedMilliseconds);
+			_log.Debug(String.Format("Parsing the GCode File took {0} ms", sw.ElapsedMilliseconds));
 		}
 
 		static string CleanupLine(string line, int lineNumber)

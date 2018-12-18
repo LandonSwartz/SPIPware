@@ -63,9 +63,10 @@ namespace SPIPware
         private void ButtonStartTimeLapse_Click(object sender, RoutedEventArgs e)
         {
             cycle.UpdatePositionList(checkBoxes);
-            Task task = new Task(() => timelapse.Start());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
+            timelapse.Start();
+            //Task task = new Task(() => timelapse.Start());
+            //task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            //task.Start();
         }
         private void ButtonStopTimeLapse_Click(object sender, RoutedEventArgs e)
         {

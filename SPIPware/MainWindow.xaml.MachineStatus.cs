@@ -148,7 +148,7 @@ namespace SPIPware
         {
             var listBoxItem = new ListBoxItem();
             listBoxItem.Content = message ?? throw new ArgumentNullException("message");
-            Console.WriteLine(message);
+            _log.Debug(message);
             //int index = m_LogList.Items.Add(string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}: {1}", DateTime.Now, message));
             //m_LogList.TopIndex = index;
         }

@@ -1,7 +1,9 @@
-﻿using SPIPware.Entities;
+﻿using log4net;
+using SPIPware.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +13,8 @@ namespace SPIPware.Communication
 {
     class TimelapseControl
     {
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         private CancellationTokenSource tokenSource;
         PeripheralControl peripheral = PeripheralControl.Instance;
         CycleControl cycle = CycleControl.Instance;
@@ -37,12 +41,12 @@ namespace SPIPware.Communication
         public void Start()
         {
             
-            Console.WriteLine("Timelapse Starting");
+            _log.Info("Timelapse Starting");
             runningTimeLapse = true;
             TimeSpan timeLapseInterval = TimeSpan.FromMilliseconds(Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
-            //Console.WriteLine(Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
-            //Console.WriteLine(timeLapseInterval.Seconds);
-            
+            _log.Debug(Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
+            _log.Debug(timeLapseInterval.Seconds);
+
             if (Properties.Settings.Default.StartNow)
             {
                 Properties.Settings.Default.tlStartDate = DateTime.Now;
@@ -106,6 +110,7 @@ namespace SPIPware.Communication
             if (((Properties.Settings.Default.StartNow || Properties.Settings.Default.tlStartDate <= DateTime.Now))
              && endDuration > 0)
             {
+                _log.Info("Running single timelapse cycle");
                 tokenSource = new CancellationTokenSource();
                 tempExperiment = new Experiment();
                 Experiment experiment = Experiment.LoadExperiment(Properties.Settings.Default.tlExperimentPath);
@@ -114,14 +119,16 @@ namespace SPIPware.Communication
                 //peripheral.SetLight(Peripheral.Backlight, true);
                 //Thread.Sleep(300);
                 runningSingleCycle = true;
+                _log.Debug("TimeLapse Single Cycle Executed at: " + DateTime.Now);
                 cycle.Start();
+
                 try
                 {
                     await RunSingleTimeLapse(timeLapseInterval, tokenSource.Token);
                 }
                 catch (TaskCanceledException e)
                 {
-                    Console.WriteLine("TimeLapse Cancelled: " + e);
+                    _log.Error("TimeLapse Cancelled: " + e);
                     //runningTimeLapse = false;
                     Stop();
                     TimeLapseStatus.Raise(this, new EventArgs());
@@ -129,9 +136,8 @@ namespace SPIPware.Communication
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    _log.Error("Unknown timelapse error: "+ e);
                 }
-                Console.WriteLine("TimeLapse Executed at: " + DateTime.Now);
 
                 HandleTimelapseCalculations(timeLapseInterval, endDuration - timeLapseInterval.TotalMilliseconds);
             }
@@ -142,7 +148,7 @@ namespace SPIPware.Communication
             }
             else
             {
-                Console.WriteLine("TimeLapse Finished");
+                _log.Info("TimeLapse Finished");
                 runningTimeLapse = false;
                 TimeLapseStatus.Raise(this, new EventArgs());
                 return;

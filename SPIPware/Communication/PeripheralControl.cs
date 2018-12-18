@@ -1,11 +1,16 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.IO.Ports;
+using System.Reflection;
 using System.Windows.Media;
 
 namespace SPIPware.Communication
 {
     public sealed class PeripheralControl
     {
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+
         private bool connected = false;
         private static readonly PeripheralControl instance = new PeripheralControl();
         static PeripheralControl()
@@ -30,6 +35,7 @@ namespace SPIPware.Communication
             switch (Properties.Settings.Default.PeripheralConType)
             {
                 case ConnectionType.Serial:
+                    _log.Info("Opening Peripheral Serial Port");
                     port = new SerialPort(Properties.Settings.Default.PeripheralSP, Properties.Settings.Default.PeripheralBaud, Parity.None,8,StopBits.One);
                     port.DataReceived += new SerialDataReceivedEventHandler(Peripheral_DataReceived);
                     port.Open();
@@ -49,7 +55,7 @@ namespace SPIPware.Communication
             TimeSpan endOfNight = TimeSpan.Parse("07:00:00");
             TimeSpan now = DateTime.Now.TimeOfDay;
 
-            Console.WriteLine(now.TotalHours);
+            _log.Debug("Current total hours: " + now.TotalHours);
             return (now >= startOfNight || now <= endOfNight) ? true : false;
 
         }
@@ -72,14 +78,13 @@ namespace SPIPware.Communication
             {
                 cmdStr = "S1P" + peripheral.ToString("D") + "V" + BtoI(value);
             }
-            Console.WriteLine(cmdStr);
+            _log.Debug(cmdStr);
             SendCommand(cmdStr);
             
         }
         public void SetBacklightColor(Color color)
         {
             string cmdStr = "S3P0R" + color.R.ToString() + "G" + color.G.ToString() + "B" + color.B.ToString();
-            Console.WriteLine(cmdStr);
             SendCommand(cmdStr);
             //string cmdStr2 = "S4P0L" + color.A.ToString();
             //Console.WriteLine(cmdStr2);
@@ -92,7 +97,7 @@ namespace SPIPware.Communication
         private void SendCommand(string commandString)
         {
             //port.DiscardOutBuffer();
-
+            _log.Debug(commandString);
             if (port!= null && port.IsOpen)
             {
                 port.WriteLine(commandString);
@@ -102,7 +107,7 @@ namespace SPIPware.Communication
         private void Peripheral_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             // Show all the incoming data in the port's buffer
-            Console.WriteLine(port.ReadLine());
+            _log.Debug(port.ReadLine());
         }
         public void Disconnect()
         {

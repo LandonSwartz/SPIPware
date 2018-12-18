@@ -1,7 +1,9 @@
-﻿using SPIPware.Entities;
+﻿using log4net;
+using SPIPware.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,46 +28,49 @@ namespace SPIPware
         }
         public void UpdatePlateCheckboxes()
         {
-
-            int numBoxes = Properties.Settings.Default.NumLocations;
-            spCheckboxes.Children.Clear();
-            checkBoxes.Clear();
-            textBlocks.Clear();
-            for (int i = 0; i < numBoxes; i++)
+            Dispatcher.Invoke(() =>
             {
-                //StackPanel stackPanel = new StackPanel();
-                //stackPanel.Orientation = Orientation.Vertical;
-                //stackPanel.Margin = new Thickness(5);
-
-                CheckBox tempCB = new CheckBox();
-                tempCB.VerticalAlignment = VerticalAlignment.Center;
-
-                if (cycle.ImagePositions.Contains(i) || Properties.Settings.Default.SelectAll)
+                int numBoxes = Properties.Settings.Default.NumLocations;
+                spCheckboxes.Children.Clear();
+                checkBoxes.Clear();
+                textBlocks.Clear();
+                for (int i = 0; i < numBoxes; i++)
                 {
-                    tempCB.IsChecked = true;
+                    //StackPanel stackPanel = new StackPanel();
+                    //stackPanel.Orientation = Orientation.Vertical;
+                    //stackPanel.Margin = new Thickness(5);
+
+                    CheckBox tempCB = new CheckBox();
+                    tempCB.VerticalAlignment = VerticalAlignment.Center;
+
+                    if (cycle.ImagePositions.Contains(i) || Properties.Settings.Default.SelectAll)
+                    {
+                        tempCB.IsChecked = true;
+                    }
+                    else
+                    {
+                        tempCB.IsChecked = false;
+                    }
+
+                    checkBoxes.Add(tempCB);
+
+                    TextBlock tempText = new TextBlock();
+                    tempText.Text = (i + 1).ToString();
+                    tempText.VerticalAlignment = VerticalAlignment.Center;
+                    tempText.Margin = new Thickness(5);
+                    textBlocks.Add(tempText);
+
+                    //stackPanel.Children.Add(checkBoxes[i]);
+                    //stackPanel.Children.Add(textBlocks[i]);
+
+                    //spCheckboxes.Children.Add(stackPanel);
+
+                    spCheckboxes.Children.Add(checkBoxes[i]);
+                    spCheckboxes.Children.Add(textBlocks[i]);
+
                 }
-                else
-                {
-                    tempCB.IsChecked = false;
-                }
-               
-                checkBoxes.Add(tempCB);
-
-                TextBlock tempText = new TextBlock();
-                tempText.Text = (i + 1).ToString();
-                tempText.VerticalAlignment = VerticalAlignment.Center;
-                tempText.Margin = new Thickness(5);
-                textBlocks.Add(tempText);
-
-                //stackPanel.Children.Add(checkBoxes[i]);
-                //stackPanel.Children.Add(textBlocks[i]);
-
-                //spCheckboxes.Children.Add(stackPanel);
-
-                spCheckboxes.Children.Add(checkBoxes[i]);
-                spCheckboxes.Children.Add(textBlocks[i]);
-
-            }
+            });
+            
         }
         private void selectAll_Change(object sender, RoutedEventArgs e)
         {
@@ -87,7 +92,7 @@ namespace SPIPware
         public void LoadDefaults()
         {
             Experiment.LoadDefaults();
-            ExperimentUpdated();
+            Dispatcher.Invoke(() => ExperimentUpdated());
 
         }
         public void SaveDefaults()
@@ -131,7 +136,7 @@ namespace SPIPware
                 Experiment experiment = new Experiment();
                 experiment.SaveExperiment(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
-                Console.Write(Properties.Settings.Default.ExperimentPath);
+                _log.Debug(Properties.Settings.Default.ExperimentPath);
             }
         }
         public void LoadSettingsFromFile()
@@ -139,7 +144,7 @@ namespace SPIPware
             var dialog = getFileResult();
             if (dialog != null)
             {
-                Console.Write(dialog.FileName);
+                _log.Debug(dialog.FileName);
                 LoadSettings(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
                 //UpdateClrCanvas();
@@ -153,6 +158,7 @@ namespace SPIPware
         {
             UpdatePlateCheckboxes();
             UpdateClrCanvas();
+            UpdateBacklightColor();
         }
         public void LoadSettings(string fileName)
         {
@@ -180,6 +186,7 @@ namespace SPIPware
         {
             using (var dialog = new System.Windows.Forms.OpenFileDialog())
             {
+                dialog.Filter = "JSON|*.json";
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 switch (result)
                 {

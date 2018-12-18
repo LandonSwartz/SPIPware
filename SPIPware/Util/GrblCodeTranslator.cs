@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Reflection;
+using log4net;
 
 namespace SPIPware.Util
 {
 	static class GrblCodeTranslator
 	{
-		static Dictionary<int, string> Errors = new Dictionary<int, string>();
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        static Dictionary<int, string> Errors = new Dictionary<int, string>();
 		static Dictionary<int, string> Alarms = new Dictionary<int, string>();
 		/// <summary>
 		/// setting name, unit, description
@@ -18,7 +22,7 @@ namespace SPIPware.Util
 		{
 			if (!File.Exists(path))
 			{
-				Console.WriteLine("File Missing: {0}", path);
+				_log.Error(String.Format("File Missing: {0}", path));
 				return;
 			}
 
@@ -30,7 +34,7 @@ namespace SPIPware.Util
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				_log.Error(ex.Message);
 				return;
 			}
 
@@ -54,7 +58,7 @@ namespace SPIPware.Util
 		{
 			if (!File.Exists(path))
 			{
-				Console.WriteLine("File Missing: {0}", path);
+				_log.Error(String.Format("File Missing: {0}", path));
 				return;
 			}
 
@@ -66,7 +70,7 @@ namespace SPIPware.Util
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				_log.Error(ex.Message);
 				return;
 			}
 
@@ -88,13 +92,13 @@ namespace SPIPware.Util
 
 		static GrblCodeTranslator()
 		{
-			Console.WriteLine("Loading GRBL Code Database");
+			_log.Info("Loading GRBL Code Database");
 
 			LoadErr(Errors, "Resources\\error_codes_en_US.csv");
 			LoadErr(Alarms, "Resources\\alarm_codes_en_US.csv");
 			LoadSettings(Settings, "Resources\\setting_codes_en_US.csv");
 
-			Console.WriteLine("Loaded GRBL Code Database");
+			_log.Info("Loaded GRBL Code Database");
 		}
 
 		public static string GetErrorMessage(int errorCode, bool alarm = false)
