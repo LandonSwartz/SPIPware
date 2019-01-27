@@ -27,6 +27,7 @@ namespace SPIPware.Communication
         public string tlCount;
         public double totalMinutes;
         private Experiment tempExperiment;
+        private bool growLightsOn = false;
 
         public delegate void TimeLapseUpdate();
         public event EventHandler TimeLapseStatus;
@@ -40,8 +41,9 @@ namespace SPIPware.Communication
         }
         public void Start()
         {
-            
+            growLightsOn = false;
             _log.Info("Timelapse Starting");
+      
             runningTimeLapse = true;
             TimeSpan timeLapseInterval = TimeSpan.FromMilliseconds(Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
             _log.Debug(Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
@@ -77,15 +79,15 @@ namespace SPIPware.Communication
                 TimeLapseStatus.Raise(this, new EventArgs());
                 if (!cycle.runningCycle)
                 {
-                    if (!peripheral.IsNightTime())
+                    if (!peripheral.IsNightTime() && !growLightsOn)
                     {
                         peripheral.SetLight(Peripheral.GrowLight, true, true);
-                        //growLightsOn = true;
+                        growLightsOn = true;
                     }
-                    else if (peripheral.IsNightTime())
+                    else if (peripheral.IsNightTime() && growLightsOn)
                     {
                         peripheral.SetLight(Peripheral.GrowLight, false, false);
-                        //growLightsOn = false;
+                        growLightsOn = false;
                     }
                 }
                 
@@ -157,6 +159,7 @@ namespace SPIPware.Communication
         }
         public void Stop()
         {
+            growLightsOn = false;
             cycle.Stop();
             if (tokenSource != null)
             {

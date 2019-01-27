@@ -55,7 +55,7 @@ namespace SPIPware.Communication
             TimeSpan endOfNight = TimeSpan.Parse("07:00:00");
             TimeSpan now = DateTime.Now.TimeOfDay;
 
-            _log.Debug("Current total hours: " + now.TotalHours);
+            //_log.Debug("Current total hours: " + now.TotalHours);
             return (now >= startOfNight || now <= endOfNight) ? true : false;
 
         }
@@ -63,9 +63,12 @@ namespace SPIPware.Communication
         {
             if (status && daytime)
             {
+                _log.Info("Grow lights on");
                 SetLight(peripheral,status);
             }
-            else { SetLight(peripheral, false); }
+            else {
+                _log.Info("Grow lights off");
+                SetLight(peripheral, false); }
         }
         public void SetLight(Peripheral peripheral, bool value)
         {

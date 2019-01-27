@@ -55,7 +55,7 @@ namespace SPIPware
         {
             //TextBox.Text = "#" + ClrPcker_Background.SelectedColor.R.ToString() + ClrPcker_Background.SelectedColor.G.ToString() + ClrPcker_Background.SelectedColor.B.ToString();
             Properties.Settings.Default.BacklightColor = ClrCanvas.SelectedColor.GetValueOrDefault();
-            _log.Debug(Properties.Settings.Default.BacklightColor);
+            //_log.Debug(Properties.Settings.Default.BacklightColor);
         }
         private void ButtonPeripheralConnect_Click(object sender, RoutedEventArgs e)
         {

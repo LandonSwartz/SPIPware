@@ -44,10 +44,10 @@ namespace SPIPware.Communication
         public bool firstRun = true;
         private decimal targetLocation = 0;
         bool foundPlate = false;
-        private bool cycleStatus = false;
 
+    
         public List<int> ImagePositions { get => imagePositions; set => imagePositions = value; }
-        public bool CycleStatus { get => cycleStatus; set => cycleStatus = value; }
+
 
         private int posIndex = 0;
 
@@ -57,10 +57,11 @@ namespace SPIPware.Communication
         }
         public void OnImageAcquired(object sender, EventArgs e)
         {
-            if (runningCycle)
-            {
-                GoToNextPosition();
-            }
+            //if (runningCycle)
+            //{
+
+            //    HandleNextPosition(posIndex);
+            //}
         }
         private bool IsNextIndex(int index)
         {
@@ -91,7 +92,6 @@ namespace SPIPware.Communication
 
                 _log.Info("Starting Cycle");
                 runningCycle = true;
-                CycleStatus = runningCycle;
               
                 StatusUpdate.Raise(this, new EventArgs());
                 
@@ -128,16 +128,15 @@ namespace SPIPware.Communication
         }
         public void End()
         {
+            _log.Debug("Ending Cycle.");
             runningCycle = false;
-            CycleStatus = runningCycle;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
-            //currentIndex = 0;
-            posIndex = 0;
             //machine.sendMotionCommand(0);
             machine.SendLine("$H");
             peripheral.SetLight(Peripheral.Backlight, false);
             peripheral.SetLight(Peripheral.GrowLight, true, !peripheral.IsNightTime());
+            posIndex = 0;
         }
         public void Stop()
         {
@@ -166,24 +165,15 @@ namespace SPIPware.Communication
 
                 else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
                 {
-                    _log.Debug("Current Index" + imagePositions[posIndex]);
+                    _log.Debug("Current Index: " + imagePositions[posIndex]);
                     //peripheral.SetLight(Peripheral.Backlight, true);
                     bi =  camera.CapSaveImage().Clone();
-                    
+
                     bi.Freeze();
 
                     ImageUpdatedEvent.Raise(this, new EventArgs());
 
-                    //Console.WriteLine("Found Plate: " + foundPlate);
-                    //foundPlate = FindCheckedBox(currentIndex, false);
-                    //foundPlate = IsNextIndex(posIndex);
-                    //if (foundPlate)
-                    //{
-                    //    posIndex++;
-                    //    targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
-                    //}
-                    //else End();
-
+                    HandleNextPosition();
                 }
 
             }
@@ -192,16 +182,20 @@ namespace SPIPware.Communication
                 return;
             }
         }
-        public void GoToNextPosition()
+        public void HandleNextPosition()
         {
-           
             foundPlate = IsNextIndex(posIndex);
             if (foundPlate)
             {
-                posIndex++;
-                targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
+                _log.Debug("Found Next Plate: " + foundPlate);
+                GoToNextPosition(posIndex++);
+                _log.Debug("Next Position: " + posIndex);
             }
             else End();
+        }
+        public void GoToNextPosition(int index)
+        {
+            targetLocation = machine.sendMotionCommand(imagePositions[index]);
         }
     }
 }

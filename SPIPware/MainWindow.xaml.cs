@@ -10,11 +10,13 @@ using System.Threading.Tasks;
 using log4net;
 using System.Reflection;
 using log4net.Config;
+using System.Runtime.InteropServices;
 
 namespace SPIPware
 {
     public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
     {
+        private uint fPreviousExecutionState;
         Machine machine = Machine.Instance;
         CameraControl camera = CameraControl.Instance;
         CycleControl cycle = CycleControl.Instance;
@@ -102,11 +104,40 @@ namespace SPIPware
             camera.m_PictureBox = m_PictureBox;
 
         }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Properties.Settings.Default.Save();
 
+            if (machine.Connected)
+            {
+                machine.Disconnect();
+                //MessageBox.Show("Can't close while connected!");
+                e.Cancel = true;
+                //return;
+            }
+            if (NativeMethods.SetThreadExecutionState(fPreviousExecutionState) == 0)
+            {
+                // No way to recover; already exiting
+            }
+            settingsWindow.Close();
+            camera.ShutdownVimba();
+            Properties.Settings.Default.Save();
+            Application.Current.Shutdown();
+        }
         public Vector3 LastProbePosMachine { get; set; }
         public Vector3 LastProbePosWork { get; set; }
 
-        
+        private void SetNoSleep()
+        {
+            _log.Info("Preventing computer from sleeping");
+            fPreviousExecutionState = NativeMethods.SetThreadExecutionState(
+               NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED);
+            if (fPreviousExecutionState == 0)
+            {
+                _log.Error("SetThreadExecutionState failed");
+            }
+
+        }
 
         private void Machine_ProbeFinished_UserOutput(Vector3 position, bool success)
         {
@@ -345,5 +376,13 @@ namespace SPIPware
         {
 
         }
+    }
+    internal static class NativeMethods
+    {
+        // Import SetThreadExecutionState Win32 API and necessary flags
+        [DllImport("kernel32.dll")]
+        public static extern uint SetThreadExecutionState(uint esFlags);
+        public const uint ES_CONTINUOUS = 0x80000000;
+        public const uint ES_SYSTEM_REQUIRED = 0x00000001;
     }
 }

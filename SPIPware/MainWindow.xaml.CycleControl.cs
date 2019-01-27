@@ -16,6 +16,7 @@ namespace SPIPware
         
         public void StartCycle()
         {
+            _log.Debug("Starting Cycle");
             cycle.UpdatePositionList(checkBoxes);
             Task task = new Task(cycle.Start);
             task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
@@ -24,6 +25,7 @@ namespace SPIPware
         }
         public void StopCycle()
         {
+            _log.Debug("Stopping Cycle");
             Task task = new Task(cycle.Stop);
             task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
             task.Start();
@@ -38,7 +40,7 @@ namespace SPIPware
      
         public void UpdateCycleStatus(object sender, EventArgs e)
         {
-            UpdateCycleStatus(cycle.CycleStatus);
+            UpdateCycleStatus(cycle.runningCycle);
         }
         public void UpdateCycleStatus(bool cycleRunning)
         {

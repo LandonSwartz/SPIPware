@@ -108,23 +108,7 @@ namespace SPIPware
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Properties.Settings.Default.Save();
-
-            if (machine.Connected)
-            {
-                machine.Disconnect();
-                //MessageBox.Show("Can't close while connected!");
-                e.Cancel = true;
-                //return;
-            }
-
-            settingsWindow.Close();
-            camera.ShutdownVimba();
-            Properties.Settings.Default.Save();
-            Application.Current.Shutdown();
-        }
+       
 
         private void ButtonSyncBuffer_Click(object sender, RoutedEventArgs e)
         {
