@@ -81,7 +81,6 @@ namespace SPIPware.Communication
             {
                 cmdStr = "S1P" + peripheral.ToString("D") + "V" + BtoI(value);
             }
-            _log.Debug(cmdStr);
             SendCommand(cmdStr);
             
         }
@@ -110,7 +109,7 @@ namespace SPIPware.Communication
         private void Peripheral_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             // Show all the incoming data in the port's buffer
-            _log.Debug(port.ReadLine());
+            _log.Debug("From Peripheral:" + port.ReadLine());
         }
         public void Disconnect()
         {

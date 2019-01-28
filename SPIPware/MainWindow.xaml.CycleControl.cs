@@ -31,12 +31,12 @@ namespace SPIPware
             task.Start();
         }
 
-        public void CheckCycle()
-        {
-            Task task = new Task(cycle.Check);
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
-        }
+        //public void CheckCycle()
+        //{
+        //    Task task = new Task(cycle.Check);
+        //    task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+        //    task.Start();
+        //}
      
         public void UpdateCycleStatus(object sender, EventArgs e)
         {

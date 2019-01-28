@@ -106,23 +106,24 @@ namespace SPIPware.Communication
                 peripheral.SetLight(Peripheral.Backlight, true);
                 peripheral.SetLight(Peripheral.GrowLight, false, false);
                 peripheral.SetBacklightColor(Properties.Settings.Default.BacklightColor);
-                if (firstRun)
-                {
-                    machine.SendLine("$H");
+                machine.SendLine("$H");
+                //if (firstRun)
+                //{
+                   
                     
-                    //Properties.Settings.Default.CurrentPlate = 1;
-                    firstRun = false;
-                }
-                else
-                {
-                    //Thread.Sleep(300);
-                    targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
-                }
+                //    //Properties.Settings.Default.CurrentPlate = 1;
+                //    firstRun = false;
+                //}
+                //else
+                //{
+                //    //Thread.Sleep(300);
+                //    targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
+                //}
             }
-            //else
-            //{
-            //    Machine_NonFatalException("Machine not connected");
-            //}
+            else
+            {
+                _log.Debug("Machine not connected");
+            }
 
 
         }
@@ -132,8 +133,8 @@ namespace SPIPware.Communication
             runningCycle = false;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
-            //machine.sendMotionCommand(0);
-            machine.SendLine("$H");
+            machine.sendMotionCommand(0);
+            //machine.SendLine("$H");
             peripheral.SetLight(Peripheral.Backlight, false);
             peripheral.SetLight(Peripheral.GrowLight, true, !peripheral.IsNightTime());
             posIndex = 0;
@@ -149,53 +150,73 @@ namespace SPIPware.Communication
         public delegate void ImageUpdated();
         public event EventHandler ImageUpdatedEvent;
         public BitmapImage bi;
-        public void Check()
+        public void IsHome()
         {
-            _log.Info("Checking cycle");
+            _log.Debug("Machine Home");
             if (runningCycle)
             {
-                if (machine.Status == "Home")
-                {
-                    //cameraControl.home = true;
-                    //cameraControl.firstRun = false;
-                    //peripheral.SetLight(Peripheral.Backlight, true);
-                    //Thread.Sleep(300);
-                    targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
-                }
-
-                else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
-                {
-                    _log.Debug("Current Index: " + imagePositions[posIndex]);
-                    //peripheral.SetLight(Peripheral.Backlight, true);
-                    bi =  camera.CapSaveImage().Clone();
-
-                    bi.Freeze();
-
-                    ImageUpdatedEvent.Raise(this, new EventArgs());
-
-                    HandleNextPosition();
-                }
-
+                GoToPosition(posIndex);
             }
-            else
+            
+        }
+        public void IsIdle()
+        {
+            _log.Debug("Machine Idle");
+            if (runningCycle && machine.WorkPosition.X == (double)targetLocation)
             {
-                return;
+                _log.Debug("Current Index: " + imagePositions[posIndex]);
+                //peripheral.SetLight(Peripheral.Backlight, true);
+                bi = camera.CapSaveImage().Clone();
+
+                bi.Freeze();
+
+                ImageUpdatedEvent.Raise(this, new EventArgs());
+
+                HandleNextPosition();
             }
         }
+        //public void Check()
+        //{
+        //    _log.Info("Checking cycle");
+        //    if (runningCycle)
+        //    {
+               
+
+        //        else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
+        //        {
+        //            _log.Debug("Current Index: " + imagePositions[posIndex]);
+        //            //peripheral.SetLight(Peripheral.Backlight, true);
+        //            bi =  camera.CapSaveImage().Clone();
+
+        //            bi.Freeze();
+
+        //            ImageUpdatedEvent.Raise(this, new EventArgs());
+
+        //            HandleNextPosition();
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        return;
+        //    }
+        //}
         public void HandleNextPosition()
         {
             foundPlate = IsNextIndex(posIndex);
             if (foundPlate)
             {
                 _log.Debug("Found Next Plate: " + foundPlate);
-                GoToNextPosition(posIndex++);
+                posIndex++;
                 _log.Debug("Next Position: " + posIndex);
+                GoToPosition(posIndex);
             }
             else End();
         }
-        public void GoToNextPosition(int index)
+        public void GoToPosition(int index)
         {
             targetLocation = machine.sendMotionCommand(imagePositions[index]);
+            _log.Debug("Going to target location: " + targetLocation);
         }
     }
 }
