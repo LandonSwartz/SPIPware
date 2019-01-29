@@ -41,9 +41,7 @@ namespace SPIPware.Communication
 
         private List<int> imagePositions = new List<int>();
         public bool runningCycle = false;
-        public bool firstRun = true;
         private decimal targetLocation = 0;
-        bool foundPlate = false;
 
     
         public List<int> ImagePositions { get => imagePositions; set => imagePositions = value; }
@@ -65,7 +63,9 @@ namespace SPIPware.Communication
         }
         private bool IsNextIndex(int index)
         {
-            return index+1 < imagePositions.Count;
+            _log.Debug("IsNextIndex Index: " + index);
+            _log.Debug("ImagePositions.count " + ImagePositions.Count);
+            return ( index < ImagePositions.Count) ;
         }
         public void UpdatePositionList(List<CheckBox> checkBoxes)
         {
@@ -77,8 +77,8 @@ namespace SPIPware.Communication
                     ImagePositions.Add(i);
                 }
             }
-            //ImagePositions.ForEach((position) => Console.Write(position + ","));
-            //Console.WriteLine();
+            ImagePositions.ForEach((position) => _log.Debug(position + ","));
+            _log.Debug(ImagePositions.Count);
         }
         //protected void OnStatusUpdateEvent(EventArgs e)
         //{
@@ -164,7 +164,7 @@ namespace SPIPware.Communication
             _log.Debug("Machine Idle");
             if (runningCycle && machine.WorkPosition.X == (double)targetLocation)
             {
-                _log.Debug("Current Index: " + imagePositions[posIndex]);
+                _log.Debug("Current Index: " + ImagePositions[posIndex]);
                 //peripheral.SetLight(Peripheral.Backlight, true);
                 bi = camera.CapSaveImage().Clone();
 
@@ -172,7 +172,8 @@ namespace SPIPware.Communication
 
                 ImageUpdatedEvent.Raise(this, new EventArgs());
 
-                HandleNextPosition();
+                posIndex++;
+                HandleNextPosition(posIndex);
             }
         }
         //public void Check()
@@ -201,21 +202,22 @@ namespace SPIPware.Communication
         //        return;
         //    }
         //}
-        public void HandleNextPosition()
+        public void HandleNextPosition(int index)
         {
-            foundPlate = IsNextIndex(posIndex);
-            if (foundPlate)
+            bool foundPlate = IsNextIndex(index);
+            _log.Debug("Found Next Plate: " + foundPlate);
+            _log.Debug("NumLocations: " + Properties.Settings.Default.NumLocations);
+            if (foundPlate && ( index < Properties.Settings.Default.NumLocations))
             {
-                _log.Debug("Found Next Plate: " + foundPlate);
-                posIndex++;
-                _log.Debug("Next Position: " + posIndex);
-                GoToPosition(posIndex);
+                _log.Debug("local index: " + index);
+                _log.Debug("posIndex: " + posIndex);
+                GoToPosition(index);
             }
             else End();
         }
         public void GoToPosition(int index)
         {
-            targetLocation = machine.sendMotionCommand(imagePositions[index]);
+            targetLocation = machine.sendMotionCommand(ImagePositions[index]);
             _log.Debug("Going to target location: " + targetLocation);
         }
     }
