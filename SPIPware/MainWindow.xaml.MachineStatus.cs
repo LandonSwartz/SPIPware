@@ -42,7 +42,7 @@ namespace SPIPware
             if (machine.Status == "Alarm")
             {
                 StopCycle();
-                cycle.firstRun = true;
+                //cycle.firstRun = true;
                 ButtonStatus.Foreground = Brushes.Red;
                 //CameraControl.runningCycle = false;
                 //cameraControl.firstRun = true;
