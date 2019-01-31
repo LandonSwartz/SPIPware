@@ -69,7 +69,9 @@ namespace SPIPware.Communication
         }
         public void UpdatePositionList(List<CheckBox> checkBoxes)
         {
-            ImagePositions = new List<int>();
+            ImagePositions.Clear();
+            //ImagePositions.ForEach((position) => _log.Debug(position + ","));
+            //ImagePositions = new List<int>();
             for (var i = 0; i < checkBoxes.Count; i++)
             {
                 if (checkBoxes[i].IsChecked == true)
@@ -78,7 +80,7 @@ namespace SPIPware.Communication
                 }
             }
             ImagePositions.ForEach((position) => _log.Debug(position + ","));
-            _log.Debug(ImagePositions.Count);
+            _log.Debug("ImagePositions.Count: " + ImagePositions.Count);
         }
         //protected void OnStatusUpdateEvent(EventArgs e)
         //{
@@ -88,7 +90,12 @@ namespace SPIPware.Communication
         {
             if (machine.Connected && peripheral.Connected)
             {
-                if (runningCycle) Stop();
+                if (runningCycle)
+                {
+                    Stop();
+                    _log.Error("Attempted to start a cycle while another was running");
+                }
+
 
                 _log.Info("Starting Cycle");
                 runningCycle = true;
@@ -133,14 +140,17 @@ namespace SPIPware.Communication
             runningCycle = false;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
-            machine.sendMotionCommand(0);
-            //machine.SendLine("$H");
             peripheral.SetLight(Peripheral.Backlight, false);
             peripheral.SetLight(Peripheral.GrowLight, true, !peripheral.IsNightTime());
+
+            machine.sendMotionCommand(0);
+            //machine.SendLine("$H");
+            
             posIndex = 0;
         }
         public void Stop()
         {
+            _log.Error("Emergency Stop Occured");
             End();
             if (machine.Connected)
             {
@@ -206,17 +216,18 @@ namespace SPIPware.Communication
         {
             bool foundPlate = IsNextIndex(index);
             _log.Debug("Found Next Plate: " + foundPlate);
-            _log.Debug("NumLocations: " + Properties.Settings.Default.NumLocations);
+            //_log.Debug("NumLocations: " + Properties.Settings.Default.NumLocations);
             if (foundPlate && ( index < Properties.Settings.Default.NumLocations))
             {
                 _log.Debug("local index: " + index);
-                _log.Debug("posIndex: " + posIndex);
+                //_log.Debug("posIndex: " + posIndex);
                 GoToPosition(index);
             }
             else End();
         }
         public void GoToPosition(int index)
         {
+            _log.Debug("ImagePositions[index]: " + ImagePositions[index]);
             targetLocation = machine.sendMotionCommand(ImagePositions[index]);
             _log.Debug("Going to target location: " + targetLocation);
         }

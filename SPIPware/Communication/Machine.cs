@@ -635,10 +635,10 @@ namespace SPIPware.Communication
         }
         
     
-        public decimal sendMotionCommand(int position, bool growLightOn, bool backLightOn)
-        {
-            return 0;
-        }
+        //public decimal sendMotionCommand(int position, bool growLightOn, bool backLightOn)
+        //{
+        //    return 0;
+        //}
         public decimal sendMotionCommand(int position, decimal offset)
         {
             decimal distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
