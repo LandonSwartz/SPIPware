@@ -238,6 +238,7 @@ namespace SPIPware.Communication
 				try
 				{
 					Log.WriteLine(message);
+                    _log.Debug(message);
 				}
 				catch { throw; }
 			}

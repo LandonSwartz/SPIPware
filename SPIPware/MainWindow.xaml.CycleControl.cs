@@ -16,19 +16,21 @@ namespace SPIPware
         
         public void StartCycle()
         {
-            _log.Debug("Starting Cycle");
+            _log.Info("        =============  Starting Cycle  =============        ");
             cycle.UpdatePositionList(checkBoxes);
-            Task task = new Task(cycle.Start);
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
+            cycle.Start();
+            //Task task = new Task(cycle.Start);
+            //task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            //task.Start();
 
         }
         public void StopCycle()
         {
-            _log.Debug("Stopping Cycle");
-            Task task = new Task(cycle.Stop);
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
+            _log.Info("        =============  Stopping Cycle  =============        ");
+            cycle.Stop();
+            //Task task = new Task(cycle.Stop);
+            //task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            //task.Start();
         }
 
         //public void CheckCycle()

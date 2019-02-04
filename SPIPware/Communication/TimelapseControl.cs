@@ -71,7 +71,7 @@ namespace SPIPware.Communication
         }
         async Task RunSingleTimeLapse(TimeSpan duration, CancellationToken token)
         {
-
+            _log.Debug("Awaiting timelapse");
             while (duration.TotalSeconds > 0)
             {
                 totalMinutes = duration.TotalMinutes;
@@ -90,8 +90,9 @@ namespace SPIPware.Communication
                         growLightsOn = false;
                     }
                 }
-                
+                //_log.Debug("Waiting 1 Minute");
                 await Task.Delay(60 * 1000, token);
+                //_log.Debug("1 minute elapsed");
                 duration = duration.Subtract(TimeSpan.FromMinutes(1));
             }
 

@@ -64,12 +64,13 @@ namespace SPIPware.Communication
         private bool IsNextIndex(int index)
         {
             _log.Debug("IsNextIndex Index: " + index);
-            _log.Debug("ImagePositions.count " + ImagePositions.Count);
+            _log.Debug("IsNextIndex+ImagePositions.count " + ImagePositions.Count);
             return ( index < ImagePositions.Count) ;
         }
         public void UpdatePositionList(List<CheckBox> checkBoxes)
         {
             ImagePositions.Clear();
+            _log.Debug("Number of Checkboxes: " + checkBoxes.Count);
             //ImagePositions.ForEach((position) => _log.Debug(position + ","));
             //ImagePositions = new List<int>();
             for (var i = 0; i < checkBoxes.Count; i++)
@@ -80,7 +81,7 @@ namespace SPIPware.Communication
                 }
             }
             ImagePositions.ForEach((position) => _log.Debug(position + ","));
-            _log.Debug("ImagePositions.Count: " + ImagePositions.Count);
+            _log.Debug("UpdatePositionList+ImagePositions.Count: " + ImagePositions.Count);
         }
         //protected void OnStatusUpdateEvent(EventArgs e)
         //{
@@ -152,10 +153,10 @@ namespace SPIPware.Communication
         {
             _log.Error("Emergency Stop Occured");
             End();
-            if (machine.Connected)
-            {
-                machine.SoftReset();
-            }
+            //if (machine.Connected)
+            //{
+            //    machine.SoftReset();
+            //}
         }
         public delegate void ImageUpdated();
         public event EventHandler ImageUpdatedEvent;

@@ -62,7 +62,7 @@ namespace SPIPware
         }
         private void ButtonStartTimeLapse_Click(object sender, RoutedEventArgs e)
         {
-            _log.Debug("Starting Timpelapse Cycle");
+            _log.Info("        =============  Starting Timelapse  =============        ");
             cycle.UpdatePositionList(checkBoxes);
             SetNoSleep();
             timelapse.Start();
@@ -74,9 +74,10 @@ namespace SPIPware
         private void ButtonStopTimeLapse_Click(object sender, RoutedEventArgs e)
         {
             _log.Debug("Stopping Timpelapse Cycle");
-            Task task = new Task(() => timelapse.Stop());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
+            timelapse.Stop();
+            //Task task = new Task(() => timelapse.Stop());
+            //task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            //task.Start();
         }
         //public void toggleTimeLapseButton(bool running)
         //{

@@ -30,6 +30,7 @@ namespace SPIPware
         {
             Dispatcher.Invoke(() =>
             {
+                _log.Debug("Updating Plate Checkboxes");
                 int numBoxes = Properties.Settings.Default.NumLocations;
                 spCheckboxes.Children.Clear();
                 checkBoxes.Clear();
@@ -70,6 +71,7 @@ namespace SPIPware
 
                 }
             });
+            _log.Debug("Number of plate checkboxes: " + checkBoxes.Count);
             
         }
         private void selectAll_Change(object sender, RoutedEventArgs e)
