@@ -144,9 +144,9 @@ namespace SPIPware.Communication
             peripheral.SetLight(Peripheral.Backlight, false);
             peripheral.SetLight(Peripheral.GrowLight, true, !peripheral.IsNightTime());
 
-            machine.sendMotionCommand(0);
-            //machine.SendLine("$H");
-            
+            //machine.sendMotionCommand(0);
+            machine.SendLine("$H");
+
             posIndex = 0;
         }
         public void Stop()

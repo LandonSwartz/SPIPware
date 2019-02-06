@@ -326,7 +326,7 @@ namespace SPIPware
                 image.Save(filePath, fileType);
 
                 LogMessage("Image acquired synchonously.");
-                if (Properties.Settings.Default.CurrentPlate <= Properties.Settings.Default.TotalPlates)
+                if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalPlates)
                 {
                     Properties.Settings.Default.CurrentPlate++;
                 }
