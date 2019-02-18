@@ -38,6 +38,18 @@ namespace SPIPware
             task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
             task.Start();
         }
+        public void UpdatePeripheralStatus(object sender, EventArgs e)
+        {
+            PeripheralEventArgs p = (PeripheralEventArgs) e;
+            if(p.Periperal == Peripheral.Backlight)
+            {
+                Properties.Settings.Default.BacklightStatus = p.Status;
+            }
+            else if (p.Periperal == Peripheral.GrowLight)
+            {
+                Properties.Settings.Default.GrowlightStatus = p.Status;
+            }
+        }
         public void UpdateClrCanvas()
         {
             Dispatcher.Invoke(()=> ClrCanvas.SelectedColor = Properties.Settings.Default.BacklightColor);

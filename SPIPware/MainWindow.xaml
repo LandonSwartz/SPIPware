@@ -476,20 +476,20 @@
 								</GroupBox.Header>
 								<Grid Name="PlateGrid">
 									<Grid.RowDefinitions>
-										<RowDefinition Height="*" />
-										<RowDefinition Height="Auto"/>
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="*"/>
 									</Grid.RowDefinitions>
 
 
-									<StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+									<StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
 										<!--<TextBlock>Goto Plate</TextBlock>-->
 										<!--<Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="10" IsSnapToTickEnabled="True" Width="300" Margin="5" />-->
 										<!--<TextBlock VerticalAlignment="Center" Margin="5">Number of Locations:</TextBlock>
 										<xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" ValueChanged="updatePlateClick"  />-->
-										<CheckBox IsChecked="{util:SettingBinding SelectAll, Mode=TwoWay}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Checked="selectAll_Change" ></CheckBox>
+										<CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
 
 									</StackPanel>
-									<StackPanel Name="spCheckboxes" Grid.Row="1" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+									<StackPanel Name="spCheckboxes" Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
 										
 									</StackPanel>
 

@@ -902,5 +902,29 @@ namespace SPIPware.Properties {
                 this["BacklightColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BacklightStatus {
+            get {
+                return ((bool)(this["BacklightStatus"]));
+            }
+            set {
+                this["BacklightStatus"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool GrowlightStatus {
+            get {
+                return ((bool)(this["GrowlightStatus"]));
+            }
+            set {
+                this["GrowlightStatus"] = value;
+            }
+        }
     }
 }

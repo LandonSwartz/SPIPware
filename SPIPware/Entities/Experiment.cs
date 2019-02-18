@@ -2,6 +2,7 @@
 using SPIPware.Communication;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media;
@@ -39,6 +40,7 @@ namespace SPIPware.Entities
         private long tlEndIntervalType;
         private long tlIntervalType;
         private List<int> imagePositions;
+
         private Color BacklightColor;
 
         public int TotalPlates { get => totalPlates; set => totalPlates = value; }
@@ -59,14 +61,15 @@ namespace SPIPware.Entities
         public int TlEndInterval { get => tlEndInterval; set => tlEndInterval = value; }
         public long TlEndIntervalType { get => tlEndIntervalType; set => tlEndIntervalType = value; }
         public long TlIntervalType { get => tlIntervalType; set => tlIntervalType = value; }
-        public List<int> ImagePositions { get => imagePositions; set => imagePositions = value; }
+
         public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
+        
+        public List<int> ImagePositions { get => imagePositions; set => imagePositions = value; }
 
         //private Color BacklightColor;
         public Experiment()
         {
-            
-            LoadExperiment();
+            //LoadExperiment();
         }
         public static void LoadDefaults()
         { 
@@ -97,7 +100,8 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.CurrentLocation = CurrentLocation;
                 Properties.Settings.Default.CameraName = CameraName;
                 Properties.Settings.Default.BacklightColor = BacklightColor;
-                cycle.ImagePositions = imagePositions;
+                //CycleControl.ImagePositions = ImagePositions;
+                cycle.ImagePositions = ImagePositions;
                 //if (experiment.BacklightColor != null)
                 //{
                 //    Properties.Settings.Default.BacklightColor = experiment.BacklightColor;
@@ -117,6 +121,7 @@ namespace SPIPware.Entities
 
      
         }
+        //Loads application settings settings into experiment
         public void LoadExperiment()
         {
             //Experiment experiment = new Experiment();
@@ -139,7 +144,8 @@ namespace SPIPware.Entities
             TlEndIntervalType = Properties.Settings.Default.tlEndIntervalType;
             TlIntervalType = Properties.Settings.Default.tlIntervalType;
             BacklightColor = Properties.Settings.Default.BacklightColor;
-            imagePositions = cycle.ImagePositions;
+           
+            ImagePositions = new List<int>( cycle.ImagePositions);
             //return this;
         }
         //public void SaveExperimentFromSettings(Experiment experiment,string filePath)
@@ -154,12 +160,14 @@ namespace SPIPware.Entities
             {
                 if (FileExists(filePath))
                 {
+
                     Experiment experiment = JSONUtil.LoadJSON<Experiment>(filePath);
                     experiment.SaveExperimentToSettings();
                     return experiment;
                 }
                 else
                 {
+                    _log.Error("Experiment file does not exist");
                     return null;
                 }
             }

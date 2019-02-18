@@ -3,13 +3,29 @@ using System;
 using System.IO.Ports;
 using System.Reflection;
 using System.Windows.Media;
+using static SPIPware.Communication.PeripheralControl;
 
 namespace SPIPware.Communication
 {
+    public class PeripheralEventArgs : EventArgs
+    {
+        private Peripheral periperal;
+        private bool status;
+
+        public PeripheralEventArgs(Peripheral periperal, bool peripheralStatus)
+        {
+            this.Periperal = periperal;
+            this.Status = peripheralStatus;
+        }
+
+        public Peripheral Periperal { get => periperal; set => periperal = value; }
+        public bool Status { get => status; set => status = value; }
+    }
     public sealed class PeripheralControl
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public event EventHandler PeripheralUpdate;
 
         private bool connected = false;
         private static readonly PeripheralControl instance = new PeripheralControl();
@@ -63,15 +79,16 @@ namespace SPIPware.Communication
         {
             if (status && daytime)
             {
-                _log.Info("Grow lights on");
+                _log.Info(peripheral.ToString() + " lights on");
                 SetLight(peripheral,status);
             }
             else {
-                _log.Info("Grow lights off");
+                _log.Info(peripheral.ToString() + " lights off");
                 SetLight(peripheral, false); }
         }
         public void SetLight(Peripheral peripheral, bool value)
         {
+            PeripheralUpdate.Raise(this, new PeripheralEventArgs(peripheral,value));
             string cmdStr = "";
             if(peripheral == Peripheral.Backlight)
             {

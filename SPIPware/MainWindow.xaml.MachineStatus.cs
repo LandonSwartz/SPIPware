@@ -41,7 +41,7 @@ namespace SPIPware
 
             if (machine.Status == "Alarm")
             {
-                StopCycle();
+                //StopCycle();
                 //cycle.firstRun = true;
                 ButtonStatus.Foreground = Brushes.Red;
                 //CameraControl.runningCycle = false;
@@ -62,13 +62,13 @@ namespace SPIPware
             else if (machine.Status == "Home")
             {
                 machine.homeMachinePos = (decimal)machine.MachinePosition.X;
-                cycle.IsHome();
+                //cycle.IsHome();
 
             }
-            else if (machine.Status == "Idle")
-            {
-                cycle.IsIdle();
-            }
+            //else if (machine.Status == "Idle")
+            //{
+            //    cycle.IsIdle();
+            //}
             else
                 ButtonStatus.Foreground = Brushes.Black;
 

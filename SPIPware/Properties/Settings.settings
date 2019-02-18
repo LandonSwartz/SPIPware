@@ -225,5 +225,11 @@ G92Z0;</Value>
     <Setting Name="BacklightColor" Type="System.Windows.Media.Color" Scope="User">
       <Value Profile="(Default)">#00000000</Value>
     </Setting>
+    <Setting Name="BacklightStatus" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="GrowlightStatus" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

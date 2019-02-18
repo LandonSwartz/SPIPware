@@ -115,7 +115,11 @@ namespace SPIPware.Communication
             {
                 _log.Info("Running single timelapse cycle");
                 tokenSource = new CancellationTokenSource();
+
                 tempExperiment = new Experiment();
+                tempExperiment.LoadExperiment();
+
+                
                 Experiment experiment = Experiment.LoadExperiment(Properties.Settings.Default.tlExperimentPath);
                 //experiment.SaveExperimentToSettings();
                 ExperimentStatus.Raise(this, new EventArgs());

@@ -40,12 +40,14 @@ namespace SPIPware
             AppDomain.CurrentDomain.UnhandledException += UnhandledException;
             InitializeComponent();
 
-            LoadDefaults();
+
+            UpdatePlateCheckboxes(true);
+            //LoadDefaults();
             //UpdatePlateCheckboxes();
             //cycle.UpdatePositionList(checkBoxes);
 
-           
 
+            peripheral.PeripheralUpdate += UpdatePeripheralStatus;
             cycle.StatusUpdate += UpdateCycleStatus;
             timelapse.TimeLapseStatus += UpdateTimeLapseStatus;
             cycle.ImageUpdatedEvent += UpdatePictureBox;

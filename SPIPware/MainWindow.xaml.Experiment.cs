@@ -1,4 +1,5 @@
 ﻿using log4net;
+using SPIPware.Communication;
 using SPIPware.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace SPIPware
     {
         List<CheckBox> checkBoxes = new List<CheckBox>();
         List<TextBlock> textBlocks = new List<TextBlock>();
-        
+
 
         public void UpdatePlateClick(object sender, RoutedEventArgs e)
         {
@@ -24,7 +25,19 @@ namespace SPIPware
                 UpdatePlateCheckboxes();
 
             }
+            else
+            {
+                _log.Error("Could not update plate checkboxes, spCheckboxes null");
+            }
 
+        }
+
+        public void UpdatePlateCheckboxes(bool value)
+        {
+            if (checkBoxes != null)
+            {
+                checkBoxes.ForEach(c => c.IsChecked = value);
+            }
         }
         public void UpdatePlateCheckboxes()
         {
@@ -37,20 +50,28 @@ namespace SPIPware
                 textBlocks.Clear();
                 for (int i = 0; i < numBoxes; i++)
                 {
-                    //StackPanel stackPanel = new StackPanel();
-                    //stackPanel.Orientation = Orientation.Vertical;
-                    //stackPanel.Margin = new Thickness(5);
+                    StackPanel stackPanel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical,
+                        Margin = new Thickness(10)
+                    };
 
-                    CheckBox tempCB = new CheckBox();
-                    tempCB.VerticalAlignment = VerticalAlignment.Center;
 
-                    if (cycle.ImagePositions.Contains(i) || Properties.Settings.Default.SelectAll)
+                    CheckBox tempCB = new CheckBox
+                    {
+                        VerticalAlignment = VerticalAlignment.Center
+                    };
+                    tempCB.Click += new RoutedEventHandler(PlateCheck_Change);
+
+                    if (cycle.ImagePositions.Contains(i))
                     {
                         tempCB.IsChecked = true;
                     }
                     else
                     {
+                        cbSelectAll.IsChecked = null;
                         tempCB.IsChecked = false;
+                        //IsThreeState = true;
                     }
 
                     checkBoxes.Add(tempCB);
@@ -61,35 +82,94 @@ namespace SPIPware
                     tempText.Margin = new Thickness(5);
                     textBlocks.Add(tempText);
 
-                    //stackPanel.Children.Add(checkBoxes[i]);
-                    //stackPanel.Children.Add(textBlocks[i]);
+                    stackPanel.Children.Add(checkBoxes[i]);
+                    stackPanel.Children.Add(textBlocks[i]);
+    
+                    spCheckboxes.Children.Add(stackPanel);
 
-                    //spCheckboxes.Children.Add(stackPanel);
-
-                    spCheckboxes.Children.Add(checkBoxes[i]);
-                    spCheckboxes.Children.Add(textBlocks[i]);
+                    //spCheckboxes.Children.Add(checkBoxes[i]);
+                    //spCheckboxes.Children.Add(textBlocks[i]);
 
                 }
+                //cycle.UpdatePositionList(checkBoxes);
             });
+            //checkBoxes.ForEach(c => c.Click += new RoutedEventHandler(PlateCheck_Change));
             _log.Debug("Number of plate checkboxes: " + checkBoxes.Count);
-            
+
+
+        }
+
+        private void PlateCheck_Change(object sender, System.EventArgs e)
+        {
+
+            if (checkBoxes.All(c => c.IsChecked == true))
+            {
+                SelectAllValue = true;
+            }
+            else if (checkBoxes.All(c => c.IsChecked == false))
+            {
+                SelectAllValue = false;
+            }
+            else 
+            {
+                SelectAllValue = null;
+                cbSelectAll.IsChecked = null;
+            }
+            Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes));
+
+        }
+
+        bool? _SelectAllValue;
+        public bool? SelectAllValue
+        {
+            get { return _SelectAllValue; }
+            set
+            {
+
+                if (value == null)
+                {
+                    IsThreeState = true;
+                }
+                else
+                {
+                    IsThreeState = false;
+                }
+                _SelectAllValue = value;
+               
+            }
+        }
+
+        bool _IsThreeState = true;
+        public bool IsThreeState
+        {
+            get { return _IsThreeState; }
+            private set
+            {
+                _IsThreeState = value;
+            }
         }
         private void selectAll_Change(object sender, RoutedEventArgs e)
+        {
+            SelectAll_Change();
+            
+        }
+        private void SelectAll_Change()
         {
             foreach (CheckBox box in checkBoxes)
             {
                 if (box != null)
                 {
-                    if (Properties.Settings.Default.SelectAll == true)
+                    if (SelectAllValue == true)
                     {
                         box.IsChecked = true;
                     }
-                    else
+                    else if (SelectAllValue == false)
                     {
                         box.IsChecked = false;
                     }
                 }
             }
+            Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes));
         }
         public void LoadDefaults()
         {
@@ -107,11 +187,12 @@ namespace SPIPware
         {
             SaveSettingsToFile(Properties.Settings.Default.ExperimentPath);
         }
-        public void SaveSettingsToFile( string filePath)
+        public void SaveSettingsToFile(string filePath)
         {
-            Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes));
-            
+            //Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes));
+
             Experiment experiment = new Experiment();
+            experiment.LoadExperiment();
             experiment.SaveExperiment(filePath);
         }
         public System.Windows.Forms.SaveFileDialog openSaveDialog()
@@ -136,6 +217,7 @@ namespace SPIPware
             if (dialog != null)
             {
                 Experiment experiment = new Experiment();
+                experiment.LoadExperiment();
                 experiment.SaveExperiment(dialog.FileName);
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
                 _log.Debug(Properties.Settings.Default.ExperimentPath);
@@ -257,15 +339,17 @@ namespace SPIPware
         }
         private void ButtonSaveExperiment_Click(object sender, RoutedEventArgs e)
         {
-            Task task = new Task(() => SaveSettingsToFile());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
+            SaveSettingsToFile();
+            //Task task = new Task(() => SaveSettingsToFile());
+            //task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            //task.Start();
         }
         private void ButtonSaveExperimentDefaults_Click(object sender, RoutedEventArgs e)
         {
-            Task task = new Task(() => SaveDefaults());
-            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            task.Start();
+            SaveDefaults();
+            //Task task = new Task(() => SaveDefaults());
+            //task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            //task.Start();
         }
         private void ButtonLoadExperimentDefaults_Click(object sender, RoutedEventArgs e)
         {

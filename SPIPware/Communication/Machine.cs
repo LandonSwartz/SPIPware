@@ -1209,8 +1209,11 @@ namespace SPIPware.Communication
 		/// </summary>
 		private void ReportError(string error)
 		{
-			if (NonFatalException != null)
-				NonFatalException.Invoke(GrblCodeTranslator.ExpandError(error));
+            _log.Error(GrblCodeTranslator.ExpandError(error));
+            if (NonFatalException != null)
+            {  
+                NonFatalException.Invoke(GrblCodeTranslator.ExpandError(error));
+            }   
 		}
 
 		private void RaiseEvent(Action<string> action, string param)

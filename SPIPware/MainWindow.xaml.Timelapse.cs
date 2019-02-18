@@ -63,7 +63,7 @@ namespace SPIPware
         private void ButtonStartTimeLapse_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("        =============  Starting Timelapse  =============        ");
-            cycle.UpdatePositionList(checkBoxes);
+            //cycle.UpdatePositionList(checkBoxes);
             SetNoSleep();
             timelapse.Start();
 

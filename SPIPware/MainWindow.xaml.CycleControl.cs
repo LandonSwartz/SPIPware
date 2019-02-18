@@ -17,7 +17,7 @@ namespace SPIPware
         public void StartCycle()
         {
             _log.Info("        =============  Starting Cycle  =============        ");
-            cycle.UpdatePositionList(checkBoxes);
+            //cycle.UpdatePositionList(checkBoxes);
             cycle.Start();
             //Task task = new Task(cycle.Start);
             //task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);

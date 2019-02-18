@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -17,10 +18,9 @@ namespace SPIPware.Communication
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly CycleControl instance = new CycleControl();
-     
+
         static CycleControl()
         {
-
         }
         public static CycleControl Instance
         {
@@ -30,28 +30,46 @@ namespace SPIPware.Communication
             }
         }
 
-        public delegate void CycleUpdate();
+        //public static ReadOnlyCollection<int> ImagePositions
+        //{
+        //    get => ImagePositions.AsReadOnly();
+     
+        //}
+        public List<int> ImagePositions { get => _imagePositions; set => _imagePositions = value; }
+
+        //public delegate void CycleUpdate();
         public event EventHandler StatusUpdate;
 
-        
+
 
         CameraControl camera = CameraControl.Instance;
         Machine machine = Machine.Instance;
         PeripheralControl peripheral = PeripheralControl.Instance;
 
-        private List<int> imagePositions = new List<int>();
+        private List<int> _imagePositions = new List<int>();
         public bool runningCycle = false;
         private decimal targetLocation = 0;
 
-    
-        public List<int> ImagePositions { get => imagePositions; set => imagePositions = value; }
+        //public static void UpdateImagePositions(List<int> imagePositions) 
+        //{
+        //    if(imagePositions != null)
+        //    {
+        //        _imagePositions.Clear();
+        //        _imagePositions = imagePositions;
+        //    }
+        //    {
+        //        _log.Error("provided imagePositions list is null, cannot update");
+        //    }
+        //}
 
 
-        private int posIndex = 0;
+
+        private static int posIndex = 0;
 
         CycleControl()
         {
             camera.ImageAcquiredEvent += OnImageAcquired;
+            machine.StatusChanged += Machine_StatusChanged;
         }
         public void OnImageAcquired(object sender, EventArgs e)
         {
@@ -65,7 +83,7 @@ namespace SPIPware.Communication
         {
             _log.Debug("IsNextIndex Index: " + index);
             _log.Debug("IsNextIndex+ImagePositions.count " + ImagePositions.Count);
-            return ( index < ImagePositions.Count) ;
+            return (index < ImagePositions.Count);
         }
         public void UpdatePositionList(List<CheckBox> checkBoxes)
         {
@@ -80,13 +98,30 @@ namespace SPIPware.Communication
                     ImagePositions.Add(i);
                 }
             }
-            ImagePositions.ForEach((position) => _log.Debug(position + ","));
+            //_imagePositions.ForEach(i => _log.Debug)
             _log.Debug("UpdatePositionList+ImagePositions.Count: " + ImagePositions.Count);
         }
         //protected void OnStatusUpdateEvent(EventArgs e)
         //{
         //    StatusUpdate?.Invoke(this, e);
         //}
+        private void Machine_StatusChanged()
+        {
+
+            if (machine.Status == "Alarm")
+            {
+                Stop();
+            }
+            else if (machine.Status == "Home")
+            {
+                IsHome();
+            }
+            else if (machine.Status == "Idle")
+            {
+                IsIdle();
+            }
+
+        }
         public void Start()
         {
             if (machine.Connected && peripheral.Connected)
@@ -100,16 +135,21 @@ namespace SPIPware.Communication
 
                 _log.Info("Starting Cycle");
                 runningCycle = true;
-              
+
                 StatusUpdate.Raise(this, new EventArgs());
-                
+
 
                 camera.loadCameraSettings();
                 posIndex = 0;
                 //currentIndex = 0;
-                
+
                 //bool isPlateFound = FindCheckedBox(currentIndex, true);
-                if (!ImagePositions.Any()) return;
+                if (!ImagePositions.Any())
+                {
+                    _log.Error("No positions selected");
+                    return;
+                }
+                ;
 
                 peripheral.SetLight(Peripheral.Backlight, true);
                 peripheral.SetLight(Peripheral.GrowLight, false, false);
@@ -117,8 +157,8 @@ namespace SPIPware.Communication
                 machine.SendLine("$H");
                 //if (firstRun)
                 //{
-                   
-                    
+
+
                 //    //Properties.Settings.Default.CurrentPlate = 1;
                 //    firstRun = false;
                 //}
@@ -139,6 +179,7 @@ namespace SPIPware.Communication
         {
             _log.Debug("Ending Cycle.");
             runningCycle = false;
+            posIndex = 0;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
             peripheral.SetLight(Peripheral.Backlight, false);
@@ -147,7 +188,7 @@ namespace SPIPware.Communication
             //machine.sendMotionCommand(0);
             machine.SendLine("$H");
 
-            posIndex = 0;
+
         }
         public void Stop()
         {
@@ -168,7 +209,7 @@ namespace SPIPware.Communication
             {
                 GoToPosition(posIndex);
             }
-            
+
         }
         public void IsIdle()
         {
@@ -192,7 +233,7 @@ namespace SPIPware.Communication
         //    _log.Info("Checking cycle");
         //    if (runningCycle)
         //    {
-               
+
 
         //        else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
         //        {
@@ -218,7 +259,7 @@ namespace SPIPware.Communication
             bool foundPlate = IsNextIndex(index);
             _log.Debug("Found Next Plate: " + foundPlate);
             //_log.Debug("NumLocations: " + Properties.Settings.Default.NumLocations);
-            if (foundPlate && ( index < Properties.Settings.Default.NumLocations))
+            if (foundPlate && (index < Properties.Settings.Default.NumLocations))
             {
                 _log.Debug("local index: " + index);
                 //_log.Debug("posIndex: " + posIndex);
