@@ -18,6 +18,7 @@ namespace SPIPware.Communication
         private CancellationTokenSource tokenSource;
         PeripheralControl peripheral = PeripheralControl.Instance;
         CycleControl cycle = CycleControl.Instance;
+        Machine machine = Machine.Instance;
         
         public bool runningTimeLapse = false;
         public bool runningSingleCycle = false;
@@ -37,6 +38,7 @@ namespace SPIPware.Communication
 
         public TimelapseControl()
         {
+            machine.StatusChanged += Machine_StatusChanged;
             cycle.StatusUpdate += CycleStatusUpdated;
         }
         public void Start()
@@ -64,7 +66,17 @@ namespace SPIPware.Communication
 
 
         }
+        private void Machine_StatusChanged()
+        {
 
+            if (machine.Status == "Alarm")
+            {
+                //("Timelapse canclled because hard limit encountered");
+                _log.Error("Machine in Alarm State. Cancelling Timelapse");
+                Stop();
+            }
+       
+        }
         async Task WaitForStartNow()
         {
             await Task.Delay(5000);
@@ -164,12 +176,13 @@ namespace SPIPware.Communication
         }
         public void Stop()
         {
-            growLightsOn = false;
+          
             cycle.Stop();
             if (tokenSource != null)
             {
                 tokenSource.Cancel();
             }
+            growLightsOn = true;
             runningTimeLapse = false;
             TimeLapseStatus.Raise(this, new EventArgs());
 

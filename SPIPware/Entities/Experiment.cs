@@ -10,7 +10,7 @@ using System.Windows.Media;
 namespace SPIPware.Entities
 {
     [Serializable]
-    class Experiment
+    public class Experiment
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         //public delegate void ExperimentUpdate();

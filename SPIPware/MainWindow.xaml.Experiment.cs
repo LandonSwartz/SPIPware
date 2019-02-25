@@ -39,6 +39,58 @@ namespace SPIPware
                 checkBoxes.ForEach(c => c.IsChecked = value);
             }
         }
+        public void GenerateCurrentParametersList(Experiment experiment, Panel panel)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _log.Debug("Updating Current Paramemters for Experiment: " + experiment.FileName);
+
+
+                StackPanel leftPanel = new StackPanel
+                {
+                    Orientation = Orientation.Vertical,
+                    Margin = new Thickness(5)
+                };
+                StackPanel rightPanel = new StackPanel
+                {
+                    Orientation = Orientation.Vertical,
+                    Margin = new Thickness(5)
+                };
+                PropertyInfo[] properties = typeof(Experiment).GetProperties();
+                foreach (PropertyInfo property in properties)
+                {
+                    _log.Info(property.ToString());
+                    
+
+                    TextBlock keyText = new TextBlock
+                    {
+                        Text = property.Name,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(3)
+                    };
+                    leftPanel.Children.Add(keyText);
+                    TextBlock valueText = new TextBlock
+                    {
+                        Text = property.GetValue(experiment).ToString(),
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(3)
+                    };
+                    rightPanel.Children.Add(valueText);
+                }
+
+
+               panel.Children.Add(leftPanel);
+               panel.Children.Add(rightPanel);
+
+
+
+                //cycle.UpdatePositionList(checkBoxes);
+            });
+
+            _log.Debug("Number of plate checkboxes: " + checkBoxes.Count);
+
+
+        }
         public void UpdatePlateCheckboxes()
         {
             Dispatcher.Invoke(() =>
@@ -84,7 +136,7 @@ namespace SPIPware
 
                     stackPanel.Children.Add(checkBoxes[i]);
                     stackPanel.Children.Add(textBlocks[i]);
-    
+
                     spCheckboxes.Children.Add(stackPanel);
 
                     //spCheckboxes.Children.Add(checkBoxes[i]);
@@ -110,7 +162,7 @@ namespace SPIPware
             {
                 SelectAllValue = false;
             }
-            else 
+            else
             {
                 SelectAllValue = null;
                 cbSelectAll.IsChecked = null;
@@ -135,7 +187,7 @@ namespace SPIPware
                     IsThreeState = false;
                 }
                 _SelectAllValue = value;
-               
+
             }
         }
 
@@ -151,7 +203,7 @@ namespace SPIPware
         private void selectAll_Change(object sender, RoutedEventArgs e)
         {
             SelectAll_Change();
-            
+
         }
         private void SelectAll_Change()
         {
@@ -364,6 +416,13 @@ namespace SPIPware
         private void ButtonLoadExperiment_Click(object sender, RoutedEventArgs e)
         {
             LoadSettingsFromFile();
+
+        }
+        private void UpdateCurrentParams_Click(object sender, RoutedEventArgs e)
+        {
+            Experiment testExperiment = new Experiment();
+            testExperiment.LoadExperiment();
+            GenerateCurrentParametersList(testExperiment, SPCurrentParameters);
 
         }
     }

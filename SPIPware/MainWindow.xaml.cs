@@ -165,7 +165,7 @@ namespace SPIPware
             info += "\r\nToString():\r\n";
             info += e.ToString();
 
-            MessageBox.Show(info);
+            MessageBox.Show("Unexpected error caused program crash. Program Exiting");
             _log.Error(info);
 
             try

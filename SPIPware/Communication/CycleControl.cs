@@ -79,11 +79,11 @@ namespace SPIPware.Communication
             //    HandleNextPosition(posIndex);
             //}
         }
-        private bool IsNextIndex(int index)
+        private bool IsCurrentIndex(int index)
         {
             _log.Debug("IsNextIndex Index: " + index);
             _log.Debug("IsNextIndex+ImagePositions.count " + ImagePositions.Count);
-            return (index < ImagePositions.Count);
+            return (index <= ImagePositions.Count && index < Properties.Settings.Default.NumLocations);
         }
         public void UpdatePositionList(List<CheckBox> checkBoxes)
         {
@@ -180,6 +180,7 @@ namespace SPIPware.Communication
             _log.Debug("Ending Cycle.");
             runningCycle = false;
             posIndex = 0;
+            targetLocation = 0;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
             peripheral.SetLight(Peripheral.Backlight, false);
@@ -207,7 +208,8 @@ namespace SPIPware.Communication
             _log.Debug("Machine Home");
             if (runningCycle)
             {
-                GoToPosition(posIndex);
+                HandleNextPosition(posIndex);
+                posIndex++;
             }
 
         }
@@ -224,8 +226,10 @@ namespace SPIPware.Communication
 
                 ImageUpdatedEvent.Raise(this, new EventArgs());
 
-                posIndex++;
+                
                 HandleNextPosition(posIndex);
+                posIndex++;
+
             }
         }
         //public void Check()
@@ -256,10 +260,10 @@ namespace SPIPware.Communication
         //}
         public void HandleNextPosition(int index)
         {
-            bool foundPlate = IsNextIndex(index);
-            _log.Debug("Found Next Plate: " + foundPlate);
+            bool foundPlate = IsCurrentIndex(index);
+            _log.Debug("Found Current Plate: " + foundPlate);
             //_log.Debug("NumLocations: " + Properties.Settings.Default.NumLocations);
-            if (foundPlate && (index < Properties.Settings.Default.NumLocations))
+            if (foundPlate )
             {
                 _log.Debug("local index: " + index);
                 //_log.Debug("posIndex: " + posIndex);

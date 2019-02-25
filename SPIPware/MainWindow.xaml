@@ -496,6 +496,28 @@
 								</Grid>
 
 							</GroupBox>
+							<GroupBox  VerticalAlignment="Top">
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Backlight Color</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+									<xctk:ColorCanvas  SelectedColorChanged="ClrCanvas_SelectedColorChanged" Name="ClrCanvas" ></xctk:ColorCanvas>
+									<Button Margin="0,5,0,5" Content="Update" Height="32" Name="btnUpdateColor" Click="Button_UpdateBacklightColor"></Button>
+								</StackPanel>
+							</GroupBox>
+
+						</StackPanel>
+					</TabItem>
+					<TabItem Header="Single Cycle"  MouseDoubleClick="UpdateCurrentParams_Click">
+						<StackPanel>
+							<GroupBox>
+								<GroupBox.Header >
+									<TextBlock HorizontalAlignment="Center">Current Parameters</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center">
+								</StackPanel>
+
+							</GroupBox>
 							<GroupBox>
 								<GroupBox.Header >
 									<TextBlock HorizontalAlignment="Center">Single Image Cycle</TextBlock>
@@ -532,7 +554,6 @@
 								</StackPanel>
 
 							</GroupBox>
-
 						</StackPanel>
 					</TabItem>
 					<TabItem Header="Timelapse" >
@@ -616,6 +637,7 @@
 
 								</StackPanel>
 						</GroupBox>
+							
 							<GroupBox>
 								<GroupBox.Header >
 									<TextBlock HorizontalAlignment="Center">Control</TextBlock>
@@ -703,7 +725,7 @@
 							</GroupBox>
 							<GroupBox  VerticalAlignment="Top">
 								<GroupBox.Header >
-									<TextBlock HorizontalAlignment="Center">Manual Control</TextBlock>
+									<TextBlock HorizontalAlignment="Center">Manual Motion Control</TextBlock>
 								</GroupBox.Header>
 								<StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
 									<!--<TextBlock>Goto Plate</TextBlock>-->
@@ -714,12 +736,6 @@
 									<Button Margin="5" Padding="5" Content="Capture Image" Name="btnCapture" Click="ButtonCaptureImage"></Button>
 								</StackPanel>
 							</GroupBox>
-						</StackPanel>
-						
-
-					</TabItem>
-					<TabItem Header="Peripherals">
-						<StackPanel Orientation="Vertical">
 							<GroupBox  VerticalAlignment="Top">
 								<GroupBox.Header >
 									<TextBlock HorizontalAlignment="Center">Backlight Control</TextBlock>
@@ -738,17 +754,16 @@
 									<Button Style="{StaticResource smallButton}" Content="Off" Name="btnGrowLightOff" Click="ButtonGrowLightOff_Click"></Button>
 								</StackPanel>
 							</GroupBox>
-							<GroupBox  VerticalAlignment="Top">
-								<GroupBox.Header >
-									<TextBlock HorizontalAlignment="Center">Backlight Color</TextBlock>
-								</GroupBox.Header>
-								<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-									<xctk:ColorCanvas  SelectedColorChanged="ClrCanvas_SelectedColorChanged" Name="ClrCanvas" ></xctk:ColorCanvas>
-									<Button Margin="0,5,0,5" Content="Update" Height="32" Name="btnUpdateColor" Click="Button_UpdateBacklightColor"></Button>
-								</StackPanel>
-							</GroupBox>
 						</StackPanel>
+						
+
 					</TabItem>
+					<!--<TabItem Header="Peripherals">
+						<StackPanel Orientation="Vertical">
+							
+							
+						</StackPanel>
+					</TabItem>-->
 				
 
 				
