@@ -218,7 +218,6 @@ namespace SPIPware.Communication
             _log.Debug("Machine Idle");
             if (runningCycle && machine.WorkPosition.X == (double)targetLocation)
             {
-                _log.Debug("Current Index: " + ImagePositions[posIndex]);
                 //peripheral.SetLight(Peripheral.Backlight, true);
                 bi = camera.CapSaveImage().Clone();
 
