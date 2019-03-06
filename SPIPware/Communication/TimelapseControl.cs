@@ -132,7 +132,7 @@ namespace SPIPware.Communication
                 tempExperiment.LoadExperiment();
 
                 
-                Experiment experiment = Experiment.LoadExperiment(Properties.Settings.Default.tlExperimentPath);
+                Experiment experiment = Experiment.LoadExperimentAndSave(Properties.Settings.Default.tlExperimentPath);
                 //experiment.SaveExperimentToSettings();
                 ExperimentStatus.Raise(this, new EventArgs());
                 //peripheral.SetLight(Peripheral.Backlight, true);

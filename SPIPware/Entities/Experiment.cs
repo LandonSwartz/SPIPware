@@ -18,6 +18,20 @@ namespace SPIPware.Entities
         public static string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // current folder the program is running in
         public static string DEFAULT_SETTINGS_PATH = BaseDirectory + "Resources\\DefaultSettings.json";
 
+        public static Dictionary<string, string> friendlyNames = new Dictionary<string, string>
+        {
+            {"TotalPlates","Total Plates" },
+            {"CurrentPlate", "Current Plate" },
+            {"PlateOffset", "Plate Offset" },
+            {"BetweenDistance", "Between Distance" },
+            {"CameraSettingsPath", "Camera Settings" },
+            {"FileName", "File Name" },
+            {"SaveFolderPath", "Save Folder" },
+            {"BackgroundColor", "Backlight Color" }
+            //{"TlEndDate", "Time Lapse End Date" }
+       
+
+        };
 
         private static CycleControl cycle = CycleControl.Instance;
         private int totalPlates;
@@ -73,7 +87,7 @@ namespace SPIPware.Entities
         }
         public static void LoadDefaults()
         { 
-            Experiment experiment = LoadExperiment(DEFAULT_SETTINGS_PATH);
+            Experiment experiment = LoadExperimentAndSave(DEFAULT_SETTINGS_PATH);
             //Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
 
         }
@@ -144,8 +158,14 @@ namespace SPIPware.Entities
             TlEndIntervalType = Properties.Settings.Default.tlEndIntervalType;
             TlIntervalType = Properties.Settings.Default.tlIntervalType;
             BacklightColor = Properties.Settings.Default.BacklightColor;
-           
-            ImagePositions = new List<int>( cycle.ImagePositions);
+            if (cycle.ImagePositions != null)
+            {
+                ImagePositions = new List<int>(cycle.ImagePositions);
+            }
+            else
+            {
+                _log.Error("cycle.ImagePositions is null");
+            }
             //return this;
         }
         //public void SaveExperimentFromSettings(Experiment experiment,string filePath)
@@ -154,6 +174,17 @@ namespace SPIPware.Entities
         //    //experiment.BacklightColor = Properties.Settings.Default.BacklightColor;
         //    SaveExperiment(experiment, filePath);
         //}
+        public static Experiment LoadExperimentAndSave(string filePath)
+        {
+            Experiment experiment = LoadExperiment(filePath);
+            if(experiment != null)
+            {
+                experiment.SaveExperimentToSettings();  
+            }
+            return experiment;
+
+
+        }
         public static Experiment LoadExperiment(string filePath)
         {
             try
@@ -162,7 +193,6 @@ namespace SPIPware.Entities
                 {
 
                     Experiment experiment = JSONUtil.LoadJSON<Experiment>(filePath);
-                    experiment.SaveExperimentToSettings();
                     return experiment;
                 }
                 else

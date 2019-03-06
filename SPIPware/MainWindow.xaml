@@ -12,7 +12,7 @@
 		DataContext="{Binding RelativeSource={RelativeSource Self}}"
         PreviewKeyDown="Window_PreviewKeyDown"
 
-     Title="{util:SettingBinding ExperimentPath}"  Closing="Window_Closing" d:DesignWidth="1508" d:DesignHeight="727" WindowState="Maximized">
+     Title="SPIPware"  Closing="Window_Closing" d:DesignWidth="1508" d:DesignHeight="727" WindowState="Maximized">
 	<Window.Resources>
 		<ResourceDictionary Source="MainWindow.Resources.xaml"/>
 	</Window.Resources>
@@ -397,13 +397,27 @@
 						</Style>
 					</TabControl.Resources>
 			
-					<TabItem Header="Experiment">
+					<TabItem>
+						<TabItem.Header>
+							<Label Content="Experiment" 
+								 HorizontalAlignment="Stretch" FontSize="14"/>
+						</TabItem.Header>
 						<StackPanel Orientation="Vertical">
+							<GroupBox>
+								<GroupBox.Header>
+									<TextBlock HorizontalAlignment="Center" >Current Experiment File</TextBlock>
+								</GroupBox.Header>
+								<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+
+									<TextBox Width="300" Text="{util:SettingBinding ExperimentPath}"
+											   VerticalAlignment="Center" IsEnabled="False" IsReadOnly="True" />
 						
+								</StackPanel>
+							</GroupBox>
 							<GroupBox>
 								<GroupBox.Header>
 										
-									<TextBlock HorizontalAlignment="Center" >Root Directory</TextBlock>
+									<TextBlock HorizontalAlignment="Center" >Image Save Directory</TextBlock>
 								</GroupBox.Header>
 								<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
 
@@ -508,11 +522,17 @@
 
 						</StackPanel>
 					</TabItem>
-					<TabItem Header="Single Cycle"  MouseDoubleClick="UpdateCurrentParams_Click">
+					<TabItem >
+						<TabItem.Header>
+							<Label Content="Single Cycle" 
+								 MouseLeftButtonDown="UpdateCurrentParams_Click" 
+								 HorizontalAlignment="Stretch" FontSize="14"/>
+						</TabItem.Header>
 						<StackPanel>
 							<GroupBox>
 								<GroupBox.Header >
-									<TextBlock HorizontalAlignment="Center">Current Parameters</TextBlock>
+									
+									<TextBlock HorizontalAlignment="Center">Experiment Parameters</TextBlock>
 								</GroupBox.Header>
 								<StackPanel Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center">
 								</StackPanel>
@@ -556,7 +576,13 @@
 							</GroupBox>
 						</StackPanel>
 					</TabItem>
-					<TabItem Header="Timelapse" >
+					<TabItem  >
+						<TabItem.Header>
+							<Label Content="Timelapse" 
+								 HorizontalAlignment="Stretch" FontSize="14"
+								   MouseLeftButtonDown="UpdateTLParams_Click" 
+								   />
+						</TabItem.Header>
 						<StackPanel>
 						<GroupBox>
 							<GroupBox.Header>
@@ -637,7 +663,16 @@
 
 								</StackPanel>
 						</GroupBox>
-							
+							<GroupBox>
+								<GroupBox.Header >
+
+									<TextBlock HorizontalAlignment="Center">Experiment Parameters</TextBlock>
+								</GroupBox.Header>
+								<StackPanel Name="TLCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center">
+								</StackPanel>
+
+							</GroupBox>
+
 							<GroupBox>
 								<GroupBox.Header >
 									<TextBlock HorizontalAlignment="Center">Control</TextBlock>
@@ -663,7 +698,11 @@
 
 						</StackPanel>
 					</TabItem>
-					<TabItem Header="Machine" >
+					<TabItem >
+						<TabItem.Header>
+							<Label Content="Machine" 
+								 HorizontalAlignment="Stretch" FontSize="14"/>
+						</TabItem.Header>
 						<StackPanel Orientation="Vertical">
 							<!--<GroupBox>
 								<GroupBox.Header >

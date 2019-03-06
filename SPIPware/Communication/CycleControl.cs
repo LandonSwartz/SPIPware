@@ -90,7 +90,6 @@ namespace SPIPware.Communication
             ImagePositions.Clear();
             _log.Debug("Number of Checkboxes: " + checkBoxes.Count);
             //ImagePositions.ForEach((position) => _log.Debug(position + ","));
-            //ImagePositions = new List<int>();
             for (var i = 0; i < checkBoxes.Count; i++)
             {
                 if (checkBoxes[i].IsChecked == true)
@@ -141,9 +140,7 @@ namespace SPIPware.Communication
 
                 camera.loadCameraSettings();
                 posIndex = 0;
-                //currentIndex = 0;
-
-                //bool isPlateFound = FindCheckedBox(currentIndex, true);
+           
                 if (!ImagePositions.Any())
                 {
                     _log.Error("No positions selected");
@@ -155,18 +152,7 @@ namespace SPIPware.Communication
                 peripheral.SetLight(Peripheral.GrowLight, false, false);
                 peripheral.SetBacklightColor(Properties.Settings.Default.BacklightColor);
                 machine.SendLine("$H");
-                //if (firstRun)
-                //{
-
-
-                //    //Properties.Settings.Default.CurrentPlate = 1;
-                //    firstRun = false;
-                //}
-                //else
-                //{
-                //    //Thread.Sleep(300);
-                //    targetLocation = machine.sendMotionCommand(imagePositions[posIndex]);
-                //}
+      
             }
             else
             {
@@ -231,41 +217,13 @@ namespace SPIPware.Communication
 
             }
         }
-        //public void Check()
-        //{
-        //    _log.Info("Checking cycle");
-        //    if (runningCycle)
-        //    {
-
-
-        //        else if (machine.WorkPosition.X == (double)targetLocation && machine.Status == "Idle")
-        //        {
-        //            _log.Debug("Current Index: " + imagePositions[posIndex]);
-        //            //peripheral.SetLight(Peripheral.Backlight, true);
-        //            bi =  camera.CapSaveImage().Clone();
-
-        //            bi.Freeze();
-
-        //            ImageUpdatedEvent.Raise(this, new EventArgs());
-
-        //            HandleNextPosition();
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        return;
-        //    }
-        //}
         public void HandleNextPosition(int index)
         {
             bool foundPlate = IsCurrentIndex(index);
             _log.Debug("Found Current Plate: " + foundPlate);
-            //_log.Debug("NumLocations: " + Properties.Settings.Default.NumLocations);
             if (foundPlate )
             {
                 _log.Debug("local index: " + index);
-                //_log.Debug("posIndex: " + posIndex);
                 GoToPosition(index);
             }
             else End();

@@ -43,8 +43,8 @@ namespace SPIPware
         {
             Dispatcher.Invoke(() =>
             {
-                _log.Debug("Updating Current Paramemters for Experiment: " + experiment.FileName);
 
+                panel.Children.Clear();
 
                 StackPanel leftPanel = new StackPanel
                 {
@@ -56,40 +56,72 @@ namespace SPIPware
                     Orientation = Orientation.Vertical,
                     Margin = new Thickness(5)
                 };
-                PropertyInfo[] properties = typeof(Experiment).GetProperties();
-                foreach (PropertyInfo property in properties)
+                if (experiment != null)
                 {
-                    _log.Info(property.ToString());
-                    
+                    _log.Debug("Updating Current Paramemters for Experiment: " + experiment.FileName);
+                    PropertyInfo[] properties = typeof(Experiment).GetProperties();
 
+                    foreach (PropertyInfo property in properties)
+                    {
+                        _log.Info(property.Name);
+                        if (Experiment.friendlyNames.TryGetValue(property.Name, out string friendlyName))
+                        {
+                            friendlyName += " :";
+                            TextBlock keyText = new TextBlock
+                            {
+                                Text = friendlyName,
+                                VerticalAlignment = VerticalAlignment.Center,
+                                Margin = new Thickness(3)
+                            };
+                            leftPanel.Children.Add(keyText);
+                            Object value = property.GetValue(experiment);
+                            String strVal = "WARN: Undefined";
+                            if (value != null)
+                            {
+                                strVal = value.ToString();
+                            }
+                            TextBlock valueText = new TextBlock
+                            {
+                                Text = strVal,
+                                VerticalAlignment = VerticalAlignment.Center,
+                                Margin = new Thickness(3)
+                            };
+                            rightPanel.Children.Add(valueText);
+                        }
+                        else
+                        {
+                            _log.Debug("Property name not in frienldy name dictonary");
+                        }
+
+
+                    }
+                }
+                else
+                {
                     TextBlock keyText = new TextBlock
                     {
-                        Text = property.Name,
+                        Text = "WARNING: ",
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(3)
+                      
                     };
                     leftPanel.Children.Add(keyText);
                     TextBlock valueText = new TextBlock
                     {
-                        Text = property.GetValue(experiment).ToString(),
+                        Text = "Experiment not Selected",
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(3)
+
                     };
                     rightPanel.Children.Add(valueText);
+
                 }
 
+                panel.Children.Add(leftPanel);
+                panel.Children.Add(rightPanel);
 
-               panel.Children.Add(leftPanel);
-               panel.Children.Add(rightPanel);
-
-
-
-                //cycle.UpdatePositionList(checkBoxes);
             });
-
-            _log.Debug("Number of plate checkboxes: " + checkBoxes.Count);
-
-
+            
         }
         public void UpdatePlateCheckboxes()
         {
@@ -115,7 +147,7 @@ namespace SPIPware
                     };
                     tempCB.Click += new RoutedEventHandler(PlateCheck_Change);
 
-                    if (cycle.ImagePositions.Contains(i))
+                    if (cycle.ImagePositions!= null && cycle.ImagePositions.Contains(i))
                     {
                         tempCB.IsChecked = true;
                     }
@@ -300,7 +332,7 @@ namespace SPIPware
         {
 
             //Experiment experiment = new Experiment(fileName);
-            Experiment experiment = Experiment.LoadExperiment(fileName);
+            Experiment experiment = Experiment.LoadExperimentAndSave(fileName);
             ExperimentUpdated();
         }
         private string GetFolderResult()
@@ -342,6 +374,12 @@ namespace SPIPware
                 return dialog.FileName;
             }
             else { return null; }
+
+        }
+        private void UpdateTLParams()
+        {
+            Experiment tlExperiment = Experiment.LoadExperiment(Properties.Settings.Default.tlExperimentPath);
+            GenerateCurrentParametersList(tlExperiment, TLCurrentParameters);
 
         }
         private string getFileResultName(System.Windows.Forms.OpenFileDialog dialog)
@@ -386,6 +424,7 @@ namespace SPIPware
             if (dialog != null)
             {
                 Properties.Settings.Default.tlExperimentPath = getFileResultName(dialog);
+                UpdateTLParams();
             }
 
         }
@@ -425,5 +464,16 @@ namespace SPIPware
             GenerateCurrentParametersList(testExperiment, SPCurrentParameters);
 
         }
+        private void UpdateTLParams_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO: Make reload on load
+            //TODO: Fix random issues with crashing on parameters loading
+          
+                UpdateTLParams();
+        
+ 
+
+        }
+
     }
 }
