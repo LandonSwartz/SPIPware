@@ -148,9 +148,9 @@ namespace SPIPware
             
             if (cameras.Any())
             {
-                //CameraInfo newSelectedItem = cameras[0];
+                SelectedItem = cameras[0];
                 UpdateCameraState(true);
-                //_log.info("New Selected Camera" + newSelectedItem);
+                _log.Info("New Selected Camera" + SelectedItem);
             }
             else
             {
@@ -159,7 +159,7 @@ namespace SPIPware
             //foreach (CameraInfo cameraInfo in cameras)
             //{
             //    //m_CameraList.Items.Add(cameraInfo);
-               
+
 
             //    if (null == newSelectedItem)
             //    {
@@ -189,7 +189,8 @@ namespace SPIPware
             //{
             //    Properties.Settings.Default.CameraState = "Not Ready";
             //}
-            
+
+
         }
 
         public void OnCameraListChanged(object sender, EventArgs args)
@@ -234,10 +235,10 @@ namespace SPIPware
             if (File.Exists(cameraSettingsFileName))
             {
                 LogMessage("Loading camera settings");
-                if (VimbaHelper != null && selectedItem != null)
+                if (VimbaHelper != null && SelectedItem != null)
                 {
-                    _log.Debug(selectedItem.ID);
-                    VimbaHelper.loadCamSettings(cameraSettingsFileName, selectedItem.ID);
+                    _log.Debug(SelectedItem.ID);
+                    VimbaHelper.loadCamSettings(cameraSettingsFileName, SelectedItem.ID);
                     LogMessage("Loaded Camera Settings");
                 }
                 else
@@ -248,7 +249,7 @@ namespace SPIPware
             }
             else
             {
-                LogError(cameraSettingsFileName);
+                LogError("CameraSettings Filename: " + cameraSettingsFileName);
                 LogError("Invalid file name for Camera Settings");
             }
             settingsLoaded = true;
@@ -344,7 +345,7 @@ namespace SPIPware
             {
                 //Determine selected camera
 
-                selectedItem = cameras[0];
+                //selectedItem = cameras[0];
                 if (null == SelectedItem)
                 {
                     throw new NullReferenceException("No camera selected.");

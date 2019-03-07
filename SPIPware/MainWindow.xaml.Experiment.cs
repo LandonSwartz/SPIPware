@@ -90,7 +90,7 @@ namespace SPIPware
                         }
                         else
                         {
-                            _log.Debug("Property name not in frienldy name dictonary");
+                            //_log.Debug("Property name not in frienldy name dictonary");
                         }
 
 
