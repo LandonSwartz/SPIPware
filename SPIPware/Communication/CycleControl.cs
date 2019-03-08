@@ -48,7 +48,7 @@ namespace SPIPware.Communication
 
         private List<int> _imagePositions = new List<int>();
         public bool runningCycle = false;
-        private decimal targetLocation = 0;
+        private double targetLocation = 0;
 
         //public static void UpdateImagePositions(List<int> imagePositions) 
         //{
@@ -202,7 +202,7 @@ namespace SPIPware.Communication
         public void IsIdle()
         {
             _log.Debug("Machine Idle");
-            if (runningCycle && machine.WorkPosition.X == (double)targetLocation)
+            if (runningCycle && machine.WorkPosition.X == targetLocation)
             {
                 //peripheral.SetLight(Peripheral.Backlight, true);
                 bi = camera.CapSaveImage().Clone();

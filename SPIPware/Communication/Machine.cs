@@ -590,8 +590,8 @@ namespace SPIPware.Communication
 			Sent.Clear();
 			ToSendMacro.Clear();
 		}
-        public Decimal homeMachinePos;
-        private String buildCommand(decimal distance)
+        public double homeMachinePos;
+        private String buildCommand(double distance)
         {
             
             StringBuilder sb = new StringBuilder();
@@ -604,50 +604,17 @@ namespace SPIPware.Communication
             _log.Info(sb.ToString());
             return sb.ToString();
         }
-        private String buildCommand(decimal distance, bool growLightOn, bool backLightOn)
-        {
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("G90");
-            sb.Append(Properties.Settings.Default.PrimaryAxis);
-            // homeMachinePos
-            //decimal distance = homeMachinePos + Properties.Settings.Default.startDistance + (Properties.Settings.Default.betweenDistance * position) + offset;
-            sb.Append(distance + " ");
-       
-            sb.Append("F" + Properties.Settings.Default.Speed);
-            _log.Info(sb.ToString());
-            return sb.ToString();
-        }
-        private void growLightOff()
-        {
-            //SendLine("G91Z1");
-        }
-        private void growLightOn()
-        {
-            //SendLine("G91Z-1");
-        }
-        private void backLightOff()
-        {
-            SendLine("G91Y1");
-        }
-        private void backLightOn()
-        {
-            SendLine("G91Y-1");
-        }
+  
         
-    
-        //public decimal sendMotionCommand(int position, bool growLightOn, bool backLightOn)
-        //{
-        //    return 0;
-        //}
-        public decimal sendMotionCommand(int position, decimal offset)
+        public double sendMotionCommand(int position, double offset)
         {
-            decimal distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+            double distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+            _log.Debug("Calculated Distance: " + distance);
             SendLine(buildCommand(distance));
             return distance;
 
         }
-        public decimal sendMotionCommand(int position)
+        public double sendMotionCommand(int position)
         {
            return sendMotionCommand(position, 0);
         }
