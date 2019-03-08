@@ -601,7 +601,7 @@ namespace SPIPware.Communication
             //decimal distance = homeMachinePos + Properties.Settings.Default.startDistance + (Properties.Settings.Default.betweenDistance * position) + offset;
             sb.Append(distance + " ");
             sb.Append("F" + Properties.Settings.Default.Speed);
-            _log.Info(sb.ToString());
+            _log.Info("Generated Command: "+ sb.ToString());
             return sb.ToString();
         }
   
@@ -632,7 +632,7 @@ namespace SPIPware.Communication
 				RaiseEvent(Info, "Not in Manual Mode");
 				return;
 			}
-
+            _log.Debug("Seinding Line: " + line);
 			ToSend.Enqueue(line);
 		}
 
