@@ -632,7 +632,7 @@ namespace SPIPware.Communication
 				RaiseEvent(Info, "Not in Manual Mode");
 				return;
 			}
-            _log.Debug("Seinding Line: " + line);
+            _log.Debug("Sending Line: " + line);
 			ToSend.Enqueue(line);
 		}
 
