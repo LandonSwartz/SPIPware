@@ -105,9 +105,6 @@ namespace SPIPware.Communication
         {
             string cmdStr = "S3P0R" + color.R.ToString() + "G" + color.G.ToString() + "B" + color.B.ToString();
             SendCommand(cmdStr);
-            //string cmdStr2 = "S4P0L" + color.A.ToString();
-            //Console.WriteLine(cmdStr2);
-            //SendCommand(cmdStr2);
         }
         private int BtoI(bool value)
         {
@@ -115,7 +112,6 @@ namespace SPIPware.Communication
         }
         private void SendCommand(string commandString)
         {
-            //port.DiscardOutBuffer();
             _log.Debug(commandString);
             if (port!= null && port.IsOpen)
             {
