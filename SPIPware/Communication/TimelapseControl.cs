@@ -22,7 +22,6 @@ namespace SPIPware.Communication
         
         public bool runningTimeLapse = false;
         public bool runningSingleCycle = false;
-        //bool growLightsOn = false;
 
         public string tlEnd;
         public string tlCount;
@@ -48,8 +47,8 @@ namespace SPIPware.Communication
       
             runningTimeLapse = true;
             TimeSpan timeLapseInterval = TimeSpan.FromMilliseconds(Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
-            _log.Debug(Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
-            _log.Debug(timeLapseInterval.Seconds);
+            _log.Debug("Calculated Milliseconds: "+ Properties.Settings.Default.tlInterval * Properties.Settings.Default.tlIntervalType);
+            _log.Debug("Actual Milliseconds: " +timeLapseInterval.TotalSeconds);
 
             if (Properties.Settings.Default.StartNow)
             {
@@ -133,10 +132,7 @@ namespace SPIPware.Communication
 
                 
                 Experiment experiment = Experiment.LoadExperimentAndSave(Properties.Settings.Default.tlExperimentPath);
-                //experiment.SaveExperimentToSettings();
                 ExperimentStatus.Raise(this, new EventArgs());
-                //peripheral.SetLight(Peripheral.Backlight, true);
-                //Thread.Sleep(300);
                 runningSingleCycle = true;
                 _log.Debug("TimeLapse Single Cycle Executed at: " + DateTime.Now);
                 cycle.Start();
@@ -148,7 +144,6 @@ namespace SPIPware.Communication
                 catch (TaskCanceledException e)
                 {
                     _log.Error("TimeLapse Cancelled: " + e);
-                    //runningTimeLapse = false;
                     Stop();
                     TimeLapseStatus.Raise(this, new EventArgs());
                     return;

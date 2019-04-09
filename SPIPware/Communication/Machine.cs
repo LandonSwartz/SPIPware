@@ -597,8 +597,6 @@ namespace SPIPware.Communication
             StringBuilder sb = new StringBuilder();
             sb.Append("G90");
             sb.Append(Properties.Settings.Default.PrimaryAxis);
-            // homeMachinePos
-            //decimal distance = homeMachinePos + Properties.Settings.Default.startDistance + (Properties.Settings.Default.betweenDistance * position) + offset;
             sb.Append(distance + " ");
             sb.Append("F" + Properties.Settings.Default.Speed);
             _log.Info("Generated Command: "+ sb.ToString());

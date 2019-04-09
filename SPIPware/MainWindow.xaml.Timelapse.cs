@@ -73,7 +73,7 @@ namespace SPIPware
         }
         private void ButtonStopTimeLapse_Click(object sender, RoutedEventArgs e)
         {
-            _log.Debug("Stopping Timpelapse Cycle");
+            _log.Debug("User Stopping Timpelapse Cycle");
             timelapse.Stop();
             //Task task = new Task(() => timelapse.Stop());
             //task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);

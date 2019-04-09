@@ -50,20 +50,6 @@ namespace SPIPware.Communication
         public bool runningCycle = false;
         private double targetLocation = 0;
 
-        //public static void UpdateImagePositions(List<int> imagePositions) 
-        //{
-        //    if(imagePositions != null)
-        //    {
-        //        _imagePositions.Clear();
-        //        _imagePositions = imagePositions;
-        //    }
-        //    {
-        //        _log.Error("provided imagePositions list is null, cannot update");
-        //    }
-        //}
-
-
-
         private static int posIndex = 0;
 
         CycleControl()
@@ -73,11 +59,7 @@ namespace SPIPware.Communication
         }
         public void OnImageAcquired(object sender, EventArgs e)
         {
-            //if (runningCycle)
-            //{
-
-            //    HandleNextPosition(posIndex);
-            //}
+    
         }
         private bool IsCurrentIndex(int index)
         {
@@ -100,10 +82,6 @@ namespace SPIPware.Communication
             //_imagePositions.ForEach(i => _log.Debug)
             _log.Debug("UpdatePositionList+ImagePositions.Count: " + ImagePositions.Count);
         }
-        //protected void OnStatusUpdateEvent(EventArgs e)
-        //{
-        //    StatusUpdate?.Invoke(this, e);
-        //}
         private void Machine_StatusChanged()
         {
 
@@ -173,6 +151,7 @@ namespace SPIPware.Communication
             peripheral.SetLight(Peripheral.GrowLight, true, !peripheral.IsNightTime());
 
             //machine.sendMotionCommand(0);
+            _log.Debug("Sending machine home to end cycle");
             machine.SendLine("$H");
 
 

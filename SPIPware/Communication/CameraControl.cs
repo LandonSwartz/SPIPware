@@ -32,11 +32,7 @@ namespace SPIPware
                 return instance;
             }
         }
-        //public int currentIndex = 0;
-        //public static bool runningCycle = false;
-        //public bool home = false;
-        //public bool goToFirstPlate = true;
-        //public bool firstRun = true;
+
         public bool settingsLoaded = false;
 
         string previousSettingsDir;
@@ -109,8 +105,6 @@ namespace SPIPware
             }
             
             _log.Info(message);
-            //int index = m_LogList.Items.Add(string.Format("{0:yyyy-MM-dd HH:mm:ss.fff}: {1}", DateTime.Now, message));
-            //m_LogList.TopIndex = index;
         }
 
         //Add an error log message and show an error message box
@@ -120,10 +114,8 @@ namespace SPIPware
             {
                 throw new ArgumentNullException("message");
             }
-            //LogMessage(message);
             _log.Error(message);
-            //runningCycle = false;
-            //MessageBox.Show(message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
         }
         List<CameraInfo> cameras;
         public void UpdateCameraState(bool cameraReady)
@@ -140,9 +132,6 @@ namespace SPIPware
         }
         public void UpdateCameraList()
         {
-            //Remember the old selection (if there was any)y
-            //CameraInfo oldSelectedItem = m_CameraList.SelectedItem as CameraInfo;
-            //m_CameraList.Items.Clear();
             
              cameras = VimbaHelper.CameraList;
             
@@ -156,52 +145,11 @@ namespace SPIPware
             {
                 UpdateCameraState(false);
             }
-            //foreach (CameraInfo cameraInfo in cameras)
-            //{
-            //    //m_CameraList.Items.Add(cameraInfo);
-
-
-            //    if (null == newSelectedItem)
-            //    {
-            //        //At least select the first camera
-            //        newSelectedItem = cameraInfo;
-            //    }
-            //    //else if (null != oldSelectedItem)
-            //    //{
-            //    //    //If the previous selected camera is still available
-            //    //    //then prefer this camera.
-            //    //    if (string.Compare(newSelectedItem.ID, cameraInfo.ID, StringComparison.Ordinal) == 0)
-            //    //    {
-            //    //        newSelectedItem = cameraInfo;
-            //    //    }
-            //    //}
-            //}
-            //Console.WriteLine("New Selected Camera" + newSelectedItem);
-
-            ////If available select a camera.
-            //if (null != newSelectedItem)
-            //{
-
-            //    //m_CameraList.SelectedItem = newSelectedItem;
-            //    Properties.Settings.Default.CameraState = "Ready";
-            //}
-            //else
-            //{
-            //    Properties.Settings.Default.CameraState = "Not Ready";
-            //}
-
-
+ 
         }
 
         public void OnCameraListChanged(object sender, EventArgs args)
         {
-            //Start an async invoke in case this method was not
-            //called by the GUI thread.
-            //if (!m_CameraList.Dispatcher.CheckAccess())
-            //{
-            //    m_CameraList.Dispatcher.Invoke(new CameraListChangedHandler(this.OnCameraListChanged), sender, args);
-            //    return;
-            //}
 
             if (null != VimbaHelper)
             {
@@ -275,10 +223,6 @@ namespace SPIPware
 
 
                 }
-
-            //Display imageD
-            //m_PictureBox.Source = bi;
-            //Application.Current.Dispatcher.Invoke(new Action(() => ));
            
 
             return bi;
@@ -344,8 +288,6 @@ namespace SPIPware
             try
             {
                 //Determine selected camera
-
-                //selectedItem = cameras[0];
                 if (null == SelectedItem)
                 {
                     throw new NullReferenceException("No camera selected.");
