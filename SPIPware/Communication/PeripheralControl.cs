@@ -67,8 +67,8 @@ namespace SPIPware.Communication
 
         public bool IsNightTime()
         {
-            TimeSpan startOfNight = TimeSpan.Parse("23:00:00");
-            TimeSpan endOfNight = TimeSpan.Parse("07:00:00");
+            TimeSpan startOfNight = Properties.Settings.Default.StartOfNight;
+            TimeSpan endOfNight = Properties.Settings.Default.EndOfNight;
             TimeSpan now = DateTime.Now.TimeOfDay;
 
             //_log.Debug("Current total hours: " + now.TotalHours);

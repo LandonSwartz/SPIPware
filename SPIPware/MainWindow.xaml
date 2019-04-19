@@ -51,19 +51,17 @@
 							</DrawingImage.Drawing>
 						</DrawingImage>
 					</RibbonApplicationMenu.SmallImageSource>
-					<RibbonApplicationMenuItem Header="New" Click="BtnExperimentFileOpen_Click">
+					<RibbonApplicationMenuItem Header="New" Click="BtnExperimentFileOpen_Click" ImageSource="Resources/Icons/new.png">
 
 					</RibbonApplicationMenuItem>
-					<RibbonApplicationMenuItem Header="Open" Click="ButtonLoadExperiment_Click"></RibbonApplicationMenuItem>
-					<RibbonApplicationSplitMenuItem Header="Save"  Click="ButtonSaveExperiment_Click">
-						<RibbonApplicationMenuItem Header="Save"  Click="ButtonSaveExperiment_Click"></RibbonApplicationMenuItem>
-						<RibbonApplicationMenuItem Header="Save As" Click="ButtonSaveAsExperiment_Click"></RibbonApplicationMenuItem>
-					</RibbonApplicationSplitMenuItem>
+					<RibbonApplicationMenuItem Header="Open" Click="ButtonLoadExperiment_Click"  ImageSource="Resources/Icons/open_small.png"></RibbonApplicationMenuItem>
+					<RibbonApplicationMenuItem Header="Save"  Click="ButtonSaveExperiment_Click" ImageSource="Resources/Icons/save.png"></RibbonApplicationMenuItem>
+					<RibbonApplicationMenuItem Header="Save As" Click="ButtonSaveAsExperiment_Click" ImageSource="Resources/Icons/saveas.png"></RibbonApplicationMenuItem>
 
 					<RibbonSeparator></RibbonSeparator>
 					<RibbonApplicationSplitMenuItem Header="Defaults" >
-						<RibbonApplicationMenuItem Header="Load Defaults" Click="ButtonLoadExperimentDefaults_Click"></RibbonApplicationMenuItem>
-						<RibbonApplicationMenuItem Header="Save Defaults" Click="ButtonSaveExperimentDefaults_Click"></RibbonApplicationMenuItem>
+						<RibbonApplicationMenuItem Header="Load Defaults" Click="ButtonLoadExperimentDefaults_Click" ImageSource="Resources/Icons/open_small.png"></RibbonApplicationMenuItem>
+						<RibbonApplicationMenuItem Header="Save Defaults" Click="ButtonSaveExperimentDefaults_Click" ImageSource="Resources/Icons/save.png"></RibbonApplicationMenuItem>
 					</RibbonApplicationSplitMenuItem>
 				</RibbonApplicationMenu>
 			</Ribbon.ApplicationMenu>
@@ -139,7 +137,30 @@
 					</StackPanel>
 
 				</RibbonGroup>
-				<RibbonGroup Header="Single Cycle">
+				<RibbonGroup Header="Backlight">
+					<StackPanel Orientation="Horizontal" >
+
+						<StackPanel Orientation="Vertical" Margin="5" VerticalAlignment="Center" >
+							<Image  Height="36" Margin="2" Name="backlightStatusIcon" Source="pack://application:,,,/Resources/Icons/button_Icon_Yellow.png"/>
+							<TextBlock Text="{util:SettingBinding CameraState, Mode=OneWay, NotifyOnTargetUpdated=True}" TextAlignment="Center" Height="22" TargetUpdated="cameraStatusUpdated"></TextBlock>
+
+						</StackPanel>
+					</StackPanel>
+
+				</RibbonGroup>
+				<RibbonGroup Header="Growlight">
+					<StackPanel Orientation="Horizontal" >
+
+						<StackPanel Orientation="Vertical" Margin="5" VerticalAlignment="Center" >
+							<Image  Height="36" Margin="2" Name="growlightStatusIcon" Source="pack://application:,,,/Resources/Icons/button_Icon_Yellow.png"/>
+							<TextBlock Text="{util:SettingBinding CameraState, Mode=OneWay, NotifyOnTargetUpdated=True}" TextAlignment="Center" Height="22" TargetUpdated="cameraStatusUpdated"></TextBlock>
+
+						</StackPanel>
+					</StackPanel>
+
+				</RibbonGroup>
+				
+				<!--<RibbonGroup Header="Single Cycle">
 					<StackPanel Orientation="Vertical" Margin="5,5,5,5" VerticalAlignment="Center">
 
 						<Image Name="cycleStatusIcon" Height="36" Margin="2" Source="pack://application:,,,/Resources/Icons/Button_Icon_Yellow.png"></Image>
@@ -167,7 +188,7 @@
 
 
 					</StackPanel>
-				</RibbonGroup>
+				</RibbonGroup>-->
 
 			</RibbonTab>
 
@@ -312,7 +333,7 @@
 									</Button>
 							
 
-									<TextBox x:Name="tbFolderPath" Width="290" Text="{util:SettingBinding SaveFolderPath}"
+									<TextBox x:Name="tbFolderPath" Width="280" Text="{util:SettingBinding SaveFolderPath}"
 											   VerticalAlignment="Center" IsEnabled="False" IsReadOnly="True" />
 		
 
@@ -325,8 +346,8 @@
 								<StackPanel Orientation="Vertical">
 
 									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-										<CheckBox IsChecked="{util:SettingBinding CurrentPlateSave }" VerticalAlignment="Center" Content="Current Plate + "></CheckBox>
-										<TextBox  Name="tbFileName" Width="125" Text="{util:SettingBinding FileName}" VerticalContentAlignment="Center" Height="22"/>
+										<!--<CheckBox IsChecked="{util:SettingBinding CurrentPlateSave }" VerticalAlignment="Center" Content="Current Plate + "></CheckBox>-->
+										<TextBox  Name="tbFileName" Width="225" Text="{util:SettingBinding FileName}" VerticalContentAlignment="Center" Height="22"/>
 					
 									</StackPanel>
 								</StackPanel>
@@ -346,14 +367,19 @@
 									<TextBlock>Plate Tagging</TextBlock>
 								</GroupBox.Header>
 								<StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
-									<StackPanel Orientation="Vertical" Margin="5,5,30,5">
+									<StackPanel Orientation="Vertical" Margin="20,5,20,5">
 										<TextBlock VerticalAlignment="Center">Total Plates:</TextBlock>
 										<xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates, Mode=TwoWay}" Name="udTotalPlates" Margin="5" />
 									</StackPanel>
-									<StackPanel Margin="30,5,5,5" Orientation="Vertical">
+									<StackPanel Margin="20,5,20,5" Orientation="Vertical">
+										<TextBlock VerticalAlignment="Center">Cycle Count:</TextBlock>
+										<xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CycleCount, Mode=TwoWay}" Name="udCycleCount"  Margin="5" />
+									</StackPanel>
+									<StackPanel Margin="20,5,20,5" Orientation="Vertical">
 										<TextBlock VerticalAlignment="Center">Current Plate:</TextBlock>
 										<xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CurrentPlate, Mode=TwoWay}" Name="udCurrentPlate"  Margin="5" />
 									</StackPanel>
+									
 								</StackPanel>
 							</GroupBox>
 							<GroupBox >
@@ -385,7 +411,7 @@
 								</GroupBox.Header>
 								<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 									<xctk:ColorCanvas  SelectedColorChanged="ClrCanvas_SelectedColorChanged" Name="ClrCanvas" ></xctk:ColorCanvas>
-									<Button Margin="0,5,0,5" Content="Update" Height="32" Name="btnUpdateColor" Click="Button_UpdateBacklightColor"></Button>
+									<Button Margin="0,5,0,5" Content="Update Color" Height="32" Name="btnUpdateColor" Click="Button_UpdateBacklightColor"></Button>
 								</StackPanel>
 							</GroupBox>
 
@@ -440,11 +466,10 @@
 									<TextBlock HorizontalAlignment="Center">Start Date and Time</TextBlock>
 								</GroupBox.Header>
 								<StackPanel Orientation="Vertical">
-
 									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
 
 										<xctk:DateTimePicker  Value="{util:SettingBinding tlStartDate}" Height="25" Width="300" Name="tlStartDateTime" Margin="5" />
-
+									
 									</StackPanel>
 									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 										<TextBlock Margin="0,0,10,0" > OR</TextBlock>
@@ -459,29 +484,30 @@
 								<GroupBox.Header>
 									<TextBlock HorizontalAlignment="Center">Duration</TextBlock>
 								</GroupBox.Header>
-								<StackPanel>
-									<StackPanel  Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-
+								
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 										<TextBlock VerticalAlignment="Center" Margin="5">Run Every:</TextBlock>
+										<TextBlock VerticalAlignment="Center" Margin="5">End In:</TextBlock>
+									</StackPanel>
+									<StackPanel Orientation="Vertical">
 										<xctk:IntegerUpDown Height="22" Value= "{util:SettingBinding tlInterval}" Minimum="0" Name="udTlInterval" Margin="5" />
-										<ComboBox Height="22"
+										<xctk:IntegerUpDown Value= "{util:SettingBinding tlEndInterval}" Minimum="0" Name="udEndInterval" Margin="5" />
+									</StackPanel>
+									<StackPanel  Orientation="Vertical" >
+										<ComboBox Height="22" Margin="5" Width="80"
 										SelectedValue="{util:SettingBinding tlIntervalType}"
 										ItemsSource="{Binding IntervalList, Mode=OneWay}"
 										SelectedValuePath="Key"
 										DisplayMemberPath="Value" />
 
-									</StackPanel>
-									<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-										<TextBlock VerticalAlignment="Center" Margin="5">End In:</TextBlock>
-
-										<xctk:IntegerUpDown Value= "{util:SettingBinding tlEndInterval}" Minimum="0" Name="udEndInterval" Margin="5" />
-										<ComboBox Height="22"
+										<ComboBox Height="22" Margin="5"
 										SelectedValue="{util:SettingBinding tlEndIntervalType}"
 										ItemsSource="{Binding IntervalList, Mode=OneWay}"
 										SelectedValuePath="Key"
 										DisplayMemberPath="Value" />
 									</StackPanel>
-
+							
 
 								</StackPanel>
 							</GroupBox>
@@ -641,8 +667,40 @@
 			<Border Grid.Column="2" BorderThickness="1,0"
             BorderBrush="Black">
 
+				<StackPanel>
+					<GroupBox Header="Single Cycle">
+						<StackPanel Orientation="Horizontal" Margin="5,5,5,5" HorizontalAlignment="Center">
 
-				<Expander  VerticalContentAlignment="Stretch" ExpandDirection="Down" Header="Message Log" IsExpanded="True">
+							<Image Name="cycleStatusIcon" Height="36" Margin="2" Source="pack://application:,,,/Resources/Icons/Button_Icon_Yellow.png"></Image>
+							<TextBlock Name="cycleStatus" Width="75" Text="Not Running" TextAlignment="Center" Height="22"/>
+						</StackPanel>
+					</GroupBox>
+					<GroupBox Header="Timelapse">
+						<StackPanel Orientation="Vertical" Margin="5,5,5,5" VerticalAlignment="Center">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+								<Image Height="36" Margin="2" Name="timeLapseStatusIcon" Source="pack://application:,,,/Resources/Icons/Button_Icon_Yellow.png"></Image>
+								<TextBlock TextAlignment="Center" Name="timeLapseStatus" Width="75" Text="Not Running"   Height="22"/>
+							</StackPanel>
+							
+							<StackPanel Orientation="Horizontal" Margin="0,15,0,0" HorizontalAlignment="Center">
+								<StackPanel Orientation="Vertical">
+									<TextBlock Text="Next Run:   " VerticalAlignment="Center"/>
+									<TextBlock Text="End:            " VerticalAlignment="Center"/>
+									
+								</StackPanel>
+								<StackPanel Orientation="Vertical">
+									<TextBox Name="timeLapseCount" Width="150"  IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+									<TextBox Name="timeLapseEnd" Width="150"  IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+								</StackPanel>
+
+
+							</StackPanel>
+						</StackPanel>
+						
+					</GroupBox>
+		
+
+					<Expander  VerticalContentAlignment="Stretch" ExpandDirection="Down" Header="Message Log" IsExpanded="True">
 
 					<ListBox    Name="ListBoxHistory" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectionChanged="ListBoxHistory_SelectionChanged"  >
 						<ListBox.ItemsPanel >
@@ -654,6 +712,8 @@
 
 
 				</Expander>
+				</StackPanel>
+				
 
 
 			</Border>

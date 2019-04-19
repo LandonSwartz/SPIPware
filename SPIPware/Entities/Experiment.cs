@@ -13,8 +13,7 @@ namespace SPIPware.Entities
     public class Experiment
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        //public delegate void ExperimentUpdate();
-        //public event EventHandler ExperimentStatus;
+ 
         public static string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // current folder the program is running in
         public static string DEFAULT_SETTINGS_PATH = BaseDirectory + "Resources\\DefaultSettings.json";
 
@@ -53,6 +52,7 @@ namespace SPIPware.Entities
         private int tlEndInterval;
         private long tlEndIntervalType;
         private long tlIntervalType;
+        private int cycleCount;
         private List<int> imagePositions;
 
         private Color BacklightColor;
@@ -79,25 +79,19 @@ namespace SPIPware.Entities
         public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
         
         public List<int> ImagePositions { get => imagePositions; set => imagePositions = value; }
+        public int CycleCount { get => cycleCount; set => cycleCount = value; }
 
-        //private Color BacklightColor;
+
         public Experiment()
         {
-            //LoadExperiment();
         }
         public static void LoadDefaults()
         { 
             Experiment experiment = LoadExperimentAndSave(DEFAULT_SETTINGS_PATH);
-            //Properties.Settings.Default.ExperimentPath = DEFAULT_SETTINGS_PATH;
 
         }
-        //public Experiment(string filePath)
-        //{
-        //     LoadExperiment(filePath);
-        //}
         public void SaveExperimentToSettings()
         {
-            //Experiment experiment = LoadExperiment(filePath);
             if (this != null)
             {
                 
@@ -114,22 +108,11 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.CurrentLocation = CurrentLocation;
                 Properties.Settings.Default.CameraName = CameraName;
                 Properties.Settings.Default.BacklightColor = BacklightColor;
+                Properties.Settings.Default.CycleCount = CycleCount;
                 //CycleControl.ImagePositions = ImagePositions;
                 cycle.ImagePositions = ImagePositions;
-                //if (experiment.BacklightColor != null)
-                //{
-                //    Properties.Settings.Default.BacklightColor = experiment.BacklightColor;
-                //}
-                //Properties.Settings.Default.tlStartDate = experiment.tlStartDate;
-                //Properties.Settings.Default.tlEndDate = experiment.tlEndDate;
-                //Properties.Settings.Default.StartNow = experiment.startNow;
-                //Properties.Settings.Default.tlEndInterval = experiment.tlEndInterval;
-                //Properties.Settings.Default.tlEndIntervalType = experiment.tlEndIntervalType;
-                //Properties.Settings.Default.tlIntervalType = experiment.tlIntervalType;
 
                 Properties.Settings.Default.Save();
-
-                //ExperimentStatus.Raise(this, new EventArgs());
 
             }
 
@@ -158,6 +141,7 @@ namespace SPIPware.Entities
             TlEndIntervalType = Properties.Settings.Default.tlEndIntervalType;
             TlIntervalType = Properties.Settings.Default.tlIntervalType;
             BacklightColor = Properties.Settings.Default.BacklightColor;
+            CycleCount = Properties.Settings.Default.CycleCount;
             if (cycle.ImagePositions != null)
             {
                 ImagePositions = new List<int>(cycle.ImagePositions);
@@ -166,14 +150,7 @@ namespace SPIPware.Entities
             {
                 _log.Error("cycle.ImagePositions is null");
             }
-            //return this;
         }
-        //public void SaveExperimentFromSettings(Experiment experiment,string filePath)
-        //{
-        //    //Experiment experiment = LoadExperiment();
-        //    //experiment.BacklightColor = Properties.Settings.Default.BacklightColor;
-        //    SaveExperiment(experiment, filePath);
-        //}
         public static Experiment LoadExperimentAndSave(string filePath)
         {
             Experiment experiment = LoadExperiment(filePath);

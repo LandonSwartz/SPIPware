@@ -41,14 +41,36 @@ namespace SPIPware
         public void UpdatePeripheralStatus(object sender, EventArgs e)
         {
             PeripheralEventArgs p = (PeripheralEventArgs) e;
-            if(p.Periperal == Peripheral.Backlight)
+            UpdatePeripheralStatus(p.Periperal, p.Status);
+    
+        }
+        public void UpdatePeripheralStatus(Peripheral peripheral, bool status)
+        {
+            if (peripheral == Peripheral.Backlight)
             {
-                Properties.Settings.Default.BacklightStatus = p.Status;
+                if (status)
+                {
+                    backlightStatusIcon.Source = GREEN_IMAGE;
+                }
+                else
+                {
+                    backlightStatusIcon.Source = YELLOW_IMAGE;
+                }
+                Properties.Settings.Default.BacklightStatus = status;
             }
-            else if (p.Periperal == Peripheral.GrowLight)
+            else if (peripheral == Peripheral.GrowLight)
             {
-                Properties.Settings.Default.GrowlightStatus = p.Status;
+                if (status)
+                {
+                    growlightStatusIcon.Source = GREEN_IMAGE;
+                }
+                else
+                {
+                    growlightStatusIcon.Source = YELLOW_IMAGE;
+                }
+                Properties.Settings.Default.GrowlightStatus = status;
             }
+
         }
         public void UpdateClrCanvas()
         {

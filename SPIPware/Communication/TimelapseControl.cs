@@ -27,6 +27,7 @@ namespace SPIPware.Communication
         public string tlCount;
         public double totalMinutes;
         private Experiment tempExperiment;
+        private Experiment timeLapseExperiment;
         private bool growLightsOn = false;
 
         public delegate void TimeLapseUpdate();
@@ -113,6 +114,10 @@ namespace SPIPware.Communication
             if(!cycle.runningCycle && runningSingleCycle)
             {
                 runningSingleCycle = false;
+                if(timeLapseExperiment != null && cycle.runningCycle == false)
+                {
+                    timeLapseExperiment.SaveExperiment(Properties.Settings.Default.tlExperimentPath);
+                }
                 tempExperiment.SaveExperimentToSettings();
                 ExperimentStatus.Raise(this, new EventArgs());
             }
@@ -131,7 +136,7 @@ namespace SPIPware.Communication
                 tempExperiment.LoadExperiment();
 
                 
-                Experiment experiment = Experiment.LoadExperimentAndSave(Properties.Settings.Default.tlExperimentPath);
+                timeLapseExperiment  = Experiment.LoadExperimentAndSave(Properties.Settings.Default.tlExperimentPath);
                 ExperimentStatus.Raise(this, new EventArgs());
                 runningSingleCycle = true;
                 _log.Debug("TimeLapse Single Cycle Executed at: " + DateTime.Now);

@@ -301,3 +301,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/icons/file_io
+/icons/light-bulb-icon.png

@@ -246,8 +246,12 @@ namespace SPIPware
         public String createFilePath()
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("C");
+            sb.Append(Properties.Settings.Default.CycleCount.ToString());
+            sb.Append("_");
             if (Properties.Settings.Default.CurrentPlateSave == true)
             {
+                sb.Append("P");
                 string currentPlateStr = (Properties.Settings.Default.CurrentPlate).ToString();
                 sb.Append(currentPlateStr + "_");
             }

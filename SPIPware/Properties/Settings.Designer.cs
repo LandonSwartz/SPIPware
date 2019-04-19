@@ -893,7 +893,7 @@ namespace SPIPware.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#00000000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFFFF")]
         public global::System.Windows.Media.Color BacklightColor {
             get {
                 return ((global::System.Windows.Media.Color)(this["BacklightColor"]));
@@ -924,6 +924,36 @@ namespace SPIPware.Properties {
             }
             set {
                 this["GrowlightStatus"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int CycleCount {
+            get {
+                return ((int)(this["CycleCount"]));
+            }
+            set {
+                this["CycleCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("23:00:00")]
+        public global::System.TimeSpan StartOfNight {
+            get {
+                return ((global::System.TimeSpan)(this["StartOfNight"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("07:00:00")]
+        public global::System.TimeSpan EndOfNight {
+            get {
+                return ((global::System.TimeSpan)(this["EndOfNight"]));
             }
         }
     }

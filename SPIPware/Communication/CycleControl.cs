@@ -29,15 +29,8 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
-
-        //public static ReadOnlyCollection<int> ImagePositions
-        //{
-        //    get => ImagePositions.AsReadOnly();
-     
-        //}
         public List<int> ImagePositions { get => _imagePositions; set => _imagePositions = value; }
 
-        //public delegate void CycleUpdate();
         public event EventHandler StatusUpdate;
 
 
@@ -142,6 +135,7 @@ namespace SPIPware.Communication
         public void End()
         {
             _log.Debug("Ending Cycle.");
+            Properties.Settings.Default.CycleCount++;
             runningCycle = false;
             posIndex = 0;
             targetLocation = 0;
@@ -158,7 +152,7 @@ namespace SPIPware.Communication
         }
         public void Stop()
         {
-            _log.Error("Emergency Stop Occured");
+            _log.Error("Stop Occured");
             End();
             //if (machine.Connected)
             //{
