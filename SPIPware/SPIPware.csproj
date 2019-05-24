@@ -214,6 +214,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="docs.xml" />
     <Resource Include="Resources\Icons\new.png" />
     <Resource Include="Resources\Icons\open_small.png" />
     <Resource Include="Resources\Icons\save.png" />

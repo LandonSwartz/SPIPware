@@ -10,6 +10,22 @@ using SPIPware.Util;
 using System.Collections.ObjectModel;
 using System;
 
+/*                                      *
+ * Class for GCode file                 *
+ * Contains all methods for motion and  *
+ *      g code commands                 *
+ */
+
+ ///   <summary>
+ ///   Class for Gcode File
+ ///   Contains all methods for motion and 
+ ///        g code commands
+ ///   </summary>
+ ///   <remarks>
+ ///   This class can build and execute several 
+ ///        gcode commands
+ ///   </remarks>
+
 namespace SPIPware.GCode
 {
 	class GCodeFile
@@ -29,7 +45,7 @@ namespace SPIPware.GCode
 
 		public double TravelDistance { get; private set; } = 0;
 		public TimeSpan TotalTime { get; private set; } = TimeSpan.Zero;
-
+        
 		private GCodeFile(List<Command> toolpath)
 		{
 			Toolpath = new ReadOnlyCollection<Command>(toolpath);
