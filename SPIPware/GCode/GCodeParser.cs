@@ -8,20 +8,35 @@ using SPIPware.Util;
 using System.Reflection;
 using log4net;
 
+/*                                      *
+ *      SPIPware.GCode.GCodeParser      *
+ *                                      *
+ *                                      *
+ *  GCodeParser class that helps parse  *
+ *      the code for Gcode              */
+
 namespace SPIPware.GCode
 {
+    /// <summary>
+    /// ParseDistanceMode determines whether the a G90 or G91 code will be sent
+    /// </summary>
+    /// <remarks>Absolute (the 0 position) is G90 while Incremental(1) is G91</remarks>
 	public enum ParseDistanceMode
 	{
 		Absolute,
 		Incremental
 	}
-
+    /// <summary>
+    /// ParseUnit determines whether to use the metric system or Freedom units
+    /// </summary>
 	public enum ParseUnit
 	{
 		Metric,
 		Imperial
 	}
-
+    /// <summary>
+    /// Parser State is a class to describe the current state of the parsing
+    /// </summary>
 	class ParserState
 	{
 		public Vector3 Position;
@@ -31,7 +46,11 @@ namespace SPIPware.GCode
 		public ParseDistanceMode ArcDistanceMode;
 		public ParseUnit Unit;
 		public int LastMotionMode;
-
+        /// <summary>
+        /// ParserState() is current state parsing
+        /// </summary>
+        /// <remarks>Includes position, the plane that is being used, feed rate, distance mode, arc distance mode,
+        /// unit system, and last motion mode.</remarks>
 		public ParserState()
 		{
 			Position = new Vector3();
@@ -43,13 +62,17 @@ namespace SPIPware.GCode
 			LastMotionMode = -1;
 		}
 	}
-
+    /// <summary>
+    /// Word is a struct with a char command and a double for parameter. Resprents a Gcode Command>
+    /// </summary>
 	struct Word
 	{
 		public char Command;
 		public double Parameter;
 	}
-
+    /// <summary>
+    /// GCodeParser class parses the GCode for the machine to interpret and use
+    /// </summary>
 	static class GCodeParser
 	{
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -57,7 +80,7 @@ namespace SPIPware.GCode
 
 		public static Regex GCodeSplitter = new Regex(@"([A-Z])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
 		private static double[] MotionCommands = new double[] { 0, 1, 2, 3 };
-		private static string ValidWords = "GMXYZIJKFRSP";
+		private static string ValidWords = "GMXYZIJKFRSP"; //all the valid letter commands of grbl
 		public static List<Command> Commands;
 
 		public static void Reset()
@@ -119,7 +142,11 @@ namespace SPIPware.GCode
 
 			return line;
 		}
-
+        /// <summary>
+        /// Parse() is a method that determines the GCode command and the parses it to an execution
+        /// </summary>
+        /// <param name="line">The string that is inputed for the command to be deciphered</param>
+        /// <param name="lineNumber">The line number for the file</param>
 		static void Parse(string line, int lineNumber)
 		{
 			MatchCollection matches = GCodeSplitter.Matches(line);
@@ -133,11 +160,12 @@ namespace SPIPware.GCode
 
 			for (int i = 0; i < Words.Count; i++)
 			{
+                //error check for non grbl commands
 				if (!ValidWords.Contains(Words[i].Command))
 				{
 					throw new ParseException($"unknown word (letter): \"{Words[i].Command} {Words[i].Parameter}\"", lineNumber);
 				}
-
+                //if feed
 				if (Words[i].Command != 'F')
 					continue;
 
@@ -147,9 +175,10 @@ namespace SPIPware.GCode
 				Words.RemoveAt(i--);
 				continue;
 			}
-
+            
 			for(int i = 0; i < Words.Count; i++)
 			{
+                //marco commands
 				if (Words[i].Command == 'M')
 				{
 					int param = (int)Words[i].Parameter;
@@ -163,7 +192,7 @@ namespace SPIPware.GCode
 					i--;
 					continue;
 				}
-
+                //spindle speed commands
 				if (Words[i].Command == 'S')
 				{
 					double param = Words[i].Parameter;
@@ -177,13 +206,13 @@ namespace SPIPware.GCode
 					i--;
 					continue;
 				}
-
+                //motion commands
 				if (Words[i].Command == 'G' && !MotionCommands.Contains(Words[i].Parameter))
 				{
 					#region UnitPlaneDistanceMode
 
 					double param = Words[i].Parameter;
-
+                    //absolute motion
 					if (param == 90)
 					{
 						State.DistanceMode = ParseDistanceMode.Absolute;
@@ -191,6 +220,7 @@ namespace SPIPware.GCode
 						i--;
 						continue;
 					}
+                    //incremental motion
 					if (param == 91)
 					{
 						State.DistanceMode = ParseDistanceMode.Incremental;
@@ -211,6 +241,7 @@ namespace SPIPware.GCode
 						i--;
 						continue;
 					}
+                    //changes unit system to metric
 					if (param == 21)
 					{
 						State.Unit = ParseUnit.Metric;
@@ -218,6 +249,7 @@ namespace SPIPware.GCode
 						i--;
 						continue;
 					}
+                    //changes unit sysetm to imperial
 					if (param == 20)
 					{
 						State.Unit = ParseUnit.Imperial;
@@ -225,6 +257,7 @@ namespace SPIPware.GCode
 						i--;
 						continue;
 					}
+                    //The next three change the working arc plane to XY, ZX, and YZ respectively
 					if (param == 17)
 					{
 						State.Plane = ArcPlane.XY;
@@ -291,9 +324,10 @@ namespace SPIPware.GCode
 
 			double UnitMultiplier = (State.Unit == ParseUnit.Metric) ? 1 : 25.4;
 
-			Vector3 EndPos = State.Position;
+			Vector3 EndPos = State.Position; //ending position is made into the position of the state
 
-			#region FindEndPos
+            //finding end position of command
+			#region FindEndPos 
 			{
 				int Incremental = (State.DistanceMode == ParseDistanceMode.Incremental) ? 1 : 0;
 
@@ -306,7 +340,7 @@ namespace SPIPware.GCode
 					break;
 				}
 
-				for (int i = 0; i < Words.Count; i++)
+				for (int i = 0; i < Words.Count; i++)// <--This could be useful for y use
 				{
 					if (Words[i].Command != 'Y')
 						continue;
@@ -366,7 +400,7 @@ namespace SPIPware.GCode
 					V = State.Position.X;
 					break;
 			}
-
+            //IJK are the offsets on planes so below is finding them and uses them for different planes
 			#region FindIJK
 			{
 				int ArcIncremental = (State.ArcDistanceMode == ParseDistanceMode.Incremental) ? 1 : 0;
