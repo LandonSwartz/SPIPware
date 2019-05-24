@@ -5,6 +5,12 @@ using System.IO;
 using System.Reflection;
 using log4net;
 
+/*                                      *   
+ * SPIPware.Util.GrblCodeTranslator.cs  *
+ *                                      *
+ * This class helps translate grbl code *
+ * for the machine to interput          */
+
 namespace SPIPware.Util
 {
 	static class GrblCodeTranslator
