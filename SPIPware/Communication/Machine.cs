@@ -15,6 +15,14 @@ using System.Text;
 using System.Reflection;
 using log4net;
 
+/*                                          *
+ *  SPIPware.Communication.Machine.cs       *
+ *                                          *
+ *  This is main class for the machine of   *
+ *  SPIPware. Handles the direct actions of *
+ *  motion, connection, and operatonModes.  *
+ *                                          */
+
 namespace SPIPware.Communication
 {
 	enum ConnectionType
@@ -37,11 +45,36 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
+        /// <summary>
+        /// This enum of the operation mode of the machine
+        /// </summary>
+        /// <list>
+        /// <item>
+        /// <term>Manual</term>
+        /// <description>The manual movement of the machine, done by the user</description>
+        /// </item>
+        /// <item>
+        /// <term>SendFile</term>
+        /// <description>Sends the GCode file from <c>Gcode.GCodeFile.cs</c>. It is how the "cycle" is done</description>
+        /// </item>
+        /// <item>
+        /// <term>Probe</term>
+        /// <description>No idea what this is</description>
+        /// </item>
+        /// <item>
+        /// <term>Disconnected</term>
+        /// <description>The machine is current disconnected from the ardunios so most operations cannot be executed</description>
+        /// </item>
+        /// <item>
+        /// <term>SendMarco</term>
+        /// <description>Sends a Marco g code command to the machine</description>
+        /// </item>
+        /// </list>
         public enum OperatingMode
 		{
 			Manual,
 			SendFile,
-			Probe,
+			Probe, //what does this do?
 			Disconnected,
 			SendMacro
 		}
@@ -54,7 +87,7 @@ namespace SPIPware.Communication
 		public event Action<string> LineSent;
 		public event Action ConnectionStateChanged;
 		public event Action PositionUpdateReceived;
-		public event Action StatusChanged;
+		public event Action StatusChanged; //the status of the machine has changed
 		public event Action DistanceModeChanged;
 		public event Action UnitChanged;
 		public event Action PlaneChanged;
@@ -119,7 +152,7 @@ namespace SPIPware.Communication
 			}
 		}
 
-		private OperatingMode _mode = OperatingMode.Disconnected;
+		private OperatingMode _mode = OperatingMode.Disconnected; //operation mode is initally disconnected
 		public OperatingMode Mode
 		{
 			get { return _mode; }
@@ -248,11 +281,16 @@ namespace SPIPware.Communication
 			_calculator = new Calculator(this);
 		}
 
+        //queues for commands
 		Queue Sent = Queue.Synchronized(new Queue());
 		Queue ToSend = Queue.Synchronized(new Queue());
 		Queue ToSendPriority = Queue.Synchronized(new Queue()); //contains characters (for soft reset, feed hold etc)
 		Queue ToSendMacro = Queue.Synchronized(new Queue());
 
+        /// <summary>
+        /// Work() is the main method of the class Machine. Where most operations are housed.
+        /// </summary>
+        /// <remarks>Will need to remark later because dense</remarks>
 		private void Work()
 		{
 			try
@@ -491,7 +529,11 @@ namespace SPIPware.Communication
 				Disconnect();
 			}
 		}
-
+        /// <summary>
+        /// Connect() connects to the ardunios when called
+        /// </summary>
+        /// <remarks>If already connected then throws exceptions that already connected. If not, then 
+        /// Connect() connects to the serial port of the ardunios</remarks>
 		public void Connect()
 		{
 			if (Connected)
@@ -536,7 +578,9 @@ namespace SPIPware.Communication
 			WorkerThread.Priority = ThreadPriority.AboveNormal;
 			WorkerThread.Start();
 		}
-
+        /// <summary>
+        /// Disconnect() disconnects the machine from the ardunios when called
+        /// </summary>
 		public void Disconnect()
 		{
 			if (!Connected)
@@ -590,7 +634,12 @@ namespace SPIPware.Communication
 			Sent.Clear();
 			ToSendMacro.Clear();
 		}
-        public double homeMachinePos;
+        public double homeMachinePos; //home position of the machine is remembered
+        /// <summary>
+        /// BuildCommand() is where Gcode command strings are built for sendMotionCommand() function
+        /// </summary>
+        /// <param name="distance">The distance to the next position in the cycle</param>
+        /// <returns>A string that is a GCode command</returns>
         private String buildCommand(double distance)
         {
             
@@ -603,7 +652,13 @@ namespace SPIPware.Communication
             return sb.ToString();
         }
   
-        
+        /// <summary>
+        /// sendMotionCommand(int, double) sends a Gcode motion command
+        /// </summary>
+        /// <param name="position">The current position of the machine</param>
+        /// <param name="offset">The distance offset from homing position</param>
+        /// <returns>Returns the calculaled distance of the motion command</returns>
+        /// <remarks>The sendLine() function is used to actually send the motion command with the buildCommand() function</remarks>
         public double sendMotionCommand(int position, double offset)
         {
             double distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
@@ -612,11 +667,19 @@ namespace SPIPware.Communication
             return distance;
 
         }
+        /// <summary>
+        /// sendMotionCommand(int) is a handler function for when the offset is 0
+        /// </summary>
+        /// <param name="position">The Position of the machine</param>
+        /// <returns>The distance variable of SendMotionCommand(int, double)</returns>
         public double sendMotionCommand(int position)
         {
            return sendMotionCommand(position, 0);
         }
-
+        /// <summary>
+        /// SendLine() sends an input string into the machine
+        /// </summary>
+        /// <param name="line">A string that is sent to the machine, usually a Gcode command string.</param>
         public void SendLine(string line)
 		{
 			if (!Connected)
@@ -634,6 +697,9 @@ namespace SPIPware.Communication
 			ToSend.Enqueue(line);
 		}
 
+        /// <summary>
+        /// SoftReset() gives the machine a soft reset when called
+        /// </summary>
 		public void SoftReset()
 		{
 			if (!Connected)
@@ -663,6 +729,10 @@ namespace SPIPware.Communication
 			SendLine("$#");
 		}
 
+        /// <summary>
+        /// SendMarcoLines() sends Gcode marco commands
+        /// </summary>
+        /// <param name="lines">A parameter of string arrays lines</param>
 		public void SendMacroLines(params string[] lines)
 		{
 			if(Mode != OperatingMode.Manual)
@@ -688,7 +758,7 @@ namespace SPIPware.Communication
 
 			ToSendPriority.Enqueue((char)controlchar);
 		}
-
+        
 		public void FeedHold()
 		{
 			if (!Connected)
@@ -722,6 +792,10 @@ namespace SPIPware.Communication
 			ToSendPriority.Enqueue((char)0x85);
 		}
 
+        /// <summary>
+        /// SetFile() sets the file to be used by machine when called
+        /// </summary>
+        /// <param name="file">The file that the function will set the machine to</param>
 		public void SetFile(IList<string> file)
 		{
 			if (Mode == OperatingMode.SendFile)
@@ -758,7 +832,9 @@ namespace SPIPware.Communication
 
 			RaiseEvent(FilePositionChanged);
 		}
-
+        /// <summary>
+        /// ClearFile() clears the file set to by the machine
+        /// </summary>
 		public void ClearFile()
 		{
 			if (Mode == OperatingMode.SendFile)
@@ -772,6 +848,9 @@ namespace SPIPware.Communication
 			RaiseEvent(FilePositionChanged);
 		}
 
+        /// <summary>
+        /// FileStart() starts the file that is inputed
+        /// </summary>
 		public void FileStart()
 		{
 			if (!Connected)
@@ -788,7 +867,9 @@ namespace SPIPware.Communication
 
 			Mode = OperatingMode.SendFile;
 		}
-
+        /// <summary>
+        /// FilePause() pauses the file inputed
+        /// </summary>
 		public void FilePause()
 		{
 			if (!Connected)
@@ -839,7 +920,10 @@ namespace SPIPware.Communication
 
 			Mode = OperatingMode.Manual;
 		}
-
+        /// <summary>
+        /// FileGoto() goes to a specfic line number of the file when called
+        /// </summary>
+        /// <param name="lineNumber">An int that is the line number that the user wants the file set to</param>
 		public void FileGoto(int lineNumber)
 		{
 			if (Mode == OperatingMode.SendFile)
@@ -855,7 +939,9 @@ namespace SPIPware.Communication
 
 			RaiseEvent(FilePositionChanged);
 		}
-
+        /// <summary>
+        /// ClearQueue() clears the queue
+        /// </summary>
 		public void ClearQueue()
 		{
 			if (Mode != OperatingMode.Manual)
@@ -872,7 +958,7 @@ namespace SPIPware.Communication
 		/// <summary>
 		/// Updates Status info from each line sent
 		/// </summary>
-		/// <param name="line"></param>
+		/// <param name="line">A string that is one of the update status</param>
 		private void UpdateStatus(string line)
 		{
 			if (!Connected)
