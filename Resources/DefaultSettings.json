@@ -1,0 +1,29 @@
+{
+  "TotalPlates": 6,
+  "CurrentPlate": 1,
+  "PlateOffset": 8,
+  "BetweenDistance": 125,
+  "CameraSettingsPath": "white_background_for-plants.xml",
+  "FileName": "SPIPImages",
+  "SaveFolderPath": "C:\\Users\\Alex\\Desktop",
+  "CurrentPlateSave": true,
+  "NumLocations": 6,
+  "SelectAll": true,
+  "CurrentLocation": 1,
+  "CameraName": "Mako",
+  "TlStartDate": "2018-12-13T19:37:17.5812239-06:00",
+  "TlEndDate": "0001-01-01T00:00:00",
+  "StartNow": true,
+  "TlEndInterval": 1,
+  "TlEndIntervalType": 60000,
+  "TlIntervalType": 60000,
+  "ImagePositions": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "BackgroundColor": "#FFFFFFCD"
+}
