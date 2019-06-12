@@ -44,6 +44,7 @@ namespace SPIPware.Communication
         private double targetLocation = 0;
 
         private static int posIndex = 0;
+     //   private static int posIndexY = 0; //y position index
 
         CycleControl()
         {
@@ -75,6 +76,7 @@ namespace SPIPware.Communication
             //_imagePositions.ForEach(i => _log.Debug)
             _log.Debug("UpdatePositionList+ImagePositions.Count: " + ImagePositions.Count);
         }
+
         private void Machine_StatusChanged()
         {
 
@@ -111,6 +113,7 @@ namespace SPIPware.Communication
 
                 camera.loadCameraSettings();
                 posIndex = 0;
+        //        posIndexY = 0;
            
                 if (!ImagePositions.Any())
                 {
@@ -138,6 +141,7 @@ namespace SPIPware.Communication
             Properties.Settings.Default.CycleCount++;
             runningCycle = false;
             posIndex = 0;
+          //  posIndexY = 0;
             targetLocation = 0;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
@@ -167,8 +171,8 @@ namespace SPIPware.Communication
             _log.Debug("Machine Home");
             if (runningCycle)
             {
-                HandleNextPosition(posIndex);
-                posIndex++;
+                   HandleNextPosition(posIndex);
+                   posIndex++; 
             }
 
         }
@@ -183,9 +187,9 @@ namespace SPIPware.Communication
                 bi.Freeze();
 
                 ImageUpdatedEvent.Raise(this, new EventArgs());
-
-                
+                                
                 HandleNextPosition(posIndex);
+                
                 posIndex++;
 
             }

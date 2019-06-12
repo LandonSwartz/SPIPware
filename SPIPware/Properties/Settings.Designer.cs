@@ -667,19 +667,37 @@ namespace SPIPware.Properties {
                 return ((int)(this["MinLocation"]));
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int CurrentLocation {
-            get {
-                return ((int)(this["CurrentLocation"]));
+        public int CurrentLocationX
+        {
+            get
+            {
+                return ((int)(this["CurrentLocationX"]));
             }
-            set {
-                this["CurrentLocation"] = value;
+            set
+            {
+                this["CurrentLocationX"] = value;
             }
         }
-        
+        //y current location
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int CurrentLocationY
+        {
+            get
+            {
+                return ((int)(this["CurrentLocationY"]));
+            }
+            set
+            {
+                this["CurrentLocationY"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Mako")]
@@ -700,7 +718,18 @@ namespace SPIPware.Properties {
                 return ((string)(this["PrimaryAxis"]));
             }
         }
-        
+        //y-axis added
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Y")]
+        public string SecondaryAxis 
+        {
+            get
+            {
+                return ((string)(this["SecondaryAxis"]));
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10000")]

@@ -591,30 +591,72 @@ namespace SPIPware.Communication
 			ToSendMacro.Clear();
 		}
         public double homeMachinePos;
-        private String buildCommand(double distance)
+        private String buildCommand(double distance) //where command is built for gcode
         {
             
             StringBuilder sb = new StringBuilder();
             sb.Append("G90");
-            sb.Append(Properties.Settings.Default.PrimaryAxis);
+            sb.Append(Properties.Settings.Default.PrimaryAxis); //primary axis is labeled as x so could be overload to be given y
             sb.Append(distance + " ");
+            
+            //Landon added code
+            //sb.Append(Properties.Settings.Default.SecondaryAxis); //this is the same as appending "Y" to the string
+            //sb.Append(distance + " "); //should move as same distance FOR NOW
+            //end of landon added code
+
             sb.Append("F" + Properties.Settings.Default.Speed);
             _log.Info("Generated Command: "+ sb.ToString());
             return sb.ToString();
         }
-  
-        
+
+        //The below functions emulates the similar X axis, perhaps by seperating the two axis, the commands can be seperated by axes
+       private String buildCommandY(double distance) //where command is built for gcode
+        {
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("G90");
+            //Landon added code
+            sb.Append(Properties.Settings.Default.SecondaryAxis); //this is the same as appending "Y" to the string
+            sb.Append(distance + " "); //should move as same distance FOR NOW
+            //end of landon added code
+            sb.Append("F" + Properties.Settings.Default.Speed);
+            _log.Info("Generated Command: " + sb.ToString());
+            return sb.ToString();
+        }
+
+
         public double sendMotionCommand(int position, double offset)
         {
+           // double distanceY = 0; //testing y value
             double distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
             _log.Debug("Calculated Distance: " + distance);
+            //here a for loop could be add for each line of code per row then iterate to next y coordinate
             SendLine(buildCommand(distance));
+           // SendLine(buildCommandY(distance)); //y command line
             return distance;
 
         }
+
+        //y-axis version
+        public double sendMotionCommandY(int position, double offset) // could be important method to send y coordinates to sunbear
+        {
+            double distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+            _log.Debug("Calculated Distance: " + distance);
+            //here a for loop could be add for each line of code per row then iterate to next y coordinate
+            SendLine(buildCommandY(distance));
+            return distance;
+
+        }
+
         public double sendMotionCommand(int position)
         {
            return sendMotionCommand(position, 0);
+        }
+
+        //y-axis version
+        public double sendMotionCommandY(int position)
+        {
+            return sendMotionCommandY(position, 0);
         }
 
         public void SendLine(string line)

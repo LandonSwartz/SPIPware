@@ -378,6 +378,70 @@ namespace SPIPware
         {
 
         }
+        //increases y axis movement
+        private void ButtonManualMoveYAxisUp_Click(object sender, RoutedEventArgs e)
+        {
+            if (machine.Mode != Machine.OperatingMode.Manual)
+            {
+                return;
+            }
+
+            _log.Debug("Goto Y-axis left dockpanel button clicked");
+            Properties.Settings.Default.CurrentLocationY++;
+            machine.sendMotionCommandY(Properties.Settings.Default.CurrentLocationY);
+
+          
+        }
+        //decreases y axis position
+        private void ButtonManualMoveYAxisDown_Click(object sender, RoutedEventArgs e)
+        {
+            if (machine.Mode != Machine.OperatingMode.Manual)
+            {
+                return;
+            }
+
+            _log.Debug("Goto Y-axis right dockpanel button clicked");
+            if (Properties.Settings.Default.CurrentLocationY == 0) //so that when 0 coordinate, then the machine won't hit hard limit and go below 0
+            {
+                return;
+            }
+            Properties.Settings.Default.CurrentLocationY--;
+            machine.sendMotionCommandY(Properties.Settings.Default.CurrentLocationY);
+        }
+        //decreases x axis position
+        private void ButtonManualMoveXAxisLeft_Click(object sender, RoutedEventArgs e)
+        {
+            if (machine.Mode != Machine.OperatingMode.Manual)
+            {
+                return;
+            }
+
+            _log.Debug("Goto X-axis left dockpanel button clicked");
+            if (Properties.Settings.Default.CurrentLocationX == 0) //so that when 0 coordinate, then the machine won't hit hard limit and go below 0
+            {
+                return;
+            }
+            Properties.Settings.Default.CurrentLocationX--;
+            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocationX);
+        }
+        //increases x axis position
+        private void ButtonManualMoveXAxisRight_Click(object sender, RoutedEventArgs e)
+        {
+            if (machine.Mode != Machine.OperatingMode.Manual)
+            {
+                return;
+            }
+
+            _log.Debug("Goto X-axis right dockpanel button clicked");
+            Properties.Settings.Default.CurrentLocationX++;
+            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocationX);
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
     internal static class NativeMethods
     {

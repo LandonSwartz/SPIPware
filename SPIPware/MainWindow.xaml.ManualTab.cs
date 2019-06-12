@@ -104,13 +104,24 @@ namespace SPIPware
 		}
         private void ButtonCaptureImage(object sender, RoutedEventArgs e)
         {
+            if(machine.Mode == Machine.OperatingMode.Disconnected) //operation mode is disconnected, then no picture will be taken
+            {
+                return;
+            }
             _log.Debug("Image capture button clicked");
             m_PictureBox.Source =  camera.CapSaveImage();
         }
-        private void ButtonGotoPosition(object sender, RoutedEventArgs e)
+        private void ButtonGotoPositionX(object sender, RoutedEventArgs e)
         {
             _log.Debug("Goto button clicked");
-            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocation);
+            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocationX);
+        }
+
+        private void ButtonGotoPositionY(object sender, RoutedEventArgs e)
+        {
+            _log.Debug("Goto Y-axis button clicked");
+            machine.sendMotionCommandY(Properties.Settings.Default.CurrentLocationY);
+
         }
 		private void ButtonManualSetG10Zero_Click(object sender, RoutedEventArgs e)
 		{

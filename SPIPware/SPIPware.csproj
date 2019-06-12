@@ -214,6 +214,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Images\Grey Square.png" />
+    <Resource Include="Resources\Images\redditDownvote.png" />
+    <Resource Include="Resources\Images\redditUpvote.png" />
     <Resource Include="Resources\Icons\new.png" />
     <Resource Include="Resources\Icons\open_small.png" />
     <Resource Include="Resources\Icons\save.png" />

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This file is NOT compatible with Silverlight-->
+<Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+  <Canvas Name="svg2" Width="300" Height="300">
+    <Canvas.Resources>
+      <LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="lg1" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1">
+        <LinearGradientBrush.GradientStops>
+          <GradientStopCollection>
+            <GradientStop Color="#00ffffff" Offset="0"/>
+            <GradientStop Color="#ffffff" Offset="1"/>
+          </GradientStopCollection>
+        </LinearGradientBrush.GradientStops>
+      </LinearGradientBrush>
+      <LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="lg3" MappingMode="Absolute" StartPoint="191,156" EndPoint="148,10">
+        <LinearGradientBrush.GradientStops>
+          <GradientStopCollection>
+            <GradientStop Color="#00ffffff" Offset="0"/>
+            <GradientStop Color="#ffffff" Offset="1"/>
+          </GradientStopCollection>
+        </LinearGradientBrush.GradientStops>
+      </LinearGradientBrush>
+      <LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="lg2" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1">
+        <LinearGradientBrush.GradientStops>
+          <GradientStopCollection>
+            <GradientStop Color="#FFD5FFD5" Offset="0"/>
+            <GradientStop Color="#FF80FF80" Offset="0.36"/>
+            <GradientStop Color="#FF2AFF2A" Offset="0.79"/>
+            <GradientStop Color="#FF00FF00" Offset="1"/>
+          </GradientStopCollection>
+        </LinearGradientBrush.GradientStops>
+      </LinearGradientBrush>
+      <RadialGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="rg1" MappingMode="Absolute" Center="-100,-278" GradientOrigin="-100,-278" RadiusX="155" RadiusY="155">
+        <RadialGradientBrush.GradientStops>
+          <GradientStopCollection/>
+        </RadialGradientBrush.GradientStops>
+        <RadialGradientBrush.Transform>
+          <MatrixTransform Matrix="1.267 0 0 1.73 26.67 204.12"/>
+        </RadialGradientBrush.Transform>
+      </RadialGradientBrush>
+    </Canvas.Resources>
+    <!--Unknown tag: metadata-->
+    <!--Unknown tag: sodipodi:namedview-->
+    <Canvas Name="layer1">
+      <Canvas.RenderTransform>
+        <TranslateTransform X="255" Y="539"/>
+      </Canvas.RenderTransform>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="p1" Fill="{StaticResource rg1}" StrokeThickness="4" Stroke="#FF00D400">
+        <Path.Data>
+          <PathGeometry Figures="M 54 -394 A 154 154 0 1 1 -254 -394 A 154 154 0 1 1 54 -394 z" FillRule="NonZero"/>
+        </Path.Data>
+        <Path.RenderTransform>
+          <MatrixTransform Matrix="0.949753 0 0 0.949753 -10.31027 -14.52566"/>
+        </Path.RenderTransform>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="p2" Fill="{StaticResource lg3}">
+        <Path.Data>
+          <PathGeometry Figures="M 150 10 C 74 10 12 71 10 147 C 49 182 87 183 106 174 C 126 165 142 136 168 129 C 194 123 208 124 249 141 C 272 150 269 119 286 116 C 271 55 216 10 150 10 z " FillRule="NonZero"/>
+        </Path.Data>
+        <Path.RenderTransform>
+          <TranslateTransform X="-255" Y="-539"/>
+        </Path.RenderTransform>
+      </Path>
+    </Canvas>
+  </Canvas>
+</Viewbox>

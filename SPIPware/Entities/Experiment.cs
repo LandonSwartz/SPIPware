@@ -67,7 +67,8 @@ namespace SPIPware.Entities
         public bool CurrentPlateSave { get => currentPlateSave; set => currentPlateSave = value; }
         public int NumLocations { get => numLocations; set => numLocations = value; }
         public bool SelectAll { get => selectAll; set => selectAll = value; }
-        public int CurrentLocation { get => currentLocation; set => currentLocation = value; }
+        public int CurrentLocationX { get => currentLocation; set => currentLocation = value; }
+        public int CurrentLocationY { get => currentLocation; set => currentLocation = value; }
         public string CameraName { get => cameraName; set => cameraName = value; }
         public DateTime TlStartDate { get => tlStartDate; set => tlStartDate = value; }
         public DateTime TlEndDate { get => tlEndDate; set => tlEndDate = value; }
@@ -105,7 +106,8 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.CurrentPlateSave = CurrentPlateSave;
                 Properties.Settings.Default.NumLocations = NumLocations;
                 Properties.Settings.Default.SelectAll = SelectAll;
-                Properties.Settings.Default.CurrentLocation = CurrentLocation;
+                Properties.Settings.Default.CurrentLocationX = CurrentLocationX;
+                Properties.Settings.Default.CurrentLocationY = CurrentLocationY;
                 Properties.Settings.Default.CameraName = CameraName;
                 Properties.Settings.Default.BacklightColor = BacklightColor;
                 Properties.Settings.Default.CycleCount = CycleCount;
@@ -132,7 +134,8 @@ namespace SPIPware.Entities
             CurrentPlateSave = Properties.Settings.Default.CurrentPlateSave;
             NumLocations = Properties.Settings.Default.NumLocations;
             SelectAll = Properties.Settings.Default.SelectAll;
-            CurrentLocation = Properties.Settings.Default.CurrentLocation;
+            CurrentLocationX = Properties.Settings.Default.CurrentLocationX;
+            CurrentLocationY = Properties.Settings.Default.CurrentLocationY;
             CameraName = Properties.Settings.Default.CameraName;
             TlStartDate = Properties.Settings.Default.tlStartDate;
             TlEndDate = Properties.Settings.Default.tlEndDate;
