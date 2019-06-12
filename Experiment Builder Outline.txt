@@ -1,0 +1,23 @@
+Experiment Builder:
+
+GOAL: To build 'experiments' in SPIPware and greatly expand the experiment function by making it variable
+
+Steps:
+1. Make classes for steps of experiment
+
+Experiment
+|
+|--Plate (collection of wells)
+|	|
+|	|--Wells (each individual thing of being experimented)
+
+Wells will need radius and other attributes
+Plates will need number of wells and arrangement
+Expriment will need number of plates and positioning
+
+2. Make pop-up window of experiment builder
+	- Want to make it savabale and reusable
+	- variable
+	- etc.
+	
+3. Implement and test
