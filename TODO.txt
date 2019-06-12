@@ -3,3 +3,7 @@ To do for SPIPware:
 2. Start outlining what experiment builder will look like
 3. Do experiment builder
 4. More Quality of life improvements
+
+
+Bugs
+	- Sometimes x manual d pad doens't work or ends up way farther than its suppose to be
