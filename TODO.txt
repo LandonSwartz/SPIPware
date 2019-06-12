@@ -1,0 +1,5 @@
+To do for SPIPware:
+1. Get two motors working
+2. Start outlining what experiment builder will look like
+3. Do experiment builder
+4. More Quality of life improvements
