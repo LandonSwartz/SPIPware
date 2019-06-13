@@ -272,21 +272,21 @@
                 </RibbonGroup>
 
             </RibbonTab>
-            <!--Lando added below-->
+            <!--Lando added below       will readd once experiment builder is ready
             <RibbonTab Header="Experiment">
-
-                <RibbonGroup Header= "Vertical Motion">
+S
+                <RibbonGroup Header= "Experiment Builder">
                     <StackPanel Orientation="Horizontal">
-                        <Button Name ="ButtonOpenExperimentBuilder" Content="Experiment Builder" Click="ButtonOpenExperimentBuilder_Click" Style="{StaticResource bigButton}"
-                                ToolTip="Opens Experiment builder">
-                        </Button>
+                        <Button Content="Experiment Window" Style="{StaticResource styleButton}" Click="OpenExperimentWindow_Click" Name="ButtonExperimentWindow"
+                                ToolTip="Opens Experiment builder"/>
+
                     </StackPanel>
                 </RibbonGroup>
 
 
 
             </RibbonTab>
-            <!--end of Landon added-->
+            end of Landon added-->
 
 
         </Ribbon>

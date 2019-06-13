@@ -443,10 +443,10 @@ namespace SPIPware
 
         }
 
-        private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
+       /* private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
         {
-
-        }
+            //will open experiment builder window and import existing settings
+        }*/
     }
     internal static class NativeMethods
     {
