@@ -10,20 +10,23 @@ namespace SPIPware.Entities
     {
         public int radius; //size of well
         public int diameter; //diameter of well
+        public bool filled; //is the well being used or not
 
-        public int GetDiameter(radius)
-        {
-            int diameter = radius * 2;
+        public
 
-            return diameter;
-        }
+            int GetDiameter(int radius)
+            {
+                int diameter = radius * 2;
+
+                return diameter;
+            }
 
 
-        public int WellArea(radius)
-        {
-            double area = (radius * radius) * 3.14;
+            double WellArea(int radius)
+            {
+                double area = (radius * radius) * 3.14;
 
-            return area;
-        }
+                return area;
+            }
     }
 }
