@@ -7,13 +7,18 @@ Steps:
 
 Experiment
 |
-|--Plate (collection of wells)
+|--Machine
 |	|
-|	|--Wells (each individual thing of being experimented)
+|	|--Plate (collection of wells)
+|	|	|
+|	|	|--Wells (individual thing of being experimented
+|	|	|
+
 
 Wells will need radius and other attributes
 Plates will need number of wells and arrangement
-Expriment will need number of plates and positioning
+Machine will be a camera and number of plates
+Expriment will need number of total plates and positioning and  number of machines/cameras connected
 
 2. Make pop-up window of experiment builder
 	- Want to make it savabale and reusable
