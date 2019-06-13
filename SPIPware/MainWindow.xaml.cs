@@ -442,6 +442,11 @@ namespace SPIPware
         {
 
         }
+
+        private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
     internal static class NativeMethods
     {

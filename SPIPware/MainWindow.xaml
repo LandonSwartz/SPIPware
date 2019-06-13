@@ -273,19 +273,12 @@
 
             </RibbonTab>
             <!--Lando added below-->
-            <RibbonTab Header="2D Motion">
+            <RibbonTab Header="Experiment">
 
                 <RibbonGroup Header= "Vertical Motion">
                     <StackPanel Orientation="Horizontal">
-                        <Button Name ="ButtonManualMoveYAxisUp" Click="ButtonManualMoveYAxisUp_Click" Style="{StaticResource bigButton}"
-                                ToolTip="Move Y-Axis Up by one Unit">
-                            <Image Height="36" Margin="2" Name ="UpMotionArrow"  Source="pack://application:,,,/Resources/Images/redditUpvote.png">
-                            </Image>
-                        </Button>
-                        <Button Name="ButtonManualMoveYAxisDown" Click="ButtonManualMoveYAxisDown_Click" Style="{StaticResource bigButton}" 
-                                ToolTip="Move Y-Axis Down by One Unit">
-                            <Image Height="36" Margin="2" Name ="DownMotionArrow"  Source="pack://application:,,,/Resources/Images/redditDownvote.png">
-                            </Image>
+                        <Button Name ="ButtonOpenExperimentBuilder" Content="Experiment Builder" Click="ButtonOpenExperimentBuilder_Click" Style="{StaticResource bigButton}"
+                                ToolTip="Opens Experiment builder">
                         </Button>
                     </StackPanel>
                 </RibbonGroup>
@@ -447,7 +440,16 @@
                         <TabItem.Header>
                             <Label Content="Single Cycle" 
 								 MouseLeftButtonDown="UpdateCurrentParams_Click" 
-								 HorizontalAlignment="Stretch" FontSize="14"/>
+								 HorizontalAlignment="Stretch" FontSize="14" RenderTransformOrigin="0.5,0.5">
+                                <Label.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="-0.168"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Label.RenderTransform>
+                            </Label>
                         </TabItem.Header>
                         <StackPanel>
                             <GroupBox>
