@@ -442,10 +442,10 @@ namespace SPIPware
         {
 
         }
-
-       /* private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
+       //may move in the future for easier readability
+      /*  private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
         {
-            //will open experiment builder window and import existing settings
+            ExperimentBuilder.ShowDialog();
         }*/
     }
     internal static class NativeMethods

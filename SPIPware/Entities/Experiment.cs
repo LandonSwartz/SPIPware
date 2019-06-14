@@ -111,6 +111,7 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.SelectAll = SelectAll;
                 Properties.Settings.Default.CurrentLocationX = CurrentLocationX;
                 Properties.Settings.Default.CurrentLocationY = CurrentLocationY;
+                Properties.Settings.Default.CurrentLocationZ = CurrentLocationZ;
                 Properties.Settings.Default.CameraName = CameraName;
                 Properties.Settings.Default.BacklightColor = BacklightColor;
                 Properties.Settings.Default.CycleCount = CycleCount;
@@ -139,6 +140,7 @@ namespace SPIPware.Entities
             SelectAll = Properties.Settings.Default.SelectAll;
             CurrentLocationX = Properties.Settings.Default.CurrentLocationX;
             CurrentLocationY = Properties.Settings.Default.CurrentLocationY;
+            CurrentLocationZ = Properties.Settings.Default.CurrentLocationZ;
             CameraName = Properties.Settings.Default.CameraName;
             TlStartDate = Properties.Settings.Default.tlStartDate;
             TlEndDate = Properties.Settings.Default.tlEndDate;
