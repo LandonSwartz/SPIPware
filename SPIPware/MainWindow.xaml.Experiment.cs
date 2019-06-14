@@ -128,7 +128,7 @@ namespace SPIPware
             Dispatcher.Invoke(() =>
             {
                 _log.Debug("Updating Plate Checkboxes");
-                int numBoxes = Properties.Settings.Default.NumLocations;
+                int numBoxes = Properties.Settings.Default.NumLocationsRow;
                 spCheckboxes.Children.Clear();
                 checkBoxes.Clear();
                 textBlocks.Clear();

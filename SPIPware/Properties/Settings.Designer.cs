@@ -1004,5 +1004,17 @@ namespace SPIPware.Properties {
                 this["CurrentLocationZ"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        public int NumLocationsY {
+            get {
+                return ((int)(this["NumLocationsY"]));
+            }
+            set {
+                this["NumLocationsY"] = value;
+            }
+        }
     }
 }

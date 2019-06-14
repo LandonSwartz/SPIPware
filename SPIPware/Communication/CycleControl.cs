@@ -64,7 +64,7 @@ namespace SPIPware.Communication
         {
             _log.Debug("IsNextIndex Index: " + index);
             _log.Debug("IsNextIndex+ImagePositions.count " + ImagePositions.Count);
-            return (index <= ImagePositions.Count && index < Properties.Settings.Default.NumLocations);
+            return (index <= ImagePositions.Count && index < Properties.Settings.Default.NumLocationsRow);
         }
         public void UpdatePositionList(List<CheckBox> checkBoxes)
         {

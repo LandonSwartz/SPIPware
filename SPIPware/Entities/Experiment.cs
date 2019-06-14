@@ -43,7 +43,9 @@ namespace SPIPware.Entities
         private bool currentPlateSave;
         private int numLocations;
         private bool selectAll;
-        private int currentLocation;
+        private int currentLocationX;
+        private int currentLocationY;
+        private int currentLocationZ;
         private string cameraName;
         private DateTime tlStartDate;
         private DateTime tlEndDate;
@@ -67,8 +69,9 @@ namespace SPIPware.Entities
         public bool CurrentPlateSave { get => currentPlateSave; set => currentPlateSave = value; }
         public int NumLocations { get => numLocations; set => numLocations = value; }
         public bool SelectAll { get => selectAll; set => selectAll = value; }
-        public int CurrentLocationX { get => currentLocation; set => currentLocation = value; }
-        public int CurrentLocationY { get => currentLocation; set => currentLocation = value; }
+        public int CurrentLocationX { get => currentLocationX; set => currentLocationX = value; }
+        public int CurrentLocationY { get => currentLocationY; set => currentLocationY = value; }
+        public int CurrentLocationZ { get => currentLocationZ; set => currentLocationZ = value; }
         public string CameraName { get => cameraName; set => cameraName = value; }
         public DateTime TlStartDate { get => tlStartDate; set => tlStartDate = value; }
         public DateTime TlEndDate { get => tlEndDate; set => tlEndDate = value; }
@@ -104,7 +107,7 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.FileName = FileName;
                 Properties.Settings.Default.SaveFolderPath = SaveFolderPath;
                 Properties.Settings.Default.CurrentPlateSave = CurrentPlateSave;
-                Properties.Settings.Default.NumLocations = NumLocations;
+                Properties.Settings.Default.NumLocationsRow = NumLocations;
                 Properties.Settings.Default.SelectAll = SelectAll;
                 Properties.Settings.Default.CurrentLocationX = CurrentLocationX;
                 Properties.Settings.Default.CurrentLocationY = CurrentLocationY;
@@ -132,7 +135,7 @@ namespace SPIPware.Entities
             FileName = Properties.Settings.Default.FileName;
             SaveFolderPath = Properties.Settings.Default.SaveFolderPath;
             CurrentPlateSave = Properties.Settings.Default.CurrentPlateSave;
-            NumLocations = Properties.Settings.Default.NumLocations;
+            NumLocations = Properties.Settings.Default.NumLocationsRow;
             SelectAll = Properties.Settings.Default.SelectAll;
             CurrentLocationX = Properties.Settings.Default.CurrentLocationX;
             CurrentLocationY = Properties.Settings.Default.CurrentLocationY;
