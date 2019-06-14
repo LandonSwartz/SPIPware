@@ -662,6 +662,7 @@ namespace SPIPware.Communication
         {
             return sendMotionCommandY(position, 0);
         }
+
         /*
         //z-axis command, not enabled yet
         private String buildCommandZ(double distance) //where command is built for gcode

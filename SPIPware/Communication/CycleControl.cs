@@ -41,10 +41,15 @@ namespace SPIPware.Communication
 
         private List<int> _imagePositions = new List<int>();
         public bool runningCycle = false;
-        private double targetLocation = 0;
+        //target locations for next position in cycle
+        private double targetLocationX = 0;
+        private double targetLocationY = 0;
+        private double targetLocationZ = 0;
 
-        private static int posIndex = 0;
-     //   private static int posIndexY = 0; //y position index
+        //position index for each axis
+        private static int posIndexX = 0;
+        private static int posIndexY = 0; //y position index
+        private static int posIndexZ = 0;
 
         CycleControl()
         {
@@ -112,8 +117,9 @@ namespace SPIPware.Communication
 
 
                 camera.loadCameraSettings();
-                posIndex = 0;
-        //        posIndexY = 0;
+                posIndexX = 0;
+                posIndexY = 0;
+                posIndexZ = 0;
            
                 if (!ImagePositions.Any())
                 {
@@ -140,9 +146,13 @@ namespace SPIPware.Communication
             _log.Debug("Ending Cycle.");
             Properties.Settings.Default.CycleCount++;
             runningCycle = false;
-            posIndex = 0;
-          //  posIndexY = 0;
-            targetLocation = 0;
+            //reseting all the indexes and target location values
+            posIndexX = 0;
+            posIndexY = 0;
+            posIndexZ = 0;
+            targetLocationX = 0;
+            targetLocationY = 0;
+            targetLocationZ = 0;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
             peripheral.SetLight(Peripheral.Backlight, false);
@@ -167,19 +177,19 @@ namespace SPIPware.Communication
         public event EventHandler ImageUpdatedEvent;
         public BitmapImage bi;
         public void IsHome()
-        {
+        {//currently only set up for x-axis
             _log.Debug("Machine Home");
             if (runningCycle)
             {
-                   HandleNextPositionX(posIndex);
-                   posIndex++; 
+                   HandleNextPositionX(posIndexX);
+                   posIndexX++; 
             }
 
         }
         public void IsIdle()
-        {
+        {//only set up for x
             _log.Debug("Machine Idle");
-            if (runningCycle && machine.WorkPosition.X == targetLocation)
+            if (runningCycle && machine.WorkPosition.X == targetLocationX)
             {
                 //peripheral.SetLight(Peripheral.Backlight, true);
                 bi = camera.CapSaveImage().Clone();
@@ -188,9 +198,9 @@ namespace SPIPware.Communication
 
                 ImageUpdatedEvent.Raise(this, new EventArgs());
                                 
-                HandleNextPositionX(posIndex);
+                HandleNextPositionX(posIndexX);
                 
-                posIndex++;
+                posIndexX++;
 
             }
         }
@@ -209,12 +219,46 @@ namespace SPIPware.Communication
         public void GoToPositionX(int index)
         {
             _log.Debug("ImagePositions[index]: " + ImagePositions[index]);
-            targetLocation = machine.sendMotionCommandX(ImagePositions[index]);
-            _log.Debug("Going to target location: " + targetLocation);
+            targetLocationX = machine.sendMotionCommandX(ImagePositions[index]);
+            _log.Debug("Going to target location: " + targetLocationX);
         }
 
         //y-axis
+        public void HandleNextPositionY(int index)
+        {
+            bool foundPlate = IsCurrentIndex(index);
+            _log.Debug("Found Current Plate: " + foundPlate);
+            if (foundPlate)
+            {
+                _log.Debug("local index: " + index);
+                GoToPositionY(index);
+            }
+            else End();
+        }
+        public void GoToPositionY(int index)
+        {
+            _log.Debug("ImagePositions[index]: " + ImagePositions[index]);
+            targetLocationX = machine.sendMotionCommandX(ImagePositions[index]);
+            _log.Debug("Going to target location: " + targetLocationY);
+        }
 
         //z-axis
+        public void HandleNextPositionZ(int index)
+        {
+            bool foundPlate = IsCurrentIndex(index);
+            _log.Debug("Found Current Plate: " + foundPlate);
+            if (foundPlate)
+            {
+                _log.Debug("local index: " + index);
+                GoToPositionZ(index);
+            }
+            else End();
+        }
+        public void GoToPositionZ(int index)
+        {
+            _log.Debug("ImagePositions[index]: " + ImagePositions[index]);
+            targetLocationX = machine.sendMotionCommandX(ImagePositions[index]);
+            _log.Debug("Going to target location: " + targetLocationZ);
+        }
     }
 }

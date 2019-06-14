@@ -156,7 +156,7 @@ G92Z0;</Value>
     <Setting Name="CurrentPlateSave" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="NumLocations" Type="System.Int32" Scope="User">
+    <Setting Name="NumLocationsRow" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">6</Value>
     </Setting>
     <Setting Name="SelectAll" Type="System.Boolean" Scope="User">

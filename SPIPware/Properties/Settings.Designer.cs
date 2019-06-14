@@ -638,12 +638,12 @@ namespace SPIPware.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("6")]
-        public int NumLocations {
+        public int NumLocationsRow {
             get {
-                return ((int)(this["NumLocations"]));
+                return ((int)(this["NumLocationsRow"]));
             }
             set {
-                this["NumLocations"] = value;
+                this["NumLocationsRow"] = value;
             }
         }
         
