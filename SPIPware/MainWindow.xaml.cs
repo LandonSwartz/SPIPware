@@ -422,7 +422,7 @@ namespace SPIPware
                 return;
             }
             Properties.Settings.Default.CurrentLocationX--;
-            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocationX);
+            machine.sendMotionCommandX(Properties.Settings.Default.CurrentLocationX);
         }
         //increases x axis position
         private void ButtonManualMoveXAxisRight_Click(object sender, RoutedEventArgs e)
@@ -434,7 +434,7 @@ namespace SPIPware
 
             _log.Debug("Goto X-axis right dockpanel button clicked");
             Properties.Settings.Default.CurrentLocationX++;
-            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocationX);
+            machine.sendMotionCommandX(Properties.Settings.Default.CurrentLocationX);
 
         }
 

@@ -171,7 +171,7 @@ namespace SPIPware.Communication
             _log.Debug("Machine Home");
             if (runningCycle)
             {
-                   HandleNextPosition(posIndex);
+                   HandleNextPositionX(posIndex);
                    posIndex++; 
             }
 
@@ -188,28 +188,33 @@ namespace SPIPware.Communication
 
                 ImageUpdatedEvent.Raise(this, new EventArgs());
                                 
-                HandleNextPosition(posIndex);
+                HandleNextPositionX(posIndex);
                 
                 posIndex++;
 
             }
         }
-        public void HandleNextPosition(int index)
+        //x-axis
+        public void HandleNextPositionX(int index)
         {
             bool foundPlate = IsCurrentIndex(index);
             _log.Debug("Found Current Plate: " + foundPlate);
             if (foundPlate )
             {
                 _log.Debug("local index: " + index);
-                GoToPosition(index);
+                GoToPositionX(index);
             }
             else End();
         }
-        public void GoToPosition(int index)
+        public void GoToPositionX(int index)
         {
             _log.Debug("ImagePositions[index]: " + ImagePositions[index]);
-            targetLocation = machine.sendMotionCommand(ImagePositions[index]);
+            targetLocation = machine.sendMotionCommandX(ImagePositions[index]);
             _log.Debug("Going to target location: " + targetLocation);
         }
+
+        //y-axis
+
+        //z-axis
     }
 }

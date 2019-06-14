@@ -12,7 +12,7 @@ namespace SPIPware.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -667,37 +667,19 @@ namespace SPIPware.Properties {
                 return ((int)(this["MinLocation"]));
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int CurrentLocationX
-        {
-            get
-            {
+        public int CurrentLocationX {
+            get {
                 return ((int)(this["CurrentLocationX"]));
             }
-            set
-            {
+            set {
                 this["CurrentLocationX"] = value;
             }
         }
-        //y current location
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int CurrentLocationY
-        {
-            get
-            {
-                return ((int)(this["CurrentLocationY"]));
-            }
-            set
-            {
-                this["CurrentLocationY"] = value;
-            }
-        }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Mako")]
@@ -718,18 +700,7 @@ namespace SPIPware.Properties {
                 return ((string)(this["PrimaryAxis"]));
             }
         }
-        //y-axis added
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Y")]
-        public string SecondaryAxis 
-        {
-            get
-            {
-                return ((string)(this["SecondaryAxis"]));
-            }
-        }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10000")]
@@ -983,6 +954,54 @@ namespace SPIPware.Properties {
         public global::System.TimeSpan EndOfNight {
             get {
                 return ((global::System.TimeSpan)(this["EndOfNight"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Y")]
+        public string SecondaryAxis {
+            get {
+                return ((string)(this["SecondaryAxis"]));
+            }
+            set {
+                this["SecondaryAxis"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Z")]
+        public string TertiaryAxis {
+            get {
+                return ((string)(this["TertiaryAxis"]));
+            }
+            set {
+                this["TertiaryAxis"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int CurrentLocationY {
+            get {
+                return ((int)(this["CurrentLocationY"]));
+            }
+            set {
+                this["CurrentLocationY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int CurrentLocationZ {
+            get {
+                return ((int)(this["CurrentLocationZ"]));
+            }
+            set {
+                this["CurrentLocationZ"] = value;
             }
         }
     }

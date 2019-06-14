@@ -60,8 +60,8 @@ namespace SPIPware
             }
 
             else if (machine.Status == "Home")
-            {
-                machine.homeMachinePos = machine.MachinePosition.X;
+            { //may need to add more axis
+                machine.homeMachinePos.currentLocationX = machine.MachinePosition.X;
                 //cycle.IsHome();
 
             }

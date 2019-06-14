@@ -95,15 +95,15 @@ namespace SPIPware
             btnTestFirst.IsEnabled = true;
             btnTestBetween.IsEnabled = true;
         }
-
+        //WILL NEED TO UPDATE FOR MULTIPLE AXIS
         private void BtnTestFirst_Click(object sender, RoutedEventArgs e)
         {
-            machine.sendMotionCommand(0);
+            machine.sendMotionCommandX(0);
 
         }
         private void btnTestBetween_Click(object sender, RoutedEventArgs e)
         {
-            machine.sendMotionCommand(1);
+            machine.sendMotionCommandX(1);
         }
     }
 }
