@@ -272,6 +272,11 @@
                 </RibbonGroup>
 
             </RibbonTab>
+            <RibbonTab Header="Experiment Builder" HorizontalAlignment="Left" Height="88" VerticalAlignment="Top" Width="1498">
+                <RibbonGroup>
+                    <Button x:Name="ExperimentBuilder" Content="Experiment Builder" HorizontalAlignment="Left" Cursor="Help"/>
+                </RibbonGroup>
+            </RibbonTab>
             <!--Lando added below       will readd once experiment builder is ready
             <RibbonTab Header="Experiment">
 S
@@ -694,7 +699,8 @@ S
 
                     </TabItem>
 
-                    <TabItem> <!--May change to Machine Position or something along those lines-->
+                    <TabItem>
+                        <!--May change to Machine Position or something along those lines-->
                         <TabItem.Header>
                             <Label Content="Plant Array" 
 								 HorizontalAlignment="Stretch" FontSize="14"/>
