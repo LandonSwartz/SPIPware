@@ -110,9 +110,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Communication\CameraControl.cs" />
-    <Compile Include="Communication\Tray.cs" />
-    <Compile Include="Communication\Plate.cs" />
-    <Compile Include="Communication\Well.cs" />
+    <Compile Include="Communication\Experiment Parts\Tray.cs" />
+    <Compile Include="Communication\Experiment Parts\Plate.cs" />
+    <Compile Include="Communication\Experiment Parts\Well.cs" />
     <Compile Include="Entities\EventExtensions.cs" />
     <Compile Include="Communication\Machine.cs" />
     <Compile Include="Communication\CycleControl.cs" />
