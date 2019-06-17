@@ -22,14 +22,9 @@ namespace SPIPware.Communication
             set { diameter = value; }
         }
 
-        public bool filled; //is the well being used or not
+        private bool active; //is the well being used or not
+        public bool Active { get => active; set => active = value; }
 
-        private string contents; //what is in the well?
-        public string Contents
-        {
-            get { return contents; }
-            set { } //may need to update in future
-        }
 
         public
 

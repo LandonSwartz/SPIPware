@@ -15,23 +15,36 @@ namespace SPIPware.Communication
             get { return numWells; }
             set { numWells = value; }
         }
-        int length; //auto private because not specified
-        public int Length
+        int numRows; //auto private because not specified
+        public int NumRows
         {
             get { return length; }
             set { length = value; }
         }
-        int width;
-        public int Width
+        int numColumns;
+        public int NumColumns
         {
-            get { return width; }
-            set { width = value; }
+            get { return numColumns; }
+            set { numColumns = value; }
         }
-        int distanceBtwnWells; //distance between wells on plate
-        public int DistanceBtwn
+
+        private int xOffset;
+        public int XOffset
         {
-            get { return distanceBtwnWells; }
-            set { distanceBtwnWells = value; }
+            get { return xOffset; }
+            set { xOffset = value; }
         }
+
+        private int yOffset;
+        public int YOffset
+        {
+            get { return yOffset; }
+            set { yOffset = value; }
+        }
+
+
+        public Well[,] wells = new Well[3,4];//need to make variable when can
+
+        //may need a method to initalize all the wells arrays
     }
 }

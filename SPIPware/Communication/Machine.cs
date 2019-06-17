@@ -64,6 +64,8 @@ namespace SPIPware.Communication
 		public event Action FileChanged;
 		public event Action FilePositionChanged;
 		public event Action OverrideChanged;
+        public event Action NumRowsChanged; //event for number of plate rows changing
+        public event Action NumColumnsChanged; 
 
 		public Vector3 MachinePosition { get; private set; } = new Vector3();   //No events here, the parser triggers a single event for both
 		public Vector3 WorkOffset { get; private set; } = new Vector3();
@@ -86,9 +88,43 @@ namespace SPIPware.Communication
 
 		public double CurrentTLO { get; private set; } = 0;
 
-        Plate Plate1 = new Plate(); //may need an access specifier
+        Plate[] plates = new Plate[7]; //may need an access specifier, currently 7 plates but will find out how to dynamic plates later
 
-		private Calculator _calculator;
+        private int _numRows;
+        public int NumRows
+        {
+            get { return _numRows; }
+            private set
+            {
+                if (_numRows == value) //if same value return
+                {
+                    return;
+                }
+
+                _numRows = value;
+
+                RaiseEvent(NumRowsChanged); //may or may not need
+            }
+        }
+
+        private int _numColumns;
+        public int NumColumns
+        {
+            get { return _numColumns; }
+            private set
+            {
+                if (_numColumns == value) //if same value return
+                {
+                    return;
+                }
+
+                _numColumns = value;
+
+                RaiseEvent(NumColumnsChanged); //may or may not need
+            }
+        }
+
+        private Calculator _calculator;
 		private Calculator Calculator { get { return _calculator; } }
 
 		private ReadOnlyCollection<bool> _pauselines = new ReadOnlyCollection<bool>(new bool[0]);

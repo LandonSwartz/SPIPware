@@ -110,6 +110,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Communication\CameraControl.cs" />
+    <Compile Include="Communication\Tray.cs" />
     <Compile Include="Communication\Plate.cs" />
     <Compile Include="Communication\Well.cs" />
     <Compile Include="Entities\EventExtensions.cs" />
