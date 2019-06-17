@@ -1,1 +1,23 @@
 To do for SPIPware:
+
+Backend (Biggest Hurdles):
+	- Finish plate, well, and tray classes
+	- Rebuild machine.cs to take plate, well and trays and maybe make more variable
+	- Redo CycleControl.cs to take plates, well, and trays in motion
+	- (Optional) Make PheropheralControl.cs take many cameras 
+	- Make Experiment.cs a better object for the plates, trays, and wells
+	- Make file reader for importing plate config and other things
+	
+Frontend:
+	- Make Experiment builder window
+	- Remake the parts of main window to remove old experiment things and input the new
+	- (Optional) Make Settings window and import some of settings of application
+	- (Optional) Update Sunbear logo to BugBear logo
+	
+Other Wants (but not needs)
+	- Documenting back end code
+	- Documenting front end code
+	- Quality of Life improvements
+		- Asking to close window if trying to close during cycle
+		- General Code Clean up
+		- Settings Window
