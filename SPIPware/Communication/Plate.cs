@@ -18,8 +18,8 @@ namespace SPIPware.Communication
         int numRows; //auto private because not specified
         public int NumRows
         {
-            get { return length; }
-            set { length = value; }
+            get { return numRows; }
+            set { numRows = value; }
         }
         int numColumns;
         public int NumColumns
@@ -43,7 +43,7 @@ namespace SPIPware.Communication
         }
 
 
-        public Well[,] wells = new Well[3,4];//need to make variable when can
+        public Well[,] wells = new Well[4,6];//need to make variable when can
 
         //may need a method to initalize all the wells arrays
     }
