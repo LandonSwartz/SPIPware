@@ -86,6 +86,8 @@ namespace SPIPware.Communication
 
 		public double CurrentTLO { get; private set; } = 0;
 
+        Plate Plate1 = new Plate(); //may need an access specifier
+
 		private Calculator _calculator;
 		private Calculator Calculator { get { return _calculator; } }
 

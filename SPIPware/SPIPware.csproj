@@ -110,8 +110,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Communication\CameraControl.cs" />
-    <Compile Include="Entities\Plate.cs" />
-    <Compile Include="Entities\Well.cs" />
+    <Compile Include="Communication\Plate.cs" />
+    <Compile Include="Communication\Well.cs" />
     <Compile Include="Entities\EventExtensions.cs" />
     <Compile Include="Communication\Machine.cs" />
     <Compile Include="Communication\CycleControl.cs" />
@@ -223,6 +223,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Icons\Button_Icon_SettingsWindow.png" />
     <Resource Include="Resources\Images\Grey Square.png" />
     <Resource Include="Resources\Images\redditDownvote.png" />
     <Resource Include="Resources\Images\redditUpvote.png" />

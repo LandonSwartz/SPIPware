@@ -57,6 +57,7 @@
                     <RibbonApplicationMenuItem Header="Open" Click="ButtonLoadExperiment_Click"  ImageSource="Resources/Icons/open_small.png"></RibbonApplicationMenuItem>
                     <RibbonApplicationMenuItem Header="Save"  Click="ButtonSaveExperiment_Click" ImageSource="Resources/Icons/save.png"></RibbonApplicationMenuItem>
                     <RibbonApplicationMenuItem Header="Save As" Click="ButtonSaveAsExperiment_Click" ImageSource="Resources/Icons/saveas.png"></RibbonApplicationMenuItem>
+                    <RibbonApplicationMenuItem Header="Open Settings" Click="OpenAppSettingsWindow_Click" ImageSource="C:\Users\sam998\Desktop\Lando's Folder\SPIPware build\SPIPware-master\SPIPware\Resources\Icons\Button_Icon_SettingsWindow.png"></RibbonApplicationMenuItem>
 
                     <RibbonSeparator></RibbonSeparator>
                     <RibbonApplicationSplitMenuItem Header="Defaults" >

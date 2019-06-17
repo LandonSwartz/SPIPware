@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SPIPware"
         xmlns:util="clr-namespace:SPIPware.Util"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="300" Width="390" Closed="Window_Closed">
+        Title="SettingsWindow" Height="627.273" Width="513.58" Closed="Window_Closed">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -72,6 +72,13 @@
                 <CheckBox Content="Include Spindle 'S' Commands" HorizontalAlignment="Left" Margin="116,10,0,0" VerticalAlignment="Top" IsChecked="{util:SettingBinding GCodeIncludeSpindle}"/>
                 <CheckBox Content="Include Dwell 'G4' Commands" HorizontalAlignment="Left" Margin="116,30,0,0" VerticalAlignment="Top" IsChecked="{util:SettingBinding GCodeIncludeDwell}"/>
                 <CheckBox Content="Include Program End (M2, M30)" HorizontalAlignment="Left" Margin="116,50,0,0" VerticalAlignment="Top" IsChecked="{util:SettingBinding GCodeIncludeMEnd}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Multi Axis Movement">
+            <Grid>
+                <CheckBox Content="Enable Y-Axis" HorizontalAlignment="Left" Margin="48,35,0,0" VerticalAlignment="Top" IsChecked="{util:SettingBinding Y_Axis_Enable}"/>
+                <CheckBox Content="Enable Z-Axis" HorizontalAlignment="Left" Margin="48,55,0,0" VerticalAlignment="Top" IsChecked="{util:SettingBinding Z_Axis_Enable}"/>
+
             </Grid>
         </TabItem>
     </TabControl>

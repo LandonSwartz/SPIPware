@@ -440,13 +440,18 @@ namespace SPIPware
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
        //may move in the future for easier readability
       /*  private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
         {
             ExperimentBuilder.ShowDialog();
         }*/
+        SettingsWindow settings = new SettingsWindow();
+        private void OpenAppSettingsWindow_Click(object sender, RoutedEventArgs e)
+        {
+            settings.ShowDialog();
+        }
     }
     internal static class NativeMethods
     {

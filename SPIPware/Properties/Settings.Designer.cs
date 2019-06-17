@@ -1016,5 +1016,41 @@ namespace SPIPware.Properties {
                 this["NumLocationsY"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
+        public int NumPlates {
+            get {
+                return ((int)(this["NumPlates"]));
+            }
+            set {
+                this["NumPlates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Y_Axis_Enable {
+            get {
+                return ((bool)(this["Y_Axis_Enable"]));
+            }
+            set {
+                this["Y_Axis_Enable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Z_Axis_Enable {
+            get {
+                return ((bool)(this["Z_Axis_Enable"]));
+            }
+            set {
+                this["Z_Axis_Enable"] = value;
+            }
+        }
     }
 }

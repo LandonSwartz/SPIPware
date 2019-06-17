@@ -7,3 +7,6 @@ To do for SPIPware:
 
 Bugs
 	- Sometimes x manual d pad doens't work or ends up way farther than its suppose to be
+
+Feature Ideas:
+	- Do you really wanna close this window when try to close while cycle is running

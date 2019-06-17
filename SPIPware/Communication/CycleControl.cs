@@ -29,6 +29,7 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
+        private List<int> _imagePositions = new List<int>();
         public List<int> ImagePositions { get => _imagePositions; set => _imagePositions = value; }
 
         public event EventHandler StatusUpdate;
@@ -39,7 +40,7 @@ namespace SPIPware.Communication
         Machine machine = Machine.Instance;
         PeripheralControl peripheral = PeripheralControl.Instance;
 
-        private List<int> _imagePositions = new List<int>();
+        
         public bool runningCycle = false;
         //target locations for next position in cycle
         private double targetLocationX = 0;
@@ -182,7 +183,11 @@ namespace SPIPware.Communication
             if (runningCycle)
             {
                    HandleNextPositionX(posIndexX);
-                   posIndexX++; 
+                   posIndexX++;
+                /*if(Settings.settings.Y_Axis_Enable = true)
+                {
+
+                }*/
             }
 
         }
