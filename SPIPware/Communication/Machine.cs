@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using log4net;
+using SPIPware.Communication.Experiment_Parts; //for experiment parts may to another file set later
 
 namespace SPIPware.Communication
 {
@@ -88,9 +89,11 @@ namespace SPIPware.Communication
 
 		public double CurrentTLO { get; private set; } = 0;
 
+        #region BugbearUpdate
         // Plate[] plates = new Plate[7]; //may need an access specifier, currently 7 plates but will find out how to dynamic plates later'
-        private Tray trays = Tray(); 
+        private Tray[] trays;//hard coded number of trays for later
 
+        //may or maynot need below
         private int _numRows;
         public int NumRows
         {
@@ -124,6 +127,7 @@ namespace SPIPware.Communication
                 RaiseEvent(NumColumnsChanged); //may or may not need
             }
         }
+        #endregion 
 
         private Calculator _calculator;
 		private Calculator Calculator { get { return _calculator; } }

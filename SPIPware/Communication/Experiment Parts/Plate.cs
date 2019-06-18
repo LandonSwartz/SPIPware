@@ -5,25 +5,78 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPIPware.Communication
+//ADD constructor!!!
+
+namespace SPIPware.Communication.Experiment_Parts
 {
     //for collection of wells
     class Plate
     {
-        public Plate()
+        #region Properties
+        private int numWells; //how many wells in the plate in total
+        //for plate array
+        int numRows; //auto private because not specified
+        int numColumns;
+        //offsets for camera
+        private int xOffset;
+        private int yOffset;
+        public Well[,] wells; //need to make variable when can
+
+        public int NumWells
         {
+            get { return numWells; }
+            set { numWells = numRows*NumColumns; } //return rows times column
+        }
+        
+        public int NumRows
+        {
+            get { return numRows; }
+            set { numRows = value; }
+        }
+        
+        public int NumColumns
+        {
+            get { return numColumns; }
+            set { numColumns = value; }
+        }
+        
+        public int XOffset
+        {
+            get { return xOffset; }
+            set { xOffset = value; }
+        }
+
+        public int YOffset
+        {
+            get { return yOffset; }
+            set { yOffset = value; }
+        }
+        #endregion
+
+
+
+        #region Constructors
+        public Plate() //constructor function
+        {
+            //hardcoded values, will change in future
+            numRows = 4;
+            numColumns = 6;
+            xOffset = 1;//will change
+            yOffset = 1;
+
             wells = new Well[numRows, numColumns]; //will need to see how this works in practice
             for(int i = 0; i < numRows; i++)
             {
                 for( int j = 0; j < numColumns; j++)
                 {
                     wells[i, j] = new Well();
+                    //filling in coordinate of the well
                     wells[i, j].X = i;
                     wells[i, j].Y = j;
                 }
             }
         }
-        //initializing method
+        //Manual initializing method
         public Plate(int NumWells, int NumRows, int NumColumns, int XOffset, int YOffset)
         {
             numWells = NumWells;
@@ -32,48 +85,14 @@ namespace SPIPware.Communication
             xOffset = XOffset;
             yOffset = YOffset;
         }
+        #endregion
 
-        private int numWells; //how many wells in the plate in total
-        public int NumWells
-        {
-            get { return numWells; }
-            set { numWells = value; }
-        }
-        //for plate array
-        int numRows; //auto private because not specified
-        public int NumRows
-        {
-            get { return numRows; }
-            set { numRows = value; }
-        }
-        int numColumns;
-        public int NumColumns
-        {
-            get { return numColumns; }
-            set { numColumns = value; }
-        }
-        //offsets for camera
-        private int xOffset;
-        public int XOffset
-        {
-            get { return xOffset; }
-            set { xOffset = value; }
-        }
-
-        private int yOffset;
-        public int YOffset
-        {
-            get { return yOffset; }
-            set { yOffset = value; }
-        }
-
-
-        private Well[,] wells; //need to make variable when can
-
+        #region Misc
         //finding point in well array
-      /*  private  ptInWellArray(xVal, yVal)
-        { 
+        /*  private  ptInWellArray(xVal, yVal)
+          { 
 
-        }*/
+          }*/
+        #endregion
     }
 }
