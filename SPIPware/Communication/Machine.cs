@@ -96,40 +96,19 @@ namespace SPIPware.Communication
         // Plate[] plates = new Plate[7]; //may need an access specifier, currently 7 plates but will find out how to dynamic plates later'
         private Tray[] trays;//hard coded number of trays for later
 
-        //may or maynot need below
-        private int _numRows;
-        public int NumRows
+        /* may or may not keep, we will see
+        public Tray[] Trays
         {
-            get { return _numRows; }
-            private set
+            get { return trays;}
+            set
             {
-                if (_numRows == value) //if same value return
+                for(int i = 0; i < 3; i++)
                 {
-                    return;
+                    trays[i] = new Tray();
                 }
-
-                _numRows = value;
-
-                RaiseEvent(NumRowsChanged); //may or may not need
             }
-        }
-
-        private int _numColumns;
-        public int NumColumns
-        {
-            get { return _numColumns; }
-            private set
-            {
-                if (_numColumns == value) //if same value return
-                {
-                    return;
-                }
-
-                _numColumns = value;
-
-                RaiseEvent(NumColumnsChanged); //may or may not need
-            }
-        }
+        }*/
+       
         #endregion 
 
         private Calculator _calculator;
@@ -644,7 +623,7 @@ namespace SPIPware.Communication
         #endregion
 
         #region Posistion and Movement
-        //this struct is a data type that holds three ints as a XYZ point location
+        //this struct is a data type that holds three doubles as a XYZ point location
         public struct machinePos
         { //have to put public in the members of the struct because default by private with C#
             public double currentLocationX;
@@ -715,7 +694,6 @@ namespace SPIPware.Communication
             return sendMotionCommandY(position, 0);
         }
 
-        /*
         //z-axis command, not enabled yet
         private String buildCommandZ(double distance) //where command is built for gcode
         {
@@ -728,17 +706,19 @@ namespace SPIPware.Communication
             _log.Info("Generated Command: " + sb.ToString());
             return sb.ToString();
         }
+
         public double sendMotionCommandZ(int position, double offset)
         {
-            double distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+            double distance = homeMachinePos.currentLocationZ + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
             _log.Debug("Calculated Distance: " + distance);
             SendLine(buildCommandZ(distance));
             return distance;
         }
+
         public double sendMotionCommandZ(int position)
         {
             return sendMotionCommandZ(position, 0);
-        }*/
+        }
         #endregion
 
         #region GRBL related functions

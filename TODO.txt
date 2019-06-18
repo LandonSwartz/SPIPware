@@ -1,10 +1,10 @@
 To do for SPIPware:
 
 Backend (Biggest Hurdles):
-	- Finish plate, well, and tray classes
+	- Finish plate, well, and tray classes DONE (at least arbitarialy)
 	- Rebuild machine.cs to take plate, well and trays and maybe make more variable
 	- Redo CycleControl.cs to take plates, well, and trays in motion
-	- (Optional) Make PheropheralControl.cs take many cameras 
+	- (Optional) Make PheripheralControl.cs take many cameras 
 	- Make Experiment.cs a better object for the plates, trays, and wells
 	- Make file reader for importing plate config and other things
 	
