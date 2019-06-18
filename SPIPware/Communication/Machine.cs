@@ -38,6 +38,7 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
+        //Operating Mode for the machine
         public enum OperatingMode
 		{
 			Manual,
@@ -47,7 +48,8 @@ namespace SPIPware.Communication
 			SendMacro
 		}
 
-		public event Action<Vector3, bool> ProbeFinished;
+        #region Properties
+        public event Action<Vector3, bool> ProbeFinished;
 		public event Action<string> NonFatalException;
 		public event Action<string> Info;
 		public event Action<string> LineReceived;
@@ -88,6 +90,7 @@ namespace SPIPware.Communication
 		public double SpindleSpeedRealtime { get; private set; } = 0;
 
 		public double CurrentTLO { get; private set; } = 0;
+        #endregion
 
         #region BugbearUpdate
         // Plate[] plates = new Plate[7]; //may need an access specifier, currently 7 plates but will find out how to dynamic plates later'
@@ -176,7 +179,7 @@ namespace SPIPware.Communication
 			}
 		}
 
-		#region Status
+		#region Status and other settings
 		private string _status = "Disconnected";
 		public string Status
 		{
@@ -265,9 +268,10 @@ namespace SPIPware.Communication
 				RaiseEvent(BufferStateChanged);
 			}
 		}
-		#endregion Status
+        #endregion Status
 
-		public bool SyncBuffer { get; set; }
+        #region Misc threads and Buffer
+        public bool SyncBuffer { get; set; }
 
 		private Stream Connection;
 		private Thread WorkerThread;
@@ -295,8 +299,10 @@ namespace SPIPware.Communication
 		Queue ToSend = Queue.Synchronized(new Queue());
 		Queue ToSendPriority = Queue.Synchronized(new Queue()); //contains characters (for soft reset, feed hold etc)
 		Queue ToSendMacro = Queue.Synchronized(new Queue());
+        #endregion
 
-		private void Work()
+        #region Work() Function
+        private void Work()
 		{
 			try
 			{
@@ -534,8 +540,10 @@ namespace SPIPware.Communication
 				Disconnect();
 			}
 		}
+        #endregion
 
-		public void Connect()
+        #region Connect() and Disconnection() Functions
+        public void Connect()
 		{
 			if (Connected)
 				throw new Exception("Can't Connect: Already Connected");
@@ -633,8 +641,9 @@ namespace SPIPware.Communication
 			Sent.Clear();
 			ToSendMacro.Clear();
 		}
+        #endregion
 
-
+        #region Posistion and Movement
         //this struct is a data type that holds three ints as a XYZ point location
         public struct machinePos
         { //have to put public in the members of the struct because default by private with C#
@@ -730,7 +739,9 @@ namespace SPIPware.Communication
         {
             return sendMotionCommandZ(position, 0);
         }*/
+        #endregion
 
+        #region GRBL related functions
         public void SendLine(string line)
 		{
 			if (!Connected)
@@ -872,8 +883,10 @@ namespace SPIPware.Communication
 
 			RaiseEvent(FilePositionChanged);
 		}
+        #endregion
 
-		public void ClearFile()
+        #region File and Probe Functions
+        public void ClearFile()
 		{
 			if (Mode == OperatingMode.SendFile)
 			{
@@ -969,8 +982,9 @@ namespace SPIPware.Communication
 
 			RaiseEvent(FilePositionChanged);
 		}
+        #endregion
 
-		public void ClearQueue()
+        public void ClearQueue()
 		{
 			if (Mode != OperatingMode.Manual)
 			{
@@ -981,7 +995,8 @@ namespace SPIPware.Communication
 			ToSend.Clear();
 		}
 
-		private static Regex GCodeSplitter = new Regex(@"([GZ])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
+        #region Update Status info functions
+        private static Regex GCodeSplitter = new Regex(@"([GZ])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
 
 		/// <summary>
 		/// Updates Status info from each line sent
@@ -1281,12 +1296,13 @@ namespace SPIPware.Communication
 			}
 
 		}
+        #endregion
 
-		/// <summary>
-		/// Reports error. This is there to offload the ExpandError function from the "Real-Time" worker thread to the application thread
-		/// also used for alarms
-		/// </summary>
-		private void ReportError(string error)
+        /// <summary>
+        /// Reports error. This is there to offload the ExpandError function from the "Real-Time" worker thread to the application thread
+        /// also used for alarms
+        /// </summary>
+        private void ReportError(string error)
 		{
             _log.Error(GrblCodeTranslator.ExpandError(error));
             if (NonFatalException != null)

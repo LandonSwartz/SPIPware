@@ -48,5 +48,6 @@ namespace SPIPware.Communication.Experiment_Parts
 
               return array;
           }*/
+        #endregion
     }
 }

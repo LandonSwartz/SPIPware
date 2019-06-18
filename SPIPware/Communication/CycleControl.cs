@@ -42,6 +42,7 @@ namespace SPIPware.Communication
 
         
         public bool runningCycle = false;
+
         //target locations for next position in cycle
         private double targetLocationX = 0;
         private double targetLocationY = 0;
@@ -61,12 +62,14 @@ namespace SPIPware.Communication
         {
     
         }
+        //finds if currenet index (but only for x?)
         private bool IsCurrentIndex(int index)
         {
             _log.Debug("IsNextIndex Index: " + index);
             _log.Debug("IsNextIndex+ImagePositions.count " + ImagePositions.Count);
             return (index <= ImagePositions.Count && index < Properties.Settings.Default.NumLocationsRow);
         }
+
         public void UpdatePositionList(List<CheckBox> checkBoxes)
         {
             ImagePositions.Clear();
@@ -83,6 +86,7 @@ namespace SPIPware.Communication
             _log.Debug("UpdatePositionList+ImagePositions.Count: " + ImagePositions.Count);
         }
 
+        //Machine Status Change function
         private void Machine_StatusChanged()
         {
 
@@ -100,6 +104,8 @@ namespace SPIPware.Communication
             }
 
         }
+
+        #region Machine Status Functions
         public void Start()
         {
             if (machine.Connected && peripheral.Connected)
@@ -191,6 +197,7 @@ namespace SPIPware.Communication
             }
 
         }
+
         public void IsIdle()
         {//only set up for x
             _log.Debug("Machine Idle");
@@ -209,6 +216,9 @@ namespace SPIPware.Communication
 
             }
         }
+        #endregion
+
+        #region HandleNextPosition Functions(x,y,z)
         //x-axis
         public void HandleNextPositionX(int index)
         {
@@ -265,5 +275,6 @@ namespace SPIPware.Communication
             targetLocationX = machine.sendMotionCommandX(ImagePositions[index]);
             _log.Debug("Going to target location: " + targetLocationZ);
         }
+        #endregion
     }
 }
