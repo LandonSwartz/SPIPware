@@ -11,7 +11,7 @@ Backend (Biggest Hurdles):
 Frontend:
 	- Make Experiment builder window
 	- Remake the parts of main window to remove old experiment things and input the new
-	- (Optional) Make Settings window and import some of settings of application
+	- (Optional) Make Settings window and import some of settings of application (because y and z axis can be enable/disabled in settings and maybe way to switch between one and two axis)
 	- (Optional) Update Sunbear logo to BugBear logo
 	
 Other Wants (but not needs)

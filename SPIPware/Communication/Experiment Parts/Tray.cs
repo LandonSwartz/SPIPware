@@ -8,6 +8,11 @@ namespace SPIPware.Communication
 {
     class Tray
     {
-        Plate[,] plates = new Plate[3,4]; //need array size but maybe hard coded
+        public Plate[,] plates; //need array size but maybe hard coded
+
+        public Tray()
+        {
+            plates = new Plate[3, 4]; 
+        }
     }
 }

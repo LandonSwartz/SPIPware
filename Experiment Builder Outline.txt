@@ -31,11 +31,7 @@ Notes over existing program:
 Experiment.cs saves the infomation of the experiment so that can be saved and extended through experiment
 builder 
 
-cycle control.cs will need two axis (maybe even three axis) motion built in for auto movement 
-
-Machine.cs will need to have a facelift to be clearer and make it easier to have multiple machines 
-
-Update to Pheripheral.cs to make it more variabled and easier to communicate between seperate cameras and what not
+Update to Pheripheral.cs to make it more variabled and easier to communicate between seperate cameras and what not ?
 
 TODO:
 1. Update existing files to take 2/3 dimensions

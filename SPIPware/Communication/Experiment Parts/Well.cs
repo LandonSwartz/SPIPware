@@ -25,22 +25,28 @@ namespace SPIPware.Communication
         private bool active; //is the well being used or not
         public bool Active { get => active; set => active = value; }
 
+        //for plate array coordinates
+        private int x;
+        public int X
+        {
+            get { return x;  }
+            set { x = value; }
+        }
+
+        private int y;
+        public int Y
+        {
+            get { return y; }
+            set { y = value; }
+        }
 
         public
 
-            int GetDiameter(int radius)
+            int GetDiameter(int radius) //maybe used for auto distance finding
             {
-                int diameter = radius * 2;
+                int diameter = this.radius * 2;
 
                 return diameter;
-            }
-
-
-            double WellArea(int radius)
-            {
-                double area = (radius * radius) * 3.14;
-
-                return area;
             }
     }
 }

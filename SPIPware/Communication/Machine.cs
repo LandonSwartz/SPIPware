@@ -88,7 +88,8 @@ namespace SPIPware.Communication
 
 		public double CurrentTLO { get; private set; } = 0;
 
-        Plate[] plates = new Plate[7]; //may need an access specifier, currently 7 plates but will find out how to dynamic plates later
+        // Plate[] plates = new Plate[7]; //may need an access specifier, currently 7 plates but will find out how to dynamic plates later'
+        private Tray trays = Tray(); 
 
         private int _numRows;
         public int NumRows
