@@ -18,13 +18,13 @@ using SPIPware.Communication.Experiment_Parts; //for experiment parts may to ano
 
 namespace SPIPware.Communication
 {
-	enum ConnectionType
-	{
-		Serial
-	}
+    enum ConnectionType
+    {
+        Serial
+    }
 
-	public sealed class Machine
-	{
+    public sealed class Machine
+    {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly Machine instance = new Machine();
         static Machine()
@@ -40,62 +40,61 @@ namespace SPIPware.Communication
         }
         //Operating Mode for the machine
         public enum OperatingMode
-		{
-			Manual,
-			SendFile,
-			Probe,
-			Disconnected,
-			SendMacro
-		}
+        {
+            Manual,
+            SendFile,
+            Probe,
+            Disconnected,
+            SendMacro
+        }
 
         #region Properties
         public event Action<Vector3, bool> ProbeFinished;
-		public event Action<string> NonFatalException;
-		public event Action<string> Info;
-		public event Action<string> LineReceived;
-		public event Action<string> StatusReceived;
-		public event Action<string> LineSent;
-		public event Action ConnectionStateChanged;
-		public event Action PositionUpdateReceived;
-		public event Action StatusChanged;
-		public event Action DistanceModeChanged;
-		public event Action UnitChanged;
-		public event Action PlaneChanged;
-		public event Action BufferStateChanged;
-		public event Action PinStateChanged;
-		public event Action OperatingModeChanged;
-		public event Action FileChanged;
-		public event Action FilePositionChanged;
-		public event Action OverrideChanged;
+        public event Action<string> NonFatalException;
+        public event Action<string> Info;
+        public event Action<string> LineReceived;
+        public event Action<string> StatusReceived;
+        public event Action<string> LineSent;
+        public event Action ConnectionStateChanged;
+        public event Action PositionUpdateReceived;
+        public event Action StatusChanged;
+        public event Action DistanceModeChanged;
+        public event Action UnitChanged;
+        public event Action PlaneChanged;
+        public event Action BufferStateChanged;
+        public event Action PinStateChanged;
+        public event Action OperatingModeChanged;
+        public event Action FileChanged;
+        public event Action FilePositionChanged;
+        public event Action OverrideChanged;
         public event Action NumRowsChanged; //event for number of plate rows changing
-        public event Action NumColumnsChanged; 
+        public event Action NumColumnsChanged;
 
-		public Vector3 MachinePosition { get; private set; } = new Vector3();   //No events here, the parser triggers a single event for both
-		public Vector3 WorkOffset { get; private set; } = new Vector3();
-		public Vector3 WorkPosition { get { return MachinePosition - WorkOffset; } }
+        public Vector3 MachinePosition { get; private set; } = new Vector3();   //No events here, the parser triggers a single event for both
+        public Vector3 WorkOffset { get; private set; } = new Vector3();
+        public Vector3 WorkPosition { get { return MachinePosition - WorkOffset; } }
 
-		public Vector3 LastProbePosMachine { get; private set; }
-		public Vector3 LastProbePosWork { get; private set; }
+        public Vector3 LastProbePosMachine { get; private set; }
+        public Vector3 LastProbePosWork { get; private set; }
 
-		public int FeedOverride { get; private set; } = 100;
-		public int RapidOverride { get; private set; } = 100;
-		public int SpindleOverride { get; private set; } = 100;
+        public int FeedOverride { get; private set; } = 100;
+        public int RapidOverride { get; private set; } = 100;
+        public int SpindleOverride { get; private set; } = 100;
 
-		public bool PinStateProbe { get; private set; } = false;
-		public bool PinStateLimitX { get; private set; } = false;
-		public bool PinStateLimitY { get; private set; } = false;
-		public bool PinStateLimitZ { get; private set; } = false;
+        public bool PinStateProbe { get; private set; } = false;
+        public bool PinStateLimitX { get; private set; } = false;
+        public bool PinStateLimitY { get; private set; } = false;
+        public bool PinStateLimitZ { get; private set; } = false;
 
-		public double FeedRateRealtime { get; private set; } = 0;
-		public double SpindleSpeedRealtime { get; private set; } = 0;
+        public double FeedRateRealtime { get; private set; } = 0;
+        public double SpindleSpeedRealtime { get; private set; } = 0;
 
-		public double CurrentTLO { get; private set; } = 0;
+        public double CurrentTLO { get; private set; } = 0;
         #endregion
 
-        #region BugbearUpdate
-        // Plate[] plates = new Plate[7]; //may need an access specifier, currently 7 plates but will find out how to dynamic plates later'
-        private Tray[] trays;//hard coded number of trays for later
-
+        #region BugbearUpdates
+        private Tray[] trays = new Tray[3];//hard coded number of trays for later
+        
         /* may or may not keep, we will see
         public Tray[] Trays
         {
@@ -623,6 +622,7 @@ namespace SPIPware.Communication
         #endregion
 
         #region Posistion and Movement
+
         //this struct is a data type that holds three doubles as a XYZ point location
         public struct machinePos
         { //have to put public in the members of the struct because default by private with C#

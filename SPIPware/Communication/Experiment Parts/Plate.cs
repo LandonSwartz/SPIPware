@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 //ADD constructor!!!
 
@@ -20,7 +21,17 @@ namespace SPIPware.Communication.Experiment_Parts
         //offsets for camera
         private int xOffset;
         private int yOffset;
-        public Well[,] wells; //need to make variable when can
+        public Well[,] wells; 
+
+        /* Notes for future...
+         * 
+         * Right now, the wells are based as a 2D fixed array. The hope is though
+         * that in the future, it is a dynamic 2D array. But for current modes of 
+         * operation, I am keeping fixed and will work in future. May make a 
+         * dictionary of list or a list of lists to make it truly dynamic but 
+         * only time will tell if I can learn enough c# to do it. 
+         */ 
+
 
         public int NumWells
         {

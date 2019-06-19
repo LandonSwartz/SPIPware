@@ -21,6 +21,7 @@ namespace SPIPware.Communication
 
         static CycleControl()
         {
+
         }
         public static CycleControl Instance
         {
@@ -29,8 +30,8 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
-        private List<int> _imagePositions = new List<int>();
-        public List<int> ImagePositions { get => _imagePositions; set => _imagePositions = value; }
+        private List<List<int>> _imagePositions = new List<List<int>>(); //chnaged to 2D checkboxes
+        public List<List<int> >ImagePositions { get => _imagePositions; set => _imagePositions = value; }
 
         public event EventHandler StatusUpdate;
 
@@ -63,23 +64,40 @@ namespace SPIPware.Communication
     
         }
         //finds if currenet index (but only for x?)
-        private bool IsCurrentIndex(int index)
+        private bool IsCurrentIndexX(int index)
         {
-            _log.Debug("IsNextIndex Index: " + index);
-            _log.Debug("IsNextIndex+ImagePositions.count " + ImagePositions.Count);
+            _log.Debug("IsNextIndex IndexX: " + index);
+            _log.Debug("IsNextIndex+ImagePositionsX.count " + ImagePositions.Count);
             return (index <= ImagePositions.Count && index < Properties.Settings.Default.NumLocationsRow);
         }
 
-        public void UpdatePositionList(List<CheckBox> checkBoxes)
+        private bool IsCurrentIndexY(int index)
+        {
+            _log.Debug("IsNextIndex IndexX: " + index);
+            _log.Debug("IsNextIndex+ImagePositionsX.count " + ImagePositions.Count);
+            return (index <= ImagePositions.Count && index < Properties.Settings.Default.NumLocationsColumns);
+        }
+
+        //NOT enabled
+        private bool IsCurrentIndexZ(int index)
+        {
+            return false; //DO NOT USE
+        }
+
+        public void UpdatePositionList(List<List<CheckBox>> checkBoxes)
         {
             ImagePositions.Clear();
             _log.Debug("Number of Checkboxes: " + checkBoxes.Count);
             //ImagePositions.ForEach((position) => _log.Debug(position + ","));
-            for (var i = 0; i < checkBoxes.Count; i++)
+
+            for (var j = 0; j < checkBoxes.Count; j++)
             {
-                if (checkBoxes[i].IsChecked == true)
+                for (var i = 0; i < checkBoxes[j].Count; i++)
                 {
-                    ImagePositions.Add(i);
+                    if (checkBoxes[j][j].IsChecked == true)
+                    {
+                        ImagePositions[j].Add(i);
+                    }
                 }
             }
             //_imagePositions.ForEach(i => _log.Debug)
@@ -222,7 +240,7 @@ namespace SPIPware.Communication
         //x-axis
         public void HandleNextPositionX(int index)
         {
-            bool foundPlate = IsCurrentIndex(index);
+            bool foundPlate = IsCurrentIndexX(index);
             _log.Debug("Found Current Plate: " + foundPlate);
             if (foundPlate )
             {
@@ -232,16 +250,16 @@ namespace SPIPware.Communication
             else End();
         }
         public void GoToPositionX(int index)
-        {
-            _log.Debug("ImagePositions[index]: " + ImagePositions[index]);
-            targetLocationX = machine.sendMotionCommandX(ImagePositions[index]);
+        { //machine will go to x value and not move at y axis, that is why ImagePositions[index][0] has 0
+            _log.Debug("ImagePositions[index]: " + ImagePositions[index][0]);
+            targetLocationX = machine.sendMotionCommandX(ImagePositions[index][0]); 
             _log.Debug("Going to target location: " + targetLocationX);
         }
 
         //y-axis
         public void HandleNextPositionY(int index)
         {
-            bool foundPlate = IsCurrentIndex(index);
+            bool foundPlate = IsCurrentIndexY(index);
             _log.Debug("Found Current Plate: " + foundPlate);
             if (foundPlate)
             {
@@ -250,17 +268,18 @@ namespace SPIPware.Communication
             }
             else End();
         }
-        public void GoToPositionY(int index)
+        public void GoToPositionY(int indexY)
         {
-            _log.Debug("ImagePositions[index]: " + ImagePositions[index]);
-            targetLocationX = machine.sendMotionCommandX(ImagePositions[index]);
+            _log.Debug("ImagePositions[index]: " + ImagePositions[0][indexY]);
+            targetLocationX = machine.sendMotionCommandX(ImagePositions[0][indexY]);
             _log.Debug("Going to target location: " + targetLocationY);
         }
 
-        //z-axis
+        //z-axis NOT ENABLED
+        /*
         public void HandleNextPositionZ(int index)
         {
-            bool foundPlate = IsCurrentIndex(index);
+            bool foundPlate = IsCurrentIndexZ(index);
             _log.Debug("Found Current Plate: " + foundPlate);
             if (foundPlate)
             {
@@ -274,7 +293,7 @@ namespace SPIPware.Communication
             _log.Debug("ImagePositions[index]: " + ImagePositions[index]);
             targetLocationX = machine.sendMotionCommandX(ImagePositions[index]);
             _log.Debug("Going to target location: " + targetLocationZ);
-        }
+        }*/
         #endregion
     }
 }

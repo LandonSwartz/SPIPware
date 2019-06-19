@@ -252,7 +252,7 @@ G92Z0;</Value>
     <Setting Name="CurrentLocationZ" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="NumLocationsY" Type="System.Int32" Scope="User">
+    <Setting Name="NumLocationsColumns" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">6</Value>
     </Setting>
     <Setting Name="NumPlates" Type="System.Int32" Scope="User">

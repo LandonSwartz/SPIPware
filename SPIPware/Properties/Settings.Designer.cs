@@ -1008,12 +1008,12 @@ namespace SPIPware.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("6")]
-        public int NumLocationsY {
+        public int NumLocationsColumns {
             get {
-                return ((int)(this["NumLocationsY"]));
+                return ((int)(this["NumLocationsColumns"]));
             }
             set {
-                this["NumLocationsY"] = value;
+                this["NumLocationsColumns"] = value;
             }
         }
         
