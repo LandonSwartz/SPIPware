@@ -542,12 +542,12 @@ namespace SPIPware.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public int TotalPlates {
+        public int TotalRows {
             get {
-                return ((int)(this["TotalPlates"]));
+                return ((int)(this["TotalRows"]));
             }
             set {
-                this["TotalPlates"] = value;
+                this["TotalRows"] = value;
             }
         }
         
@@ -637,7 +637,7 @@ namespace SPIPware.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
         public int NumLocationsRow {
             get {
                 return ((int)(this["NumLocationsRow"]));
@@ -1050,6 +1050,18 @@ namespace SPIPware.Properties {
             }
             set {
                 this["Z_Axis_Enable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        public int TotalColumns {
+            get {
+                return ((int)(this["TotalColumns"]));
+            }
+            set {
+                this["TotalColumns"] = value;
             }
         }
     }

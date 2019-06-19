@@ -19,7 +19,8 @@ namespace SPIPware.Entities
 
         public static Dictionary<string, string> friendlyNames = new Dictionary<string, string>
         {
-            {"TotalPlates","Total Plates" },
+            {"TotalRows","Total Rows" },
+            {"Total Columns", "Total Columns" },
             {"CurrentPlate", "Current Plate" },
             {"PlateOffset", "Plate Offset" },
             {"BetweenDistance", "Between Distance" },
@@ -33,7 +34,9 @@ namespace SPIPware.Entities
         };
 
         private static CycleControl cycle = CycleControl.Instance;
-        private int totalPlates;
+        // private int totalPlates;
+        private int platesPerRow;
+        private int platesPerColumn;
         private int currentPlate;
         private int plateOffset;
         private int betweenDistance;
@@ -55,12 +58,14 @@ namespace SPIPware.Entities
         private long tlEndIntervalType;
         private long tlIntervalType;
         private int cycleCount;
-        private List<int> imagePositions;
+        private List<List<int>> imagePositions;
 
         private Color BacklightColor;
 
-        public int TotalPlates { get => totalPlates; set => totalPlates = value; }
-        public int CurrentPlate { get => currentPlate; set => currentPlate = value; }
+       // public int TotalPlates { get => totalPlates; set => totalPlates = value; }
+        public int PlatesPerRow { get => platesPerRow; set => platesPerRow = value; }
+        public int PlatesPerColumn{ get => platesPerColumn; set => platesPerColumn = value; }
+        public int  CurrentPlate { get => currentPlate; set => currentPlate = currentLocationX*CurrentLocationY; } //current plate is x*Y position
         public int PlateOffset { get => plateOffset; set => plateOffset = value; }
         public int BetweenDistance { get => betweenDistance; set => betweenDistance = value; }
         public string CameraSettingsPath { get => cameraSettingsPath; set => cameraSettingsPath = value; }
@@ -82,7 +87,7 @@ namespace SPIPware.Entities
 
         public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
         
-        public List<int> ImagePositions { get => imagePositions; set => imagePositions = value; }
+        public List<List<int>> ImagePositions { get => imagePositions; set => imagePositions = value; }
         public int CycleCount { get => cycleCount; set => cycleCount = value; }
 
 
@@ -99,7 +104,8 @@ namespace SPIPware.Entities
             if (this != null)
             {
                 
-                Properties.Settings.Default.TotalPlates = TotalPlates;
+                Properties.Settings.Default.TotalRows = PlatesPerRow;
+                Properties.Settings.Default.TotalColumns = PlatesPerColumn;
                 Properties.Settings.Default.CurrentPlate = CurrentPlate;
                 Properties.Settings.Default.PlateOffset = PlateOffset;
                 Properties.Settings.Default.BetweenDistance = BetweenDistance;
@@ -128,7 +134,8 @@ namespace SPIPware.Entities
         public void LoadExperiment()
         {
             //Experiment experiment = new Experiment();
-            TotalPlates = Properties.Settings.Default.TotalPlates;
+            PlatesPerRow = Properties.Settings.Default.TotalRows;
+            PlatesPerColumn = Properties.Settings.Default.TotalColumns;
             CurrentPlate = Properties.Settings.Default.CurrentPlate;
             PlateOffset = Properties.Settings.Default.PlateOffset;
             BetweenDistance = Properties.Settings.Default.BetweenDistance;
@@ -152,7 +159,7 @@ namespace SPIPware.Entities
             CycleCount = Properties.Settings.Default.CycleCount;
             if (cycle.ImagePositions != null)
             {
-                ImagePositions = new List<int>(cycle.ImagePositions);
+                ImagePositions = new List<List<int>>(cycle.ImagePositions);
             }
             else
             {

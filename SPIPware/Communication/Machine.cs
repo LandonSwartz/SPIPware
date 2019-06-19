@@ -67,8 +67,8 @@ namespace SPIPware.Communication
         public event Action FileChanged;
         public event Action FilePositionChanged;
         public event Action OverrideChanged;
-        public event Action NumRowsChanged; //event for number of plate rows changing
-        public event Action NumColumnsChanged;
+     //   public event Action NumRowsChanged; //event for number of plate rows changing
+     //   public event Action NumColumnsChanged;
 
         public Vector3 MachinePosition { get; private set; } = new Vector3();   //No events here, the parser triggers a single event for both
         public Vector3 WorkOffset { get; private set; } = new Vector3();

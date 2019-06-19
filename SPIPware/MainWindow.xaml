@@ -388,24 +388,25 @@ S
                                 <GroupBox.Header>
                                     <TextBlock>Plate Tagging</TextBlock>
                                 </GroupBox.Header>
+
+
                                 <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <StackPanel Orientation="Vertical" Margin="20,5,20,5">
-                                        <TextBlock VerticalAlignment="Center">Total Plates Per Row:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates, Mode=TwoWay}" Name="udTotalPlates" Margin="5" />
-                                    </StackPanel>
-                                    <!--<StackPanel Orientation="Vertical" Margin="20,5,20,5">
+                                    <StackPanel Orientation="Vertical" Margin="10,5,10,5">
                                         <TextBlock VerticalAlignment="Center">Total Rows:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates, Mode=TwoWay}" Name="udTotalPlates" Margin="5" />
-                                    </StackPanel> -->
-                                    <StackPanel Margin="20,5,20,5" Orientation="Vertical">
+                                        <xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalRows, Mode=TwoWay}" Name="udTotalRows" Margin="5" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical" Margin="10,5,10,5">
+                                        <TextBlock VerticalAlignment="Center">Total Columns:</TextBlock>
+                                        <xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalColumns, Mode=TwoWay}" Name="udTotalColumns" Margin="5" />
+                                    </StackPanel>
+                                    <StackPanel Margin="10,5,10,5" Orientation="Vertical">
                                         <TextBlock VerticalAlignment="Center">Cycle Count:</TextBlock>
                                         <xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CycleCount, Mode=TwoWay}" Name="udCycleCount"  Margin="5" />
                                     </StackPanel>
-                                    <StackPanel Margin="20,5,20,5" Orientation="Vertical">
+                                    <StackPanel Margin="10,5,10,5" Orientation="Vertical">
                                         <TextBlock VerticalAlignment="Center">Current Plate:</TextBlock>
                                         <xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CurrentPlate, Mode=TwoWay}" Name="udCurrentPlate"  Margin="5" />
                                     </StackPanel>
-
                                 </StackPanel>
                             </GroupBox>
                             <GroupBox >

@@ -47,12 +47,12 @@ namespace SPIPware.Communication
         //target locations for next position in cycle
         private double targetLocationX = 0;
         private double targetLocationY = 0;
-        private double targetLocationZ = 0;
+   //     private double targetLocationZ = 0; TO USE LATER IF NEEDED
 
         //position index for each axis
         private static int posIndexX = 0;
         private static int posIndexY = 0; //y position index
-        private static int posIndexZ = 0;
+       // private static int posIndexZ = 0; TO USE LATER IF NEEDED
 
         CycleControl()
         {
@@ -144,7 +144,7 @@ namespace SPIPware.Communication
                 camera.loadCameraSettings();
                 posIndexX = 0;
                 posIndexY = 0;
-                posIndexZ = 0;
+           //     posIndexZ = 0;
            
                 if (!ImagePositions.Any())
                 {
@@ -174,10 +174,10 @@ namespace SPIPware.Communication
             //reseting all the indexes and target location values
             posIndexX = 0;
             posIndexY = 0;
-            posIndexZ = 0;
+          //  posIndexZ = 0;
             targetLocationX = 0;
             targetLocationY = 0;
-            targetLocationZ = 0;
+            //targetLocationZ = 0;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
             peripheral.SetLight(Peripheral.Backlight, false);
@@ -206,12 +206,10 @@ namespace SPIPware.Communication
             _log.Debug("Machine Home");
             if (runningCycle)
             {
-                   HandleNextPositionX(posIndexX);
-                   posIndexX++;
-                /*if(Settings.settings.Y_Axis_Enable = true)
-                {
-
-                }*/
+                    HandleNextPositionX(posIndexX);
+                    posIndexX++;
+                HandleNextPositionY(posIndexY);
+                posIndexY++;
             }
 
         }
@@ -219,7 +217,7 @@ namespace SPIPware.Communication
         public void IsIdle()
         {//only set up for x
             _log.Debug("Machine Idle");
-            if (runningCycle && machine.WorkPosition.X == targetLocationX)
+            if (runningCycle && (machine.WorkPosition.X == targetLocationX))
             {
                 //peripheral.SetLight(Peripheral.Backlight, true);
                 bi = camera.CapSaveImage().Clone();
@@ -232,11 +230,15 @@ namespace SPIPware.Communication
                 
                 posIndexX++;
 
+                HandleNextPositionY(posIndexY);
+
+                posIndexY++;
+
             }
         }
         #endregion
 
-        #region HandleNextPosition Functions(x,y,z)
+        #region HandleNextPosition and GoToPosition Functions(x,y,z)
         //x-axis
         public void HandleNextPositionX(int index)
         {
