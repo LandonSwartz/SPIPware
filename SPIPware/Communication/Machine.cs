@@ -93,7 +93,15 @@ namespace SPIPware.Communication
         #endregion
 
         #region BugbearUpdates
-        private Tray[] trays = new Tray[3];//hard coded number of trays for later
+        private Tray[] trays;//hard coded number of trays for later
+        public Tray[] Trays
+        {
+            get { return trays; }
+            set
+            {
+                trays = new Tray[3];
+            }
+        }
         
         /* may or may not keep, we will see
         public Tray[] Trays
@@ -663,7 +671,7 @@ namespace SPIPware.Communication
         public double sendMotionCommandX(int position, double offset)
         {
            // double distanceY = 0; //testing y value
-            double distance = homeMachinePos.currentLocationX + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+            double distance = homeMachinePos.currentLocationX + Properties.Settings.Default.PlateXOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
             _log.Debug("Calculated Distance: " + distance);
             //here a for loop could be add for each line of code per row then iterate to next y coordinate
             SendLine(buildCommandX(distance));
@@ -675,7 +683,7 @@ namespace SPIPware.Communication
         //y-axis version
         public double sendMotionCommandY(int position, double offset) // could be important method to send y coordinates to sunbear
         {
-            double distance = homeMachinePos.currentLocationY + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+            double distance = homeMachinePos.currentLocationY + Properties.Settings.Default.PlateXOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
             _log.Debug("Calculated Distance: " + distance);
             //here a for loop could be add for each line of code per row then iterate to next y coordinate
             SendLine(buildCommandY(distance));
@@ -709,7 +717,7 @@ namespace SPIPware.Communication
 
         public double sendMotionCommandZ(int position, double offset)
         {
-            double distance = homeMachinePos.currentLocationZ + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+            double distance = homeMachinePos.currentLocationZ + Properties.Settings.Default.PlateXOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
             _log.Debug("Calculated Distance: " + distance);
             SendLine(buildCommandZ(distance));
             return distance;

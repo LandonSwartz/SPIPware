@@ -30,7 +30,7 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
-        private List<List<int>> _imagePositions = new List<List<int>>(); //chnaged to 2D checkboxes
+        private List<List<int>> _imagePositions = new List<List<int>>(); //changed to 2D checkboxes
         public List<List<int> >ImagePositions { get => _imagePositions; set => _imagePositions = value; }
 
         public event EventHandler StatusUpdate;
@@ -90,13 +90,13 @@ namespace SPIPware.Communication
             _log.Debug("Number of Checkboxes: " + checkBoxes.Count);
             //ImagePositions.ForEach((position) => _log.Debug(position + ","));
 
-            for (var j = 0; j < checkBoxes.Count; j++)
+            for (var i = 0; i < checkBoxes.Count; i++)
             {
-                for (var i = 0; i < checkBoxes[j].Count; i++)
+                for (var j = 0; i < checkBoxes[i].Count; i++)
                 {
-                    if (checkBoxes[j][j].IsChecked == true)
+                    if (checkBoxes[i][j].IsChecked == true)
                     {
-                        ImagePositions[j].Add(i);
+                        ImagePositions[i].Add(j);
                     }
                 }
             }
@@ -206,8 +206,8 @@ namespace SPIPware.Communication
             _log.Debug("Machine Home");
             if (runningCycle)
             {
-                    HandleNextPositionX(posIndexX);
-                    posIndexX++;
+                HandleNextPositionX(posIndexX);
+                posIndexX++;
                 HandleNextPositionY(posIndexY);
                 posIndexY++;
             }

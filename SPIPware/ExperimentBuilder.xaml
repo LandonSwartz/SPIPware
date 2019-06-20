@@ -3,12 +3,137 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:SPIPware"
         mc:Ignorable="d"
-        Title="Experiment Builder"
-        Height="450" Width="800">
-    <Grid>
-        <TextBox HorizontalAlignment="Left" Height="117" Margin="316,139,0,0" TextWrapping="Wrap" Text="TESTING" VerticalAlignment="Top" Width="190" Cursor=""/>
+        Height="450" Width="800"
+        AllowDrop="True"
+		Drop="Window_Drop"
+		DragEnter="Window_DragEnter"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        PreviewKeyDown="Window_PreviewKeyDown"
 
+        Title="Experiment Builder"  Closing="Window_Closing" d:DesignWidth="600" d:DesignHeight="600" WindowState="Maximized">
+
+    <Grid>
+        <Border Background="WhiteSmoke" BorderBrush="Gainsboro" BorderThickness="5">
+            <TabControl TabStripPlacement="Top">
+                <!-- Build Experiment Tab-->
+                
+                <!--May Change stackpanels to dockpanels to auto fill remaining space-->
+                <TabItem Header="Build Experiment">
+                    <StackPanel Orientation="Vertical">
+                        <!--Well Config -->
+                        <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0 0 10 0">Length of Radius:</TextBlock>
+                            <TextBox Width="25" Name="RadiusOfWell"></TextBox>
+                        </StackPanel>
+                        
+                        
+                        <!--Plate Config-->
+                        <TextBlock  FontWeight="Bold" Margin="0 3" TextDecorations="Underline">Plate Config</TextBlock>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <StackPanel Grid.Column ="0" Orientation="Vertical">
+                                
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0 0 10 0">Number of Rows:</TextBlock>
+                                    <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInPlate"></xctk:IntegerUpDown>
+                                </StackPanel>
+                                <StackPanel  Orientation="Horizontal">
+                                    <TextBlock Margin="0 0 10 0">Number of Columns:</TextBlock>
+                                    <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInPlate"></xctk:IntegerUpDown>
+                                </StackPanel>
+                                <StackPanel  Orientation="Horizontal">
+                                    <TextBlock Margin="0 0 10 0">X Offset:</TextBlock>
+                                    <TextBox Width="25" Name ="XOffsetOfPlate"></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0 0 10 0">Y Offset:</TextBlock>
+                                    <TextBox Width="25" Name ="YOffsetOfPlate"></TextBox>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <!-- Array of Checkboxes for Active Wells in Plate here-->
+                            
+                        </Grid>
+                        
+                        
+                        <!--Tray Config-->
+                        <TextBlock FontWeight="Bold" TextDecorations="Underline">Tray Config</TextBlock>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            
+                            <StackPanel Grid.Column="0" Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0 0 10 0">Number of Rows:</TextBlock>
+                                    <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInTray"></xctk:IntegerUpDown>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0 0 10 0">Number of Columns:</TextBlock>
+                                    <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInTray"></xctk:IntegerUpDown>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Array of Checkboxes for Active Plates in Tray here-->
+                        </Grid>
+                        
+                    </StackPanel>
+
+
+                </TabItem>
+                
+                <!--Load Experiment Tab-->
+                <TabItem Header="Load Experiment">
+                    <Grid ShowGridLines="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        
+                        <!-- Scroll Viewer of Past Experiment Files-->
+                        <DockPanel Grid.Column="0">
+                            <TextBlock DockPanel.Dock="Top" FontWeight="Bold">Past Experiment Files</TextBlock>
+                            <ScrollViewer>
+                                
+                            </ScrollViewer>
+                        </DockPanel>
+                        
+                        <!--Past Experimnet Parameters-->
+                        <DockPanel Grid.Column="1">
+                            <TextBlock DockPanel.Dock="Top" FontWeight="Bold">Experiment Title</TextBlock> <!--Put title of file here-->
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
+                                
+                            </StackPanel>
+                        </DockPanel>
+
+                    </Grid>
+
+                    
+                    
+
+                </TabItem>
+                
+                <!--Misc Tab-->
+                <TabItem Header="Graphic Representation">
+
+                </TabItem>
+                
+                
+
+            </TabControl>
+        </Border>
     </Grid>
-</Window>
+    
+</Window> 

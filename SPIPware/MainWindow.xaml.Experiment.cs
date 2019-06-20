@@ -14,6 +14,8 @@ namespace SPIPware
 {
     partial class MainWindow
     {
+        //WILL UPDATE WHEN WORKING ON EXPERIMENT BUILDER WINDOW
+        List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
         List<CheckBox> checkBoxes = new List<CheckBox>();
         List<TextBlock> textBlocks = new List<TextBlock>();
 
@@ -124,8 +126,8 @@ namespace SPIPware
             
         }
         public void UpdatePlateCheckboxes()
-        {
-            Dispatcher.Invoke(() =>
+        { //will redo checkboxes with expeirment builder so commenting below out FOR NOW    
+          /*  Dispatcher.Invoke(() =>
             {
                 _log.Debug("Updating Plate Checkboxes");
                 int numBoxes = Properties.Settings.Default.NumLocationsRow;
@@ -179,7 +181,7 @@ namespace SPIPware
             });
             //checkBoxes.ForEach(c => c.Click += new RoutedEventHandler(PlateCheck_Change));
             _log.Debug("Number of plate checkboxes: " + checkBoxes.Count);
-
+            */
 
         }
 

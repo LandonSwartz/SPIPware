@@ -22,7 +22,8 @@ namespace SPIPware.Entities
             {"TotalRows","Total Rows" },
             {"Total Columns", "Total Columns" },
             {"CurrentPlate", "Current Plate" },
-            {"PlateOffset", "Plate Offset" },
+            {"PlateXOffset", "Plate X Offset" },
+            {"PlateYOffset", "Plate Y Offset" },
             {"BetweenDistance", "Between Distance" },
             {"CameraSettingsPath", "Camera Settings" },
             {"FileName", "File Name" },
@@ -37,14 +38,17 @@ namespace SPIPware.Entities
         // private int totalPlates;
         private int platesPerRow;
         private int platesPerColumn;
-        private int currentPlate;
-        private int plateOffset;
+        private int[] currentPlate;
+        private int wellXoffset;
+        private int wellYoffset;
+        private int plateXOffset;
+        private int plateYOffest;
         private int betweenDistance;
         private string cameraSettingsPath;
         private string fileName;
         private string saveFolderPath;
         private bool currentPlateSave;
-        private int numLocations;
+        private int numLocations; //may need to make array
         private bool selectAll;
         private int currentLocationX;
         private int currentLocationY;
@@ -65,8 +69,11 @@ namespace SPIPware.Entities
        // public int TotalPlates { get => totalPlates; set => totalPlates = value; }
         public int PlatesPerRow { get => platesPerRow; set => platesPerRow = value; }
         public int PlatesPerColumn{ get => platesPerColumn; set => platesPerColumn = value; }
-        public int  CurrentPlate { get => currentPlate; set => currentPlate = currentLocationX*CurrentLocationY; } //current plate is x*Y position
-        public int PlateOffset { get => plateOffset; set => plateOffset = value; }
+        public int[] CurrentPlate { get => currentPlate; set => currentPlate = value; } //current plate is array of x then y
+        private int PlateXOffset { get => plateXOffset; set => plateXOffset = value; }
+        private int PlateYOffset { get => plateYOffest; set => plateYOffest = value; }
+        public int WellXoffset { get => wellXoffset; set => wellXoffset = value; }
+        public int WellYoffset { get => wellYoffset; set => wellYoffset = value; }
         public int BetweenDistance { get => betweenDistance; set => betweenDistance = value; }
         public string CameraSettingsPath { get => cameraSettingsPath; set => cameraSettingsPath = value; }
         public string FileName { get => fileName; set => fileName = value; }
@@ -107,7 +114,8 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.TotalRows = PlatesPerRow;
                 Properties.Settings.Default.TotalColumns = PlatesPerColumn;
                 Properties.Settings.Default.CurrentPlate = CurrentPlate;
-                Properties.Settings.Default.PlateOffset = PlateOffset;
+                Properties.Settings.Default.PlateXOffset = PlateXOffset;
+                Properties.Settings.Default.PlateYOffset = PlateYOffset;
                 Properties.Settings.Default.BetweenDistance = BetweenDistance;
                 Properties.Settings.Default.CameraSettingsPath = CameraSettingsPath;
                 Properties.Settings.Default.FileName = FileName;
@@ -137,7 +145,8 @@ namespace SPIPware.Entities
             PlatesPerRow = Properties.Settings.Default.TotalRows;
             PlatesPerColumn = Properties.Settings.Default.TotalColumns;
             CurrentPlate = Properties.Settings.Default.CurrentPlate;
-            PlateOffset = Properties.Settings.Default.PlateOffset;
+            PlateXOffset = Properties.Settings.Default.PlateXOffset;
+            PlateYOffset = Properties.Settings.Default.PlateYOffset;
             BetweenDistance = Properties.Settings.Default.BetweenDistance;
             CameraSettingsPath = Properties.Settings.Default.CameraSettingsPath;
             FileName = Properties.Settings.Default.FileName;

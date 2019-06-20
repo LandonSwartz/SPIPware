@@ -553,10 +553,10 @@ namespace SPIPware.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int CurrentPlate {
+        [global::System.Configuration.DefaultSettingValueAttribute("1\r\n1")]
+        public int[] CurrentPlate {
             get {
-                return ((int)(this["CurrentPlate"]));
+                return ((int[])(this["CurrentPlate"]));
             }
             set {
                 this["CurrentPlate"] = value;
@@ -566,12 +566,12 @@ namespace SPIPware.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int PlateOffset {
+        public int PlateXOffset {
             get {
-                return ((int)(this["PlateOffset"]));
+                return ((int)(this["PlateXOffset"]));
             }
             set {
-                this["PlateOffset"] = value;
+                this["PlateXOffset"] = value;
             }
         }
         
@@ -1062,6 +1062,18 @@ namespace SPIPware.Properties {
             }
             set {
                 this["TotalColumns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int PlateYOffset {
+            get {
+                return ((int)(this["PlateYOffset"]));
+            }
+            set {
+                this["PlateYOffset"] = value;
             }
         }
     }

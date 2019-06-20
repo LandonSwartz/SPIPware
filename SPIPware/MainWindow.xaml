@@ -409,6 +409,7 @@ S
                                     </StackPanel>
                                 </StackPanel>
                             </GroupBox>
+                            <!-- Will need to update below to tkae 2D or move to experiment builder window-->
                             <GroupBox >
                                 <GroupBox.Header >
                                     <TextBlock HorizontalAlignment="Center">Imaging Positions</TextBlock>

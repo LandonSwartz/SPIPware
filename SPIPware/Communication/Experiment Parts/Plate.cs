@@ -11,7 +11,7 @@ using System.Collections;
 namespace SPIPware.Communication.Experiment_Parts
 {
     //for collection of wells
-    class Plate
+    public class Plate
     {
         #region Properties
         private int numWells; //how many wells in the plate in total

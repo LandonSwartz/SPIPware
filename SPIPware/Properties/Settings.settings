@@ -135,10 +135,11 @@ G92Z0;</Value>
     <Setting Name="TotalRows" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7</Value>
     </Setting>
-    <Setting Name="CurrentPlate" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
+    <Setting Name="CurrentPlate" Type="System.int32[]" Scope="User">
+      <Value Profile="(Default)">1
+1</Value>
     </Setting>
-    <Setting Name="PlateOffset" Type="System.Int32" Scope="User">
+    <Setting Name="PlateXOffset" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="BetweenDistance" Type="System.Int32" Scope="User">
@@ -266,6 +267,9 @@ G92Z0;</Value>
     </Setting>
     <Setting Name="TotalColumns" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">6</Value>
+    </Setting>
+    <Setting Name="PlateYOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

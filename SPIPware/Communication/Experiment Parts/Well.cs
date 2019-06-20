@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SPIPware.Communication.Experiment_Parts
 
 {
-    class Well
+    public class Well
     {
         #region Properties
         private int radius; //size of well
