@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:local="clr-namespace:SPIPware"
-        mc:Ignorable="d"
+            xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+            xmlns:local="clr-namespace:SPIPware"
+            xmlns:util="clr-namespace:SPIPware.Util"
+            mc:Ignorable="d"
         Height="450" Width="800"
         AllowDrop="True"
 		Drop="Window_Drop"
@@ -25,18 +26,28 @@
                 <TabItem Header="Build Experiment">
                     <Border Padding="5">
                         
-                        
-                        <StackPanel Orientation="Vertical">
+                        <!--Grid Layout of Build Experiment for sizing-->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
                             <!--Well Config -->
-                            <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="0 0 10 0">Length of Radius:</TextBlock>
-                                <TextBox Width="25" Name="RadiusOfWell"></TextBox>
-                            </StackPanel>
+                            <StackPanel Grid.Row="0">
+                                <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0 0 10 0">Length of Radius (in cm):</TextBlock>
+                                    <TextBox Width="25" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay, Path = Value}"></TextBox>
+                                </StackPanel>
+                           </StackPanel>
+                            
                         
                         
                             <!--Plate Config-->
-                            <TextBlock  FontWeight="Bold" Margin="0 3" TextDecorations="Underline">Plate Config</TextBlock>
+                            <StackPanel Grid.Row="1">
+                                <TextBlock FontWeight="Bold" Margin="0 3" TextDecorations="Underline">Plate Config</TextBlock>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -48,11 +59,11 @@
                                 
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Number of Rows:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInPlate"></xctk:IntegerUpDown>
+                                        <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInPlate" Value="{util:SettingBinding TotalRows, Mode = TwoWay, Path=Value}"></xctk:IntegerUpDown>
                                     </StackPanel>
                                     <StackPanel  Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Number of Columns:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInPlate"></xctk:IntegerUpDown>
+                                            <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInPlate" Value="{util:SettingBinding TotalColumns, Mode = TwoWay}"></xctk:IntegerUpDown>
                                     </StackPanel>
                                     <StackPanel  Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">X Offset:</TextBlock>
@@ -64,48 +75,64 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <DockPanel Grid.Column="1">
-                                    <TextBlock DockPanel.Dock="Top" TextAlignment="Center">Arrangement of Plate</TextBlock>
-                                    <DockPanel DockPanel.Dock="Bottom">
-                                        <!--Put array of checkboxes or something similar here-->
+                                    <DockPanel Grid.Column="1">
+                                        <TextBlock DockPanel.Dock="Top" TextAlignment="Center">Arrangement of Plate</TextBlock>
+                                        <DockPanel DockPanel.Dock="Bottom">
+                                            <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRows, Mode=TwoWay}"
+                                                  util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns, Mode=TwoWay}">
+
+
+                                            </Grid>
+                                            <!--Put array of checkboxes or something similar here-->
+                                        </DockPanel>
                                     </DockPanel>
-                                </DockPanel>
+
+
+                                </Grid>
+                            </StackPanel>
                             
-                                <!-- Array of Checkboxes for Active Wells in Plate here-->
-                            
-                            </Grid>
                         
                         
                             <!--Tray Config-->
-                            <TextBlock FontWeight="Bold" TextDecorations="Underline" Margin="0 3">Tray Config</TextBlock>
+                            <StackPanel Grid.Row="2">
+                                <TextBlock FontWeight="Bold" TextDecorations="Underline" Margin="0 3">Tray Config</TextBlock>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="2*" />
                                 </Grid.ColumnDefinitions>
 
                             
                                 <StackPanel Grid.Column="0" Orientation="Vertical">
-                                    <StackPanel Orientation="Horizontal">
+                                    <!-- <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Number of Rows:</TextBlock>
                                         <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInTray"></xctk:IntegerUpDown>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Number of Columns:</TextBlock>
                                         <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInTray"></xctk:IntegerUpDown>
-                                    </StackPanel>
+                                    </StackPanel> -->
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0 0 10 0">Number of Trays</TextBlock>
+                                            <xctk:IntegerUpDown Minimum="0" Maximum="3" Name="NumberOfTrays" 
+                                                                Text="{Binding ElementName=TrayCountSlider, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></xctk:IntegerUpDown>
+                                        </StackPanel>
                                 </StackPanel>
 
                                 <!-- Array of Checkboxes for Active Plates in Tray here-->
                                 <DockPanel Grid.Column="1">
-                                    <TextBlock DockPanel.Dock="Top" TextAlignment="Center">Arrangement of Tray</TextBlock>
+                                    <TextBlock DockPanel.Dock="Top" TextAlignment="Center">Number of Trays</TextBlock>
                                     <DockPanel DockPanel.Dock="Bottom">
-                                        <!--Put array of checkes or something similar here-->
-                                    </DockPanel>
+                                        <!--Slider of Number of trays-->
+                                        <Slider Name="TrayCountSlider" Minimum="1" Maximum="3" 
+                                                TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                        </DockPanel>
                                 </DockPanel>
                             </Grid>
+                            </StackPanel>
+                            
                         
-                        </StackPanel>
+                        </Grid>
 
                     </Border>
                 </TabItem>

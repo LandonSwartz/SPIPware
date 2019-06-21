@@ -271,5 +271,8 @@ G92Z0;</Value>
     <Setting Name="PlateYOffset" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="RadiusOfWell" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

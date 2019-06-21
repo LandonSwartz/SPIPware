@@ -169,6 +169,7 @@
     <Compile Include="Util\Constants.cs" />
     <Compile Include="Util\FileConverter.cs" />
     <Compile Include="Util\GrblCodeTranslator.cs" />
+    <Compile Include="Util\GridHelpers.cs" />
     <Compile Include="Util\SettingsBinding.cs" />
     <Compile Include="Util\UpdateCheck.cs" />
     <Compile Include="Util\Vector2.cs" />

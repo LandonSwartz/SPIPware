@@ -1076,5 +1076,17 @@ namespace SPIPware.Properties {
                 this["PlateYOffset"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int RadiusOfWell {
+            get {
+                return ((int)(this["RadiusOfWell"]));
+            }
+            set {
+                this["RadiusOfWell"] = value;
+            }
+        }
     }
 }
