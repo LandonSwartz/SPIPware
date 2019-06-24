@@ -136,12 +136,17 @@ namespace SPIPware
         }
         public void UpdatePlateCheckboxes()
         { //will redo checkboxes with expeirment builder so commenting below out FOR NOW    
-          /*  Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 _log.Debug("Updating Plate Checkboxes");
                 int numBoxes = Properties.Settings.Default.NumLocationsRow;
                 spCheckboxes.Children.Clear();
-                checkBoxes.Clear();
+                foreach(List<CheckBox> list in checkBoxes2D)
+                {
+                        list.Clear();
+                }
+
+                
                 textBlocks.Clear();
                 for (int i = 0; i < numBoxes; i++)
                 {
@@ -158,7 +163,7 @@ namespace SPIPware
                     };
                     tempCB.Click += new RoutedEventHandler(PlateCheck_Change);
 
-                    if (cycle.ImagePositions!= null && cycle.ImagePositions.Contains(i))
+                   /* if (cycle.ImagePositions!= null && cycle.ImagePositions.Contains(i))
                     {
                         tempCB.IsChecked = true;
                     }
@@ -167,9 +172,13 @@ namespace SPIPware
                         cbSelectAll.IsChecked = null;
                         tempCB.IsChecked = false;
                         //IsThreeState = true;
+                    }*/
+                    
+                    foreach(List<CheckBox> list in checkBoxes2D)
+                    {
+                        list.Add(tempCB);
                     }
-
-                    checkBoxes.Add(tempCB);
+                    
 
                     TextBlock tempText = new TextBlock();
                     tempText.Text = (i + 1).ToString();
@@ -177,7 +186,15 @@ namespace SPIPware
                     tempText.Margin = new Thickness(5);
                     textBlocks.Add(tempText);
 
-                    stackPanel.Children.Add(checkBoxes[i]);
+                    foreach(List<CheckBox> list in checkBoxes2D)
+                    {
+                        foreach(CheckBox box in list)
+                        {
+                            stackPanel.Children.Add(box);
+                        }
+                        
+                    }
+                    
                     stackPanel.Children.Add(textBlocks[i]);
 
                     spCheckboxes.Children.Add(stackPanel);
@@ -189,8 +206,8 @@ namespace SPIPware
                 //cycle.UpdatePositionList(checkBoxes);
             });
             //checkBoxes.ForEach(c => c.Click += new RoutedEventHandler(PlateCheck_Change));
-            _log.Debug("Number of plate checkboxes: " + checkBoxes.Count);
-            */
+            _log.Debug("Number of plate checkboxes: " + checkBoxes2D.Count);
+            
 
         }
 

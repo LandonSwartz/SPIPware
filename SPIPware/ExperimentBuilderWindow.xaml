@@ -22,7 +22,7 @@
                     <Border Padding="5">
                         
                         <!--Grid Layout of Build Experiment for sizing-->
-                        <Grid>
+                        <Grid Name="BuildExperimentLayoutGrid">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="3*"/>
@@ -74,26 +74,21 @@
                                     <DockPanel Grid.Column="1">
                                         <TextBlock DockPanel.Dock="Top" TextAlignment="Center">Arrangement of Plate</TextBlock>
                                         <DockPanel DockPanel.Dock="Bottom">
-                                            
-                                           <!-- <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRow}"
-                                                  util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns}"> -->
-                                                <ItemsControl>
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRow}"
-                                                                  util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns}"/>
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <CheckBox Content="Testing"/>
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                    
-                                                </ItemsControl> 
-                                                
 
-                                           <!-- </Grid> -->
+                                            <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRow}"
+                                                  util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns}">
+                                               <StackPanel Name="spCheckboxes" Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+
+                                                </StackPanel> 
+
+                                            </Grid>
+                                            <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+
+                                                <!-- <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}"
+                                                  Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
+                                                    -->
+                                            </StackPanel>
+
                                             <!--Put array of checkboxes or something similar here-->
                                         </DockPanel>
                                     </DockPanel>
