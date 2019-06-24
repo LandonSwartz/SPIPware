@@ -272,16 +272,18 @@ namespace SPIPware
                 _log.Info("Image written to: " + filePath);
                 //_log.Debug(("File Name: " + sb.ToString());
 
+                //may need to add second axis and what not below
+
                 image.Save(filePath, fileType);
 
                 LogMessage("Image acquired synchonously.");
-                if (Properties.Settings.Default.CurrentPlate < Properties.Settings.Default.TotalRows)
+                if (Properties.Settings.Default.CurrentPlate[0] < Properties.Settings.Default.TotalRows)
                 {
-                    Properties.Settings.Default.CurrentPlate++;
+                    Properties.Settings.Default.CurrentPlate[0]++;
                 }
                 else
                 {
-                    Properties.Settings.Default.CurrentPlate = 1;
+                    Properties.Settings.Default.CurrentPlate[0] = 1;
                 }
             });
 

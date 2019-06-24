@@ -25,6 +25,8 @@ namespace SPIPware
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
+        ExperimentBuilderWindow experimentWindow = new ExperimentBuilderWindow();
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string propertyName)
@@ -443,10 +445,10 @@ namespace SPIPware
             
         }
        //may move in the future for easier readability
-      /*  private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
+        private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
         {
-            ExperimentBuilder.ShowDialog();
-        }*/
+            experimentWindow.ShowDialog();
+        }
         SettingsWindow settings = new SettingsWindow();
         private void OpenAppSettingsWindow_Click(object sender, RoutedEventArgs e)
         {

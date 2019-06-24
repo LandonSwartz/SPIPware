@@ -58,3 +58,9 @@ Goals:
 				- Documenation doc on page
 				- Move over to lab github
 				- Add contribute.md file
+				
+				
+4. NOTES
+	- Current Plate setting is currently an int[] but default values not always working so will figure out at a later time how to work
+	- Application is set up through application settings being the program's setting, may just have to deal with then fix later
+	- Best way to make experimentBuilderWindow Load experiment tab to work is probs a listbox on left then some viewer or loader of experiment on the right

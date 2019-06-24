@@ -1,4 +1,4 @@
-﻿<Window x:Class="SPIPware.ExperimentBuilder"
+﻿<Window x:Class="SPIPware.ExperimentBuilderWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,11 +8,6 @@
             xmlns:util="clr-namespace:SPIPware.Util"
             mc:Ignorable="d"
         Height="450" Width="800"
-        AllowDrop="True"
-		Drop="Window_Drop"
-		DragEnter="Window_DragEnter"
-		DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        PreviewKeyDown="Window_PreviewKeyDown"
 
         Title="Experiment Builder"  Closing="Window_Closing" d:DesignWidth="600" d:DesignHeight="600" WindowState="Maximized">
 
@@ -32,6 +27,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="3*"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             
                             <!--Well Config -->
@@ -39,7 +35,7 @@
                                 <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Margin="0 0 10 0">Length of Radius (in cm):</TextBlock>
-                                    <TextBox Width="25" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay, Path = Value}"></TextBox>
+                                    <TextBox Width="25" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay, Path = Value}" TextChanged="RadiusOfWell_TextChanged"></TextBox>
                                 </StackPanel>
                            </StackPanel>
                             
@@ -59,7 +55,7 @@
                                 
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Number of Rows:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInPlate" Value="{util:SettingBinding TotalRows, Mode = TwoWay, Path=Value}"></xctk:IntegerUpDown>
+                                        <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInPlate" Value="{util:SettingBinding TotalRows, Mode = TwoWay}"></xctk:IntegerUpDown>
                                     </StackPanel>
                                     <StackPanel  Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Number of Columns:</TextBlock>
@@ -67,22 +63,37 @@
                                     </StackPanel>
                                     <StackPanel  Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">X Offset:</TextBlock>
-                                        <TextBox Width="25" Name ="XOffsetOfPlate"></TextBox>
+                                        <TextBox Width="25" Name ="XOffsetOfPlate" TextChanged="XOffsetOfPlate_TextChanged"></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Y Offset:</TextBlock>
-                                        <TextBox Width="25" Name ="YOffsetOfPlate"></TextBox>
+                                        <TextBox Width="25" Name ="YOffsetOfPlate" TextChanged="YOffsetOfPlate_TextChanged"></TextBox>
                                     </StackPanel>
                                 </StackPanel>
 
                                     <DockPanel Grid.Column="1">
                                         <TextBlock DockPanel.Dock="Top" TextAlignment="Center">Arrangement of Plate</TextBlock>
                                         <DockPanel DockPanel.Dock="Bottom">
-                                            <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRows, Mode=TwoWay}"
-                                                  util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns, Mode=TwoWay}">
+                                            
+                                           <!-- <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRow}"
+                                                  util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns}"> -->
+                                                <ItemsControl>
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRow}"
+                                                                  util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns}"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox Content="Testing"/>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                    
+                                                </ItemsControl> 
+                                                
 
-
-                                            </Grid>
+                                           <!-- </Grid> -->
                                             <!--Put array of checkboxes or something similar here-->
                                         </DockPanel>
                                     </DockPanel>
@@ -112,11 +123,12 @@
                                         <TextBlock Margin="0 0 10 0">Number of Columns:</TextBlock>
                                         <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInTray"></xctk:IntegerUpDown>
                                     </StackPanel> -->
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Margin="0 0 10 0">Number of Trays</TextBlock>
-                                            <xctk:IntegerUpDown Minimum="0" Maximum="3" Name="NumberOfTrays" 
-                                                                Text="{Binding ElementName=TrayCountSlider, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></xctk:IntegerUpDown>
-                                        </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="0 0 10 0">Number of Trays</TextBlock>
+                                        <xctk:IntegerUpDown Minimum="0" Maximum="3" Name="NumberOfTrays" 
+                                                            Text="{Binding ElementName=TrayCountSlider, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></xctk:IntegerUpDown>
+                                    </StackPanel>
+                                        <TextBlock>Min number of Trays is one while max is three</TextBlock>
                                 </StackPanel>
 
                                 <!-- Array of Checkboxes for Active Plates in Tray here-->
@@ -126,11 +138,27 @@
                                         <!--Slider of Number of trays-->
                                         <Slider Name="TrayCountSlider" Minimum="1" Maximum="3" 
                                                 TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
-                                        </DockPanel>
+                                    </DockPanel>
                                 </DockPanel>
                             </Grid>
                             </StackPanel>
                             
+                            
+                            <!-- Apply and Save Buttons and what not -->
+                            <StackPanel Grid.Row="3">
+                                <TextBlock FontWeight="Bold" TextDecorations="Underline" Margin="0 3">Final Touches</TextBlock>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button Grid.Column="0" Name="btnSaveExperiment" Click="BtnSaveExperiment_Click" Content="Save" Padding="10"/>
+
+                                    <Button Grid.Column="1" Name="btnApplyExperiment" Click="BtnApplyExperiment_Click" Content="Apply"/>
+
+                                </Grid>
+                            </StackPanel>
                         
                         </Grid>
 
@@ -151,9 +179,9 @@
                         <!-- Scroll Viewer of Past Experiment Files-->
                         <DockPanel Grid.Column="0">
                             <TextBlock DockPanel.Dock="Top" FontWeight="Bold">Past Experiment Files</TextBlock>
-                            <ScrollViewer>
+                            <ListBox>
                                 
-                            </ScrollViewer>
+                            </ListBox>
                         </DockPanel>
                         
                         <!--Past Experimnet Parameters-->

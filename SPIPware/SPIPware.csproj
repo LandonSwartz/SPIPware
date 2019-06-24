@@ -175,8 +175,8 @@
     <Compile Include="Util\Vector2.cs" />
     <Compile Include="Util\Vector3.cs" />
     <Compile Include="Communication\VimbaHelper.cs" />
-    <Compile Include="ExperimentBuilder.xaml.cs">
-      <DependentUpon>ExperimentBuilder.xaml</DependentUpon>
+    <Compile Include="ExperimentBuilderWindow.xaml.cs">
+      <DependentUpon>ExperimentBuilderWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="GrblSettingsWindow.xaml">
       <SubType>Designer</SubType>
@@ -207,7 +207,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExperimentBuilder.xaml">
+    <Page Include="ExperimentBuilderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

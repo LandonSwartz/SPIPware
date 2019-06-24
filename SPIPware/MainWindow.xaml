@@ -275,8 +275,7 @@
             </RibbonTab>
             <RibbonTab Header="Experiment Builder" HorizontalAlignment="Left" Height="88" VerticalAlignment="Top" Width="1498">
                 <RibbonGroup>
-                    <Button x:Name="ExperimentBuilder" Content="Experiment Builder" HorizontalAlignment="Left" Cursor="Help"/>
-                    <RibbonButton x:Name="ExperimentBuilderBtnOpenWindow" Content="Experiment Builder" Height="42" Width="150"/> 
+                    <Button x:Name="ExperimentBuilderWindow_Open" Content="Experiment Builder" HorizontalAlignment="Left" Cursor="Help" Click="ButtonOpenExperimentBuilder_Click"/>
                 </RibbonGroup>
             </RibbonTab>
             <!--Lando added below       will readd once experiment builder is ready
@@ -423,7 +422,8 @@ S
 
                                     <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
 
-                                        <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
+                                        <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}"
+                                                  Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
 
                                     </StackPanel>
                                     <StackPanel Name="spCheckboxes" Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">

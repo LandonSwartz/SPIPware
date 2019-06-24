@@ -553,7 +553,6 @@ namespace SPIPware.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1\r\n1")]
         public int[] CurrentPlate {
             get {
                 return ((int[])(this["CurrentPlate"]));

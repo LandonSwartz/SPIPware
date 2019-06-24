@@ -11,8 +11,8 @@ namespace SPIPware.Util
     /*                                                                                                  *
      *                              Taken from Rachel Lim's Blog                                        *
      *                              on 6/21/2019 at 10:41 AM.                                           *
-     *                              Was used to make dynmaic rows                                     *
-     *                              with Experiment Builder Window                                      *
+     *                              Was used to make dynmaic rows                                       *
+     *                              with Experiment Builder Window.                                     *
      *                                                                                                  *
      *  Website: https://rachel53461.wordpress.com/2011/09/17/wpf-grids-rowcolumn-count-properties/     *
      *                                                                                                  */

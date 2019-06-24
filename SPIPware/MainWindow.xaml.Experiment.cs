@@ -15,8 +15,8 @@ namespace SPIPware
     partial class MainWindow
     {
         //WILL UPDATE WHEN WORKING ON EXPERIMENT BUILDER WINDOW
+      //  List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
         List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
-        List<CheckBox> checkBoxes = new List<CheckBox>();
         List<TextBlock> textBlocks = new List<TextBlock>();
 
 
@@ -36,9 +36,18 @@ namespace SPIPware
 
         public void UpdatePlateCheckboxes(bool value)
         {
-            if (checkBoxes != null)
+            if (checkBoxes2D != null)
             {
-                checkBoxes.ForEach(c => c.IsChecked = value);
+                //1D version
+                //checkBoxes2D.ForEach(c => c.IsChecked = value);
+
+                foreach(List<CheckBox> boxList in checkBoxes2D)
+                {
+                    foreach(CheckBox box in boxList)
+                    {
+                        box.IsChecked = value;
+                    }
+                }
             }
         }
         public void GenerateCurrentParametersList(Experiment experiment, Panel panel)
@@ -187,12 +196,13 @@ namespace SPIPware
 
         private void PlateCheck_Change(object sender, System.EventArgs e)
         {
-
-            if (checkBoxes.All(c => c.IsChecked == true))
+            //  WILL NEED TO FIX LATER
+            /*
+            if (checkBoxes2D.All(c => c.IsChecked == true))
             {
                 SelectAllValue = true;
             }
-            else if (checkBoxes.All(c => c.IsChecked == false))
+            else if (checkBoxes2D.All(c => c.IsChecked == false))
             {
                 SelectAllValue = false;
             }
@@ -201,7 +211,7 @@ namespace SPIPware
                 SelectAllValue = null;
                 cbSelectAll.IsChecked = null;
             }
-            Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes));
+            Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D)); */
 
         }
 
@@ -241,21 +251,51 @@ namespace SPIPware
         }
         private void SelectAll_Change()
         {
-            foreach (CheckBox box in checkBoxes)
+            //double for loop implemenation that is not being pursued
+           /* for(int i = 0; i < Properties.Settings.Default.TotalRows; i++)
             {
-                if (box != null)
+                for(int j = 0; j < Properties.Settings.Default.TotalColumns; j++)
                 {
-                    if (SelectAllValue == true)
+                    if (checkBoxes2D.data != null)
                     {
-                        box.IsChecked = true;
-                    }
-                    else if (SelectAllValue == false)
-                    {
-                        box.IsChecked = false;
+                        if (SelectAllValue == true)
+                        {
+                            box.IsChecked = true;
+                        }
+                        else if (SelectAllValue == false)
+                        {
+                            box.IsChecked = false;
+                        }
                     }
                 }
+                Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
+            }*/
+
+            //foreach loop when 1D
+            /*foreach (CheckBox box in checkBoxes2D.SelectMany(k => k.checkBoxes2D))
+            {
+               
+            }*/
+
+            foreach(List<CheckBox> boxList in checkBoxes2D)
+            {
+                foreach(CheckBox box in boxList)
+                {
+                    if (box != null)
+                    {
+                        if (SelectAllValue == true)
+                        {
+                            box.IsChecked = true;
+                        }
+                        else if (SelectAllValue == false)
+                        {
+                            box.IsChecked = false;
+                        }
+                    }
+                    Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
+                }
             }
-            Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes));
+            
         }
         public void LoadDefaults()
         {

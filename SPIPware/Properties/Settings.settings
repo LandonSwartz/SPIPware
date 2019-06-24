@@ -136,8 +136,7 @@ G92Z0;</Value>
       <Value Profile="(Default)">7</Value>
     </Setting>
     <Setting Name="CurrentPlate" Type="System.int32[]" Scope="User">
-      <Value Profile="(Default)">1
-1</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PlateXOffset" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
