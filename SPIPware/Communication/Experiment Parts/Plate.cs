@@ -21,7 +21,7 @@ namespace SPIPware.Communication.Experiment_Parts
         //offsets for camera
         private int xOffset;
         private int yOffset;
-        public Well[,] wells; 
+        public Well[,] wells; //could change to list of list later
 
         /* Notes for future...
          * 

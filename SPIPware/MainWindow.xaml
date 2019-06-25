@@ -241,6 +241,10 @@
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="   Y:" VerticalAlignment="Center"/>
+                            <TextBox Name="LabelPosY" Width="55"  Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
                             <TextBlock Text="MX: " VerticalAlignment="Center"/>
                             <TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
 
@@ -703,8 +707,9 @@ S
 
                     </TabItem>
 
-                    <TabItem>
-                        <!--May change to Machine Position or something along those lines-->
+                 <!--   <TabItem>
+                        May change to Machine Position or something along those lines
+                        
                         <TabItem.Header>
                             <Label Content="Plant Array" 
 								 HorizontalAlignment="Stretch" FontSize="14"/>
@@ -718,7 +723,7 @@ S
                             <Grid Margin="18,0,18,0" Height="321">
 
                                 <Grid.ColumnDefinitions>
-                                    <!-- for now there is seven columns and 3 rows -->
+                                    for now there is seven columns and 3 rows 
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
@@ -761,7 +766,7 @@ S
                             </Grid>
                         </GroupBox>
 
-                    </TabItem>
+                    </TabItem> -->
 
                 </TabControl>
             </DockPanel>

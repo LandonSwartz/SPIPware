@@ -273,5 +273,8 @@ G92Z0;</Value>
     <Setting Name="RadiusOfWell" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
+    <Setting Name="DeleteThis" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Delete In Future</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

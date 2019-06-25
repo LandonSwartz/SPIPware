@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using System.Windows.Media;
+using SPIPware.Communication.Experiment_Parts;
 
 namespace SPIPware.Entities
 {
@@ -63,6 +64,8 @@ namespace SPIPware.Entities
         private long tlIntervalType;
         private int cycleCount;
         private List<List<int>> imagePositions;
+        private Well well;
+        private Plate plate;
 
         private Color BacklightColor;
 
@@ -91,6 +94,8 @@ namespace SPIPware.Entities
         public int TlEndInterval { get => tlEndInterval; set => tlEndInterval = value; }
         public long TlEndIntervalType { get => tlEndIntervalType; set => tlEndIntervalType = value; }
         public long TlIntervalType { get => tlIntervalType; set => tlIntervalType = value; }
+        public Plate Plate { get => plate; set => plate = value; }
+        public Well Well { get => well; set => well = value; }
 
         public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
         

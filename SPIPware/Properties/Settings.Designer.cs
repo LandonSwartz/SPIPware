@@ -1087,5 +1087,17 @@ namespace SPIPware.Properties {
                 this["RadiusOfWell"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Delete In Future")]
+        public string DeleteThis {
+            get {
+                return ((string)(this["DeleteThis"]));
+            }
+            set {
+                this["DeleteThis"] = value;
+            }
+        }
     }
 }

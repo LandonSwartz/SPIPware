@@ -47,7 +47,7 @@ Goals:
 			- Remove legacy code from CNC mill
 			- Remove past comments
 			- Add regions to major parts of classes DONE
-			- Rework files
+			- Rework file trees
 		- Settings Window
 			- (Optional) Make Settings window and import some of settings of application (because y and z axis can be enable/disabled in settings and maybe way to switch between one and two axis)
 			- Add to file ribbon on ribbbon bar

@@ -63,6 +63,16 @@ namespace SPIPware.Communication.Experiment_Parts
             this.x = x;
             this.y = y;
         }
+
+        //overloaded constructor for if no radius passed, maybe default constructor
+        public Well(bool active, int x, int y)
+        {
+            this.active = active;
+            this.x = x;
+            this.y = y;
+
+            radius = 0; //no radius passed
+        }
         #endregion
 
         #region Misc

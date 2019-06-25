@@ -9,7 +9,7 @@
             mc:Ignorable="d"
         Height="450" Width="800"
 
-        Title="Experiment Builder"  Closing="Window_Closing" d:DesignWidth="600" d:DesignHeight="600" WindowState="Maximized">
+        Title="Experiment Builder"  Closing="Window_Closing" d:DesignWidth="450" d:DesignHeight="800" WindowState="Maximized">
 
     <Grid>
         <Border Background="WhiteSmoke" BorderThickness="5">
@@ -35,7 +35,7 @@
                                 <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Margin="0 0 10 0">Length of Radius (in cm):</TextBlock>
-                                    <TextBox Width="25" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay, Path = Value}" TextChanged="RadiusOfWell_TextChanged"></TextBox>
+                                    <TextBox Width="50" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay, Path = Value, UpdateSourceTrigger=PropertyChanged}" TextChanged="RadiusOfWell_TextChanged"></TextBox>
                                 </StackPanel>
                            </StackPanel>
                             
@@ -63,33 +63,35 @@
                                     </StackPanel>
                                     <StackPanel  Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">X Offset:</TextBlock>
-                                        <TextBox Width="25" Name ="XOffsetOfPlate" TextChanged="XOffsetOfPlate_TextChanged"></TextBox>
+                                        <TextBox Width="50" Name ="XOffsetOfPlate" TextChanged="XOffsetOfPlate_TextChanged"></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Y Offset:</TextBlock>
-                                        <TextBox Width="25" Name ="YOffsetOfPlate" TextChanged="YOffsetOfPlate_TextChanged"></TextBox>
+                                        <TextBox Width="50" Name ="YOffsetOfPlate" TextChanged="YOffsetOfPlate_TextChanged"></TextBox>
                                     </StackPanel>
                                 </StackPanel>
 
                                     <DockPanel Grid.Column="1">
                                         <TextBlock DockPanel.Dock="Top" TextAlignment="Center">Arrangement of Plate</TextBlock>
                                         <DockPanel DockPanel.Dock="Bottom">
-
+                                            <!--All wells active checkbox-->
+                                            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                                                <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}"
+                                                      Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
+                                            </StackPanel>
+                                            
+                                            <!-- Array of Checkboxes or something where we can choose what is active and what is not-->
                                             <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRow}"
                                                   util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns}">
-                                               <StackPanel Name="spCheckboxes" Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-
+                                                
+                                                <StackPanel Name="spCheckboxes" Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                                                    <CheckBox>
+                                                        <!--Need to figure out how to get dynamic check boxes-->
+                                                    </CheckBox>
                                                 </StackPanel> 
 
                                             </Grid>
-                                            <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-
-                                                <!-- <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}"
-                                                  Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
-                                                    -->
-                                            </StackPanel>
-
-                                            <!--Put array of checkboxes or something similar here-->
+                                            
                                         </DockPanel>
                                     </DockPanel>
 
@@ -110,14 +112,7 @@
 
                             
                                 <StackPanel Grid.Column="0" Orientation="Vertical">
-                                    <!-- <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="0 0 10 0">Number of Rows:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInTray"></xctk:IntegerUpDown>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="0 0 10 0">Number of Columns:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInTray"></xctk:IntegerUpDown>
-                                    </StackPanel> -->
+                                    
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0 0 10 0">Number of Trays</TextBlock>
                                         <xctk:IntegerUpDown Minimum="0" Maximum="3" Name="NumberOfTrays" 
@@ -167,16 +162,14 @@
                     <Grid ShowGridLines="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="3*" />
                         </Grid.ColumnDefinitions>
 
                         
                         <!-- Scroll Viewer of Past Experiment Files-->
                         <DockPanel Grid.Column="0">
                             <TextBlock DockPanel.Dock="Top" FontWeight="Bold">Past Experiment Files</TextBlock>
-                            <ListBox>
-                                
-                            </ListBox>
+                            <Button x:Name ="OpenPastExperiments" Click="OpenPastExperiments_Click" Height="355" Width="180" Content="Open Past Experiment"/>
                         </DockPanel>
                         
                         <!--Past Experimnet Parameters-->
@@ -184,8 +177,8 @@
                             <TextBlock DockPanel.Dock="Top" FontWeight="Bold">Experiment Title</TextBlock> <!--Put title of file here-->
                             <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold">Wells Config:</TextBlock>
-                                    <TextBlock> some number</TextBlock>
+                                  <!--  <TextBlock FontWeight="DemiBold">Wells Config:</TextBlock> -->
+                                    <StackPanel Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center"/>
                                 </StackPanel>
                                 
                             </StackPanel>

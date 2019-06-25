@@ -268,32 +268,6 @@ namespace SPIPware
         }
         private void SelectAll_Change()
         {
-            //double for loop implemenation that is not being pursued
-           /* for(int i = 0; i < Properties.Settings.Default.TotalRows; i++)
-            {
-                for(int j = 0; j < Properties.Settings.Default.TotalColumns; j++)
-                {
-                    if (checkBoxes2D.data != null)
-                    {
-                        if (SelectAllValue == true)
-                        {
-                            box.IsChecked = true;
-                        }
-                        else if (SelectAllValue == false)
-                        {
-                            box.IsChecked = false;
-                        }
-                    }
-                }
-                Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
-            }*/
-
-            //foreach loop when 1D
-            /*foreach (CheckBox box in checkBoxes2D.SelectMany(k => k.checkBoxes2D))
-            {
-               
-            }*/
-
             foreach(List<CheckBox> boxList in checkBoxes2D)
             {
                 foreach(CheckBox box in boxList)

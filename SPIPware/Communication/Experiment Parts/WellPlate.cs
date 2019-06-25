@@ -28,7 +28,7 @@ namespace SPIPware.Communication.Experiment_Parts
         #region Constructors
         public WellPlate()
         {
-            xOffset = 1; //will chnage later
+            xOffset = 1; //will change later
             yOffset = 1;
         }
         #endregion
