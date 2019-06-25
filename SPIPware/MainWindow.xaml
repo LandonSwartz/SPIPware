@@ -470,9 +470,7 @@ S
 
                                     <TextBlock HorizontalAlignment="Center">Experiment Parameters</TextBlock>
                                 </GroupBox.Header>
-                                <StackPanel Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center">
-                                </StackPanel>
-
+                                <StackPanel Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center"/>
                             </GroupBox>
                             <GroupBox>
                                 <GroupBox.Header >

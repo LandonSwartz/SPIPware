@@ -170,6 +170,7 @@
     <Compile Include="Util\FileConverter.cs" />
     <Compile Include="Util\GrblCodeTranslator.cs" />
     <Compile Include="Util\GridHelpers.cs" />
+    <Compile Include="Util\PathToFilenameConverter.cs" />
     <Compile Include="Util\SettingsBinding.cs" />
     <Compile Include="Util\UpdateCheck.cs" />
     <Compile Include="Util\Vector2.cs" />
@@ -227,7 +228,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="Resources\Icons\Button_Icon_SettingsWindow.png" />
-    <Resource Include="Resources\Images\Grey Square.png" />
+    <Resource Include="Resources\Images\Grey-Square.png" />
     <Resource Include="Resources\Images\redditDownvote.png" />
     <Resource Include="Resources\Images\redditUpvote.png" />
     <Resource Include="Resources\Icons\new.png" />

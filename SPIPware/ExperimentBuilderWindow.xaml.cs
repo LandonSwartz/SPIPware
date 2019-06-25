@@ -29,10 +29,24 @@ namespace SPIPware
             InitializeComponent();
 
             Experiment newExperimet = new Experiment();
+
+            //filling out plate thingy
+            for(int i = 0; i < Properties.Settings.Default.TotalColumns; i++)
+            {
+                for(int j = 0; j < Properties.Settings.Default.TotalRows; j++)
+                {
+                    Image greySquare = new Image();
+
+                    Grid.SetColumn(greySquare, i);
+                    Grid.SetRow(greySquare, j);
+                    PlateArrangementGrid.Children.Add(greySquare);
+                }
+            }
         }
 
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        //  Experiment newExperiment; //don't know if needed
+
+        
 
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

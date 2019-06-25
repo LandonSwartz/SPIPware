@@ -26,11 +26,21 @@ Goals:
 	
 2. Frontend:
 	- Make Experiment builder window
+		- Finish Actual builder window
+			- move old experiment functinos to new window 
+			- get it to save as JSON
+			- get plate and well stuff saved to experiment.cs
+			- could make the window be view model bound to experiment.cs
+				- https://www.youtube.com/watch?v=U2ZvZwDZmJU
+		- Finish Loader Window
+			- Have file load preview and a apply button for past file experiments
+			- Take info from experiment builder window and input
 	- Remake the parts of main window to remove old experiment things and input the new
 		- Move timelaspe ribbon to experiment builder window
 		- Move parts of Machine tab to window
 		- Move experiment tab to window
-		- Add y position to g-code terminal view
+		- Add y position to g-code terminal view DONE
+		- Remove Experiment ribbon tab on main window
 	
 	- (Optional) Update Sunbear logo to BugBear logo
 	

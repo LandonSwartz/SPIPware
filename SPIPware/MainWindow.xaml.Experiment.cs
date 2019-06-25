@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
+/* Useful Links
+ * https://social.msdn.microsoft.com/Forums/vstudio/en-US/2f303aa2-73c8-420b-ab6d-2dde22a9d0bb/wpf-dynamically-adding-controls-to-grid?forum=wpf
+ */
+
 namespace SPIPware
 {
     partial class MainWindow
@@ -199,8 +203,16 @@ namespace SPIPware
 
                     spCheckboxes.Children.Add(stackPanel);
 
-                    //spCheckboxes.Children.Add(checkBoxes[i]);
-                    //spCheckboxes.Children.Add(textBlocks[i]);
+                    foreach(List<CheckBox> list in checkBoxes2D)
+                    {
+                        foreach(CheckBox box in list)
+                        {
+                            spCheckboxes.Children.Add(box);
+                        }
+                        
+                    }
+                    
+                    spCheckboxes.Children.Add(textBlocks[i]);
 
                 }
                 //cycle.UpdatePositionList(checkBoxes);
