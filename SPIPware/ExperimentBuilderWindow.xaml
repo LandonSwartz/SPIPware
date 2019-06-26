@@ -9,7 +9,7 @@
             mc:Ignorable="d"
         Height="450" Width="800"
 
-        Title="Experiment Builder"  Closing="Window_Closing" d:DesignWidth="600" d:DesignHeight="600" WindowState="Maximized">
+        Title="Experiment Builder"  Closing="Window_Closing" d:DesignWidth="800" d:DesignHeight="450" WindowState="Maximized">
 
     <Grid>
         <Border Background="WhiteSmoke" BorderThickness="5">
@@ -35,7 +35,7 @@
                                 <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Margin="0 0 10 0">Length of Radius (in cm):</TextBlock>
-                                    <TextBox Width="50" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay, Path = Value, UpdateSourceTrigger=PropertyChanged}" TextChanged="RadiusOfWell_TextChanged"></TextBox>
+                                    <TextBox Width="50" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay}" TextChanged="RadiusOfWell_TextChanged"></TextBox>
                                 </StackPanel>
                             </StackPanel>
 
@@ -44,10 +44,10 @@
                             <!--Plate Config-->
                             <StackPanel Grid.Row="1">
                                 <TextBlock FontWeight="Bold" Margin="0 3" TextDecorations="Underline">Plate Config</TextBlock>
-                                <Grid>
+                                <Grid Height="164">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width = "*" />
+                                        <ColumnDefinition Width = "*"/>
                                     </Grid.ColumnDefinitions>
 
 
@@ -55,19 +55,19 @@
 
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">Number of Rows:</TextBlock>
-                                            <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInPlate" Value="{util:SettingBinding TotalRows, Mode = TwoWay}"></xctk:IntegerUpDown>
+                                            <xctk:IntegerUpDown Minimum="0" Name="NumberOfRowsInPlate" Value="{util:SettingBinding TotalRows, Mode=TwoWay}"></xctk:IntegerUpDown>
                                         </StackPanel>
                                         <StackPanel  Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">Number of Columns:</TextBlock>
-                                            <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInPlate" Value="{util:SettingBinding TotalColumns, Mode = TwoWay}"></xctk:IntegerUpDown>
+                                            <xctk:IntegerUpDown Minimum="0" Name="NumberOfColumnsInPlate" Value="{util:SettingBinding TotalColumns, Mode=TwoWay}"></xctk:IntegerUpDown>
                                         </StackPanel>
                                         <StackPanel  Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">X Offset:</TextBlock>
-                                            <TextBox Width="50" Name ="XOffsetOfPlate" TextChanged="XOffsetOfPlate_TextChanged"></TextBox>
+                                            <TextBox Width="50" Name ="XOffsetOfPlate" Text="{util:SettingBinding XOffset, Mode=TwoWay}" TextChanged="XOffsetOfPlate_TextChanged"></TextBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">Y Offset:</TextBlock>
-                                            <TextBox Width="50" Name ="YOffsetOfPlate" TextChanged="YOffsetOfPlate_TextChanged"></TextBox>
+                                            <TextBox Width="50" Name ="YOffsetOfPlate" Text ="{util:SettingBinding YOffset, Mode=TwoWay}" TextChanged="YOffsetOfPlate_TextChanged"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
 

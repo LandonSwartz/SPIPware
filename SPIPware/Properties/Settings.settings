@@ -276,5 +276,11 @@ G92Z0;</Value>
     <Setting Name="DeleteThis" Type="System.String" Scope="User">
       <Value Profile="(Default)">Delete In Future</Value>
     </Setting>
+    <Setting Name="XOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="YOffset" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

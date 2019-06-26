@@ -28,6 +28,8 @@ namespace SPIPware
         {
             InitializeComponent();
 
+            this.DataContext = new ExperimentViewModel();
+
             Experiment newExperimet = new Experiment();
 
             //filling out plate thingy

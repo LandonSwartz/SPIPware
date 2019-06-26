@@ -215,7 +215,7 @@ namespace SPIPware
                     spCheckboxes.Children.Add(textBlocks[i]);
 
                 }
-                //cycle.UpdatePositionList(checkBoxes);
+                cycle.UpdatePositionList(checkBoxes2D);
             });
             //checkBoxes.ForEach(c => c.Click += new RoutedEventHandler(PlateCheck_Change));
             _log.Debug("Number of plate checkboxes: " + checkBoxes2D.Count);
