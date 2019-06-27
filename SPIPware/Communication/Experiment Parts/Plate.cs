@@ -70,7 +70,7 @@ namespace SPIPware.Communication.Experiment_Parts
         public Plate() //constructor function
         {
             //hardcoded values, will change in future
-            numRows = 4;
+            numRows = 4; //will change to Properties.Settings.Default.numberofRows later
             numColumns = 6;
             xOffset = 1;//will change
             yOffset = 1;
@@ -87,7 +87,7 @@ namespace SPIPware.Communication.Experiment_Parts
                 }
             }
         }
-        //Manual initializing method
+        //Manual initializing method (if needed)
         public Plate(int NumWells, int NumRows, int NumColumns, int XOffset, int YOffset)
         {
             numWells = NumWells;

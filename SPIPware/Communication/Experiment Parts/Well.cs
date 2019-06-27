@@ -50,7 +50,7 @@ namespace SPIPware.Communication.Experiment_Parts
         //constructor function
         public Well() //if no parameters passed
         {
-            radius = 0;
+            radius = 0; //properties.settings.default.radius
             active = false;
             x = 0;
             y = 0;

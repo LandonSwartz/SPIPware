@@ -121,7 +121,7 @@
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">Number of Trays</TextBlock>
                                             <xctk:IntegerUpDown Minimum="0" Maximum="3" Name="NumberOfTrays" 
-                                                            Text="{Binding ElementName=TrayCountSlider, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></xctk:IntegerUpDown>
+                                                            Text="{util:SettingBinding NumberOfTrays, Mode=TwoWay, Path=Value}"></xctk:IntegerUpDown>
                                         </StackPanel>
                                         <TextBlock>Min number of Trays is one while max is three</TextBlock>
                                     </StackPanel>
@@ -132,7 +132,7 @@
                                         <DockPanel DockPanel.Dock="Bottom">
                                             <!--Slider of Number of trays-->
                                             <Slider Name="TrayCountSlider" Minimum="1" Maximum="3" 
-                                                TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                                TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Value="{util:SettingBinding NumberOfTrays, Mode=TwoWay}"/>
                                         </DockPanel>
                                     </DockPanel>
                                 </Grid>

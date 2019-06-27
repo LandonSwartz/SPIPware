@@ -1123,5 +1123,17 @@ namespace SPIPware.Properties {
                 this["YOffset"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int NumberOfTrays {
+            get {
+                return ((int)(this["NumberOfTrays"]));
+            }
+            set {
+                this["NumberOfTrays"] = value;
+            }
+        }
     }
 }

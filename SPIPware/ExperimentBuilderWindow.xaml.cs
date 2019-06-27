@@ -16,6 +16,7 @@ using SPIPware.Entities; //for experiment class
 using System.IO; //for file opening
 using log4net;
 using System.Reflection;
+using SPIPware.Communication.Experiment_Parts;
 
 namespace SPIPware
 {
@@ -24,13 +25,15 @@ namespace SPIPware
     /// </summary>
     public partial class ExperimentBuilderWindow : Window
     {
+        ExperimentArrangement experiment = new ExperimentArrangement();
+
         public ExperimentBuilderWindow()
         {
             InitializeComponent();
 
             this.DataContext = new ExperimentViewModel();
 
-            Experiment newExperimet = new Experiment();
+         //   Experiment newExperimet = new Experiment();
 
             //filling out plate thingy
             for(int i = 0; i < Properties.Settings.Default.TotalColumns; i++)
@@ -91,6 +94,40 @@ namespace SPIPware
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
             }
         }
+
+        //to say all wells are active
+        private void selectAll_Change(object sender, RoutedEventArgs e)
+        {
+            SelectAll_Change();
+
+        }
+        private void SelectAll_Change()
+        { //will need to make experiment class
+           /* foreach (Tray tray in experiment)
+            {
+                foreach ( in plateList)
+                {
+                    if (well != null)
+                    {
+                        if (SelectAllValue == true)
+                        {
+                            well.Active = true;
+                        }
+                        else if (SelectAllValue == false)
+                        {
+                            well.Active = false;
+                        }
+                    }
+                    // Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
+                }
+            }*/
+
+            //making method in plate classes to make all wells active then calling those for each plate in tray
+
+        }
+
+
+
 
         #region Past SPIPware functions
         List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
@@ -338,33 +375,7 @@ namespace SPIPware
                 _IsThreeState = value;
             }
         }
-        private void selectAll_Change(object sender, RoutedEventArgs e)
-        {
-            SelectAll_Change();
 
-        }
-        private void SelectAll_Change()
-        {
-            foreach (List<CheckBox> boxList in checkBoxes2D)
-            {
-                foreach (CheckBox box in boxList)
-                {
-                    if (box != null)
-                    {
-                        if (SelectAllValue == true)
-                        {
-                            box.IsChecked = true;
-                        }
-                        else if (SelectAllValue == false)
-                        {
-                            box.IsChecked = false;
-                        }
-                    }
-                   // Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
-                }
-            }
-
-        }
         public void LoadDefaults()
         {
             Experiment.LoadDefaults();
