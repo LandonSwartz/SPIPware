@@ -21,6 +21,7 @@ namespace SPIPware.Communication.Experiment_Parts
         //offsets for camera
         private int xOffset;
         private int yOffset;
+        private bool active; //all wells are active
         public Well[,] wells; //could change to list of list later
 
         /* Notes for future...
@@ -30,27 +31,27 @@ namespace SPIPware.Communication.Experiment_Parts
          * operation, I am keeping fixed and will work in future. May make a 
          * dictionary of list or a list of lists to make it truly dynamic but 
          * only time will tell if I can learn enough c# to do it. 
-         */ 
+         */
 
 
         public int NumWells
         {
             get { return numWells; }
-            set { numWells = numRows*NumColumns; } //return rows times column
+            set { numWells = numRows * NumColumns; } //return rows times column
         }
-        
+
         public int NumRows
         {
             get { return numRows; }
             set { numRows = value; }
         }
-        
+
         public int NumColumns
         {
             get { return numColumns; }
             set { numColumns = value; }
         }
-        
+
         public int XOffset
         {
             get { return xOffset; }
@@ -61,6 +62,33 @@ namespace SPIPware.Communication.Experiment_Parts
         {
             get { return yOffset; }
             set { yOffset = value; }
+        }
+
+        public bool Active
+        {
+            get { return active; }
+            set { active = value; }
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Activates all wells in a plate. Returns 1 if sucessful, 0 if not
+        /// </summary>
+        /// <returns></returns>
+        public int ActivatePlates()
+        {
+            for(int i =0; i < numRows; i++)
+            {
+                for(int j =0; j < numColumns; j++)
+                {
+                    this.wells[i,j].Active = true;
+                }
+            }
+
+            this.active = true;
+
+            return 1;
         }
         #endregion
 

@@ -10,7 +10,7 @@ namespace SPIPware.Communication.Experiment_Parts
     {
         #region Properties
         private Plate[,] plates; //need array size but maybe hard coded
-        private int numRow;
+        private int numRows;
         private int numColumns;
 
 
@@ -21,8 +21,8 @@ namespace SPIPware.Communication.Experiment_Parts
         }
         public int NumRows
         {
-            get { return numRow; }
-            set { numRow = value; }
+            get { return numRows; }
+            set { numRows = value; }
         }
         public int NumColumns
         {
@@ -31,6 +31,26 @@ namespace SPIPware.Communication.Experiment_Parts
         }
 
 
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Activates all plates on a tray. Returns 1 when sucessful
+        /// </summary>
+        /// <returns></returns>
+        public int ActivateTrays()
+        {
+            for (int i = 0; i < numRows; i++)
+            {
+                for (int j = 0; j < numColumns; j++)
+                {
+                    this.plates[i, j].ActivatePlates();
+                }
+            }
+
+
+            return 1;
+        }
         #endregion
 
         #region Constructor

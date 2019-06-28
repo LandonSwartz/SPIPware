@@ -18,6 +18,23 @@ namespace SPIPware.Communication.Experiment_Parts
         }
         #endregion
 
+        #region Methods
+        /// <summary>
+        /// Activates all the wells in the trays of plates
+        /// </summary>
+        /// <returns></returns>
+        public int ActivateAllTrays()
+        {
+            for(int i=0; i < 3; i++) //hard coded to three rn'
+            {
+                this.trays[i].ActivateTrays();
+            }
+
+            return 1;
+        }
+
+        #endregion
+
 
         #region Constructors
         public ExperimentArrangement()
