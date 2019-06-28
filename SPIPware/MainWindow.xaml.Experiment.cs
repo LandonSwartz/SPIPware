@@ -19,7 +19,6 @@ namespace SPIPware
     partial class MainWindow
     {
         //WILL UPDATE WHEN WORKING ON EXPERIMENT BUILDER WINDOW
-      //  List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
         List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
         List<TextBlock> textBlocks = new List<TextBlock>();
 

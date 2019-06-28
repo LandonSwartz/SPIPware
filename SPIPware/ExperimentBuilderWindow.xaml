@@ -7,9 +7,13 @@
             xmlns:local="clr-namespace:SPIPware"
             xmlns:util="clr-namespace:SPIPware.Util"
             mc:Ignorable="d"
-        Height="450" Width="800"
+        Height="600" Width="800"
 
-        Title="Experiment Builder"  Closing="Window_Closing" d:DesignWidth="800" d:DesignHeight="450" WindowState="Maximized">
+        Title="Experiment Builder"  Closing="Window_Closing" d:DesignWidth="800" d:DesignHeight="600" WindowState="Maximized">
+
+    <Window.Resources>
+        <ResourceDictionary Source="MainWindow.Resources.xaml"/>
+    </Window.Resources>
 
     <Grid>
         <Border Background="WhiteSmoke" BorderThickness="5">
@@ -25,29 +29,106 @@
                         <Grid Name="BuildExperimentLayoutGrid">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <!--Well Config -->
-                            <StackPanel Grid.Row="0">
-                                <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Margin="0 0 10 0">Length of Radius (in cm):</TextBlock>
-                                    <TextBox Width="50" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay}" TextChanged="RadiusOfWell_TextChanged"></TextBox>
-                                </StackPanel>
+
+                            <!--Image Save Directory and Image File Names-->
+                            <StackPanel Grid.Column="0" Orientation="Vertical">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+
+                                    <!--Image Save Directory-->
+                                    <StackPanel Orientation="Vertical" Grid.Column="0">
+                                        <TextBlock FontWeight="Bold" TextDecorations="Underline" Margin="0 3">Image Save Directory</TextBlock>
+                                        <StackPanel  Orientation="Horizontal" Margin="0 0 0 0">
+                                            <Button Name="btnSaveFolder" Style="{StaticResource smallButton}"  Click="BtnSaveFolderOpen_Click">
+                                                <StackPanel>
+                                                    <ContentControl Template="{StaticResource FolderOpen}" ></ContentControl>
+
+                                                </StackPanel>
+                                            </Button>
+
+
+                                            <TextBox x:Name="tbFolderPath" Width="202" Text="{util:SettingBinding SaveFolderPath}"
+											   VerticalAlignment="Center" IsEnabled="False" IsReadOnly="True" />
+
+
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!--Image File Name-->
+                                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                                        <TextBlock FontWeight="Bold" TextDecorations="Underline" Margin="0 3">Image File Name</TextBlock>
+                                        <TextBox x:Name="tbFileName" Text="{util:SettingBinding FileName}" TextChanged="TbFileName_TextChanged"/>
+                                    </StackPanel>
+
+                                    <!--Experiment Path-->
+                                    <StackPanel Orientation="Vertical" Grid.Column="2">
+                                        <TextBlock FontWeight="Bold" Margin="0 3" TextDecorations="Underline">Experiment Path</TextBlock>
+                                        <TextBox Text="{util:SettingBinding ExperimentPath}"
+											    IsEnabled="False" IsReadOnly="True" Margin="0,0,0,0" HorizontalAlignment="Stretch"/>
+                                    </StackPanel>
+
+
+                                </Grid>
+                            </StackPanel>
+
+
+                            <!--Well Config And Experiment Path and Camera Settings-->
+                            <StackPanel Grid.Row="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <!--<ColumnDefinition Width="*"/>-->
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--Well Config-->
+                                    <StackPanel Orientation="Vertical" Grid.Column="0">
+                                        <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0 0 10 0">Length of Radius (in cm):</TextBlock>
+                                            <TextBox Width="50" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay}"></TextBox>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!--Experiment Path-->
+                                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                                        <TextBlock FontWeight="Bold" Margin="0 3" TextDecorations="Underline">Experiment Path</TextBlock>
+                                        <TextBox Text="{util:SettingBinding ExperimentPath}"
+											   IsEnabled="False" IsReadOnly="True" Margin="0,0,0,0" HorizontalAlignment="Stretch"/>
+                                    </StackPanel>
+
+                                    <!--Camera Settings-->
+                                    <!--<StackPanel Orientation="Vertical" Grid.Column="2">
+                                        <TextBlock FontWeight="Bold" Margin="0 3" TextDecorations="Underline">Camera Settings</TextBlock>
+                                        <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Left">
+                                            <ComboBox Name="cameraSettingsCB" Width="225" Text="{util:SettingBinding CameraSettingsPath}"  VerticalContentAlignment="Center" Height="22" DropDownOpened="cameraSettingsCB_DropDownOpened" SelectionChanged="cameraSettingsCB_SelectionChanged"/>
+                                        </StackPanel>
+                                    </StackPanel>-->
+                                </Grid>
+
                             </StackPanel>
 
 
 
                             <!--Plate Config-->
-                            <StackPanel Grid.Row="1">
+                            <StackPanel Grid.Row="2">
                                 <TextBlock FontWeight="Bold" Margin="0 3" TextDecorations="Underline">Plate Config</TextBlock>
                                 <Grid Height="164">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width = "*" />
                                         <ColumnDefinition Width = "*"/>
+                                        <!--<ColumnDefinition Width = "*"/>-->
                                     </Grid.ColumnDefinitions>
 
 
@@ -63,25 +144,25 @@
                                         </StackPanel>
                                         <StackPanel  Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">X Offset:</TextBlock>
-                                            <TextBox Width="50" Name ="XOffsetOfPlate" Text="{util:SettingBinding XOffset, Mode=TwoWay}" TextChanged="XOffsetOfPlate_TextChanged"></TextBox>
+                                            <TextBox Width="50" Name ="XOffsetOfPlate" Text="{util:SettingBinding XOffset, Mode=TwoWay}"></TextBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">Y Offset:</TextBlock>
-                                            <TextBox Width="50" Name ="YOffsetOfPlate" Text ="{util:SettingBinding YOffset, Mode=TwoWay}" TextChanged="YOffsetOfPlate_TextChanged"></TextBox>
+                                            <TextBox Width="50" Name ="YOffsetOfPlate" Text ="{util:SettingBinding YOffset, Mode=TwoWay}"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
 
                                     <DockPanel Grid.Column="1">
                                         <TextBlock DockPanel.Dock="Top" TextAlignment="Center">Arrangement of Plate</TextBlock>
-                                        <DockPanel DockPanel.Dock="Bottom">
-                                            <!--All wells active checkbox-->
-                                            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                                                <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}"
-                                                      Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
-                                            </StackPanel>
+                                        <!--All wells active checkbox-->
+                                        <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+                                            <TextBlock Margin="3" VerticalAlignment="Center" TextWrapping="Wrap"><Run Text="Press Checkbox to activate all wells in the experiment:"/></TextBlock>
+                                            <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}"
+                                                      x:Name="cbSelectAll" HorizontalAlignment="Center"  Content="Select All" Click="selectAll_Change"  />
+                                        </StackPanel>
 
-                                            <!-- Array of Checkboxes or something where we can choose what is active and what is not-->
-                                            <Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRow}"
+                                        <!-- Array of Checkboxes or something where we can choose what is active and what is not-->
+                                        <!--<Grid util:GridHelpers.RowCount ="{util:SettingBinding TotalRow}"
                                                   util:GridHelpers.ColumnCount="{util:SettingBinding TotalColumns}"
                                                   Name ="PlateArrangementGrid">
                                                 <Grid.RowDefinitions>
@@ -92,13 +173,30 @@
 
                                                 <StackPanel Name="spCheckboxes" Grid.Row="0" Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,-729,0" Grid.RowSpan="2">
                                                     <Image Source="C:\Users\sam998\Desktop\Lando's Folder\SPIPware build\SPIPware-master\SPIPware\Resources\Images\Grey-Square.png"/>
-                                                    <!--Need to figure out how to get dynamic check boxes-->
+                                                    Need to figure out how to get dynamic check boxes
                                                 </StackPanel>
 
-                                            </Grid>
-
-                                        </DockPanel>
+                                            </Grid> -->
                                     </DockPanel>
+                                    
+                                    <!--Plate Position Configuration-->
+                                    <!--<StackPanel Grid.Column="2" Orientation="Vertical">
+                                        <TextBlock>Plate Position Configuration:</TextBlock>
+                                        
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="First Plate Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                            <xctk:IntegerUpDown Name="udPlateOffset" Value="{util:SettingBinding PlateOffset}" Width="65" Margin="5"/>
+                                            <Button Name="btnTestFirst" Content="Test" Style="{StaticResource styleButton}" Click="BtnTestFirst_Click"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Between Plates:  " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                            <xctk:IntegerUpDown Name="udBetweenDistance" Value="{util:SettingBinding BetweenDistance}" Width="65" Margin="5" />
+                                            <Button Name="btnTestBetween" Content="Test" Style="{StaticResource styleButton}" Click="btnTestBetween_Click" />
+                                        </StackPanel>
+
+                                    </StackPanel>-->
 
 
                                 </Grid>
@@ -107,7 +205,7 @@
 
 
                             <!--Tray Config-->
-                            <StackPanel Grid.Row="2">
+                            <StackPanel Grid.Row="3">
                                 <TextBlock FontWeight="Bold" TextDecorations="Underline" Margin="0 3">Tray Config</TextBlock>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -120,7 +218,7 @@
 
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">Number of Trays</TextBlock>
-                                            <xctk:IntegerUpDown Minimum="0" Maximum="3" Name="NumberOfTrays" 
+                                            <xctk:IntegerUpDown Minimum="1" Maximum="3" Name="NumberOfTrays" 
                                                             Text="{util:SettingBinding NumberOfTrays, Mode=TwoWay, Path=Value}"></xctk:IntegerUpDown>
                                         </StackPanel>
                                         <TextBlock>Min number of Trays is one while max is three</TextBlock>
@@ -139,8 +237,8 @@
                             </StackPanel>
 
 
-                            <!-- Apply and Save Buttons and what not -->
-                            <StackPanel Grid.Row="3">
+                            <!-- Apply and Save Buttons -->
+                            <StackPanel Grid.Row="4">
                                 <TextBlock FontWeight="Bold" TextDecorations="Underline" Margin="0 3">Final Touches</TextBlock>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -148,9 +246,9 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Button Grid.Column="0" Name="btnSaveExperiment" Click="BtnSaveExperiment_Click" Content="Save" Padding="10"/>
+                                    <Button Grid.Column="0" Name="btnSaveExperiment" Click="ButtonSaveAsExperiment_Click" Content="Save Experiment" Padding="10"/>
 
-                                    <Button Grid.Column="1" Name="btnApplyExperiment" Click="BtnApplyExperiment_Click" Content="Apply"/>
+                                    <Button Grid.Column="1" Name="btnApplyExperiment" Click="BtnApplyExperiment_Click" Content="Apply to Settings"/>
 
                                 </Grid>
                             </StackPanel>
@@ -181,7 +279,7 @@
                         <DockPanel Grid.Column="1">
                             <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Text="Experiment Title"></TextBlock>
                             <!--Put title of file here-->
-                            <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
+                            <StackPanel Name ="PastExperimentPapameters" DockPanel.Dock="Bottom" Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel x:Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center"/>
                                 </StackPanel>
@@ -197,9 +295,10 @@
                 </TabItem>
 
                 <!--Misc Tab-->
+                <!--
                 <TabItem Header="Graphic Representation">
 
-                </TabItem>
+                </TabItem> -->
 
 
 

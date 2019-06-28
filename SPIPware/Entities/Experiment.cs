@@ -66,6 +66,7 @@ namespace SPIPware.Entities
         private List<List<int>> imagePositions;
         private Well well;
         private Plate plate;
+        private int numTrays;
 
         private Color BacklightColor;
 
@@ -96,6 +97,7 @@ namespace SPIPware.Entities
         public long TlIntervalType { get => tlIntervalType; set => tlIntervalType = value; }
         public Plate Plate { get => plate; set => plate = value; }
         public Well Well { get => well; set => well = value; }
+        public int NumTrays { get => numTrays; set => numTrays = value; }
 
         public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
         
@@ -136,6 +138,8 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.CycleCount = CycleCount;
                 //CycleControl.ImagePositions = ImagePositions;
                 cycle.ImagePositions = ImagePositions;
+                Properties.Settings.Default.NumberOfTrays = NumTrays;
+
 
                 Properties.Settings.Default.Save();
 

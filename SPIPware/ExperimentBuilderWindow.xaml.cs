@@ -17,6 +17,7 @@ using System.IO; //for file opening
 using log4net;
 using System.Reflection;
 using SPIPware.Communication.Experiment_Parts;
+using System.Reflection.Emit;
 
 namespace SPIPware
 {
@@ -44,7 +45,7 @@ namespace SPIPware
 
                     Grid.SetColumn(greySquare, i);
                     Grid.SetRow(greySquare, j);
-                    PlateArrangementGrid.Children.Add(greySquare);
+                    //PlateArrangementGrid.Children.Add(greySquare);
                 }
             }
         }
@@ -70,7 +71,8 @@ namespace SPIPware
 
         }
 
-        private void XOffsetOfPlate_TextChanged(object sender, TextChangedEventArgs e)
+        //directly tied to settings now so these will be commented out until needed later
+       /* private void XOffsetOfPlate_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
@@ -82,8 +84,8 @@ namespace SPIPware
 
         private void RadiusOfWell_TextChanged(object sender, TextChangedEventArgs e)
         {
-
-        }
+            RadiusOfWell.Text = RadiusOfWell_Value.Text;
+        }*/
 
         private void OpenPastExperiments_Click(object sender, RoutedEventArgs e)
         {
@@ -102,25 +104,8 @@ namespace SPIPware
 
         }
         private void SelectAll_Change()
-        { //will need to make experiment class
-           /* foreach (Tray tray in experiment)
-            {
-                foreach ( in plateList)
-                {
-                    if (well != null)
-                    {
-                        if (SelectAllValue == true)
-                        {
-                            well.Active = true;
-                        }
-                        else if (SelectAllValue == false)
-                        {
-                            well.Active = false;
-                        }
-                    }
-                    // Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
-                }
-            }*/
+        { 
+            experiment.ActivateAllTrays();
 
             //making method in plate classes to make all wells active then calling those for each plate in tray
 
@@ -130,11 +115,14 @@ namespace SPIPware
 
 
         #region Past SPIPware functions
+     
+
+        //other settings from experiments
         List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
         List<TextBlock> textBlocks = new List<TextBlock>();
 
 
-        public void UpdatePlateClick(object sender, RoutedEventArgs e)
+     /*   public void UpdatePlateClick(object sender, RoutedEventArgs e)
         {
             if (spCheckboxes != null)
             {
@@ -146,7 +134,7 @@ namespace SPIPware
                 _log.Error("Could not update plate checkboxes, spCheckboxes null");
             }
 
-        }
+        } */
 
         public void UpdatePlateCheckboxes(bool value)
         {
@@ -254,7 +242,7 @@ namespace SPIPware
             {
                 _log.Debug("Updating Plate Checkboxes");
                 int numBoxes = Properties.Settings.Default.NumLocationsRow;
-                spCheckboxes.Children.Clear();
+              //  spCheckboxes.Children.Clear();
                 foreach (List<CheckBox> list in checkBoxes2D)
                 {
                     list.Clear();
@@ -311,7 +299,7 @@ namespace SPIPware
 
                     stackPanel.Children.Add(textBlocks[i]);
 
-                    spCheckboxes.Children.Add(stackPanel);
+                    //spCheckboxes.Children.Add(stackPanel);
 
                     //spCheckboxes.Children.Add(checkBoxes[i]);
                     //spCheckboxes.Children.Add(textBlocks[i]);
@@ -598,6 +586,10 @@ namespace SPIPware
 
         }
 
+        private void TbFileName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 
     #endregion
