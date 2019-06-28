@@ -22,10 +22,10 @@ namespace SPIPware.Entities
         {
             {"TotalRows","Total Rows" },
             {"Total Columns", "Total Columns" },
-            {"CurrentPlate", "Current Plate" },
+        //    {"CurrentPlate", "Current Plate" },
             {"PlateXOffset", "Plate X Offset" },
             {"PlateYOffset", "Plate Y Offset" },
-            {"BetweenDistance", "Between Distance" },
+        //    {"BetweenDistance", "Between Distance" },
             {"CameraSettingsPath", "Camera Settings" },
             {"FileName", "File Name" },
             {"SaveFolderPath", "Save Folder" },
@@ -39,7 +39,7 @@ namespace SPIPware.Entities
         // private int totalPlates;
         private int platesPerRow;
         private int platesPerColumn;
-        private int[] currentPlate;
+     //   private int[] currentPlate;
         private int wellXoffset;
         private int wellYoffset;
         private int plateXOffset;
@@ -64,16 +64,16 @@ namespace SPIPware.Entities
         private long tlIntervalType;
         private int cycleCount;
         private List<List<int>> imagePositions;
-        private Well well;
-        private Plate plate;
         private int numTrays;
+        private int wellRadius;
+        private string experimentTitle; //for title of experiment
 
         private Color BacklightColor;
 
        // public int TotalPlates { get => totalPlates; set => totalPlates = value; }
         public int PlatesPerRow { get => platesPerRow; set => platesPerRow = value; }
         public int PlatesPerColumn{ get => platesPerColumn; set => platesPerColumn = value; }
-        public int[] CurrentPlate { get => currentPlate; set => currentPlate = value; } //current plate is array of x then y
+      //  public int[] CurrentPlate { get => currentPlate; set => currentPlate = value; } //current plate is array of x then y
         private int PlateXOffset { get => plateXOffset; set => plateXOffset = value; }
         private int PlateYOffset { get => plateYOffest; set => plateYOffest = value; }
         public int WellXoffset { get => wellXoffset; set => wellXoffset = value; }
@@ -95,9 +95,9 @@ namespace SPIPware.Entities
         public int TlEndInterval { get => tlEndInterval; set => tlEndInterval = value; }
         public long TlEndIntervalType { get => tlEndIntervalType; set => tlEndIntervalType = value; }
         public long TlIntervalType { get => tlIntervalType; set => tlIntervalType = value; }
-        public Plate Plate { get => plate; set => plate = value; }
-        public Well Well { get => well; set => well = value; }
         public int NumTrays { get => numTrays; set => numTrays = value; }
+        public int WellRadius { get => wellRadius; set => wellRadius = value; }
+        public string ExperimentTitle { get => experimentTitle; set => experimentTitle = value; }
 
         public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
         
@@ -120,9 +120,11 @@ namespace SPIPware.Entities
                 
                 Properties.Settings.Default.TotalRows = PlatesPerRow;
                 Properties.Settings.Default.TotalColumns = PlatesPerColumn;
-                Properties.Settings.Default.CurrentPlate = CurrentPlate;
+            //    Properties.Settings.Default.CurrentPlate = CurrentPlate;
                 Properties.Settings.Default.PlateXOffset = PlateXOffset;
                 Properties.Settings.Default.PlateYOffset = PlateYOffset;
+                Properties.Settings.Default.WellXOffset = WellXoffset;
+                Properties.Settings.Default.WellYOffset = WellYoffset;
                 Properties.Settings.Default.BetweenDistance = BetweenDistance;
                 Properties.Settings.Default.CameraSettingsPath = CameraSettingsPath;
                 Properties.Settings.Default.FileName = FileName;
@@ -139,6 +141,7 @@ namespace SPIPware.Entities
                 //CycleControl.ImagePositions = ImagePositions;
                 cycle.ImagePositions = ImagePositions;
                 Properties.Settings.Default.NumberOfTrays = NumTrays;
+                Properties.Settings.Default.RadiusOfWell = WellRadius;
 
 
                 Properties.Settings.Default.Save();
@@ -153,7 +156,7 @@ namespace SPIPware.Entities
             //Experiment experiment = new Experiment();
             PlatesPerRow = Properties.Settings.Default.TotalRows;
             PlatesPerColumn = Properties.Settings.Default.TotalColumns;
-            CurrentPlate = Properties.Settings.Default.CurrentPlate;
+            //CurrentPlate = Properties.Settings.Default.CurrentPlate;
             PlateXOffset = Properties.Settings.Default.PlateXOffset;
             PlateYOffset = Properties.Settings.Default.PlateYOffset;
             BetweenDistance = Properties.Settings.Default.BetweenDistance;
@@ -175,6 +178,9 @@ namespace SPIPware.Entities
             TlIntervalType = Properties.Settings.Default.tlIntervalType;
             BacklightColor = Properties.Settings.Default.BacklightColor;
             CycleCount = Properties.Settings.Default.CycleCount;
+            NumTrays = Properties.Settings.Default.NumberOfTrays;
+            WellRadius = Properties.Settings.Default.RadiusOfWell;
+
             if (cycle.ImagePositions != null)
             {
                 ImagePositions = new List<List<int>>(cycle.ImagePositions);

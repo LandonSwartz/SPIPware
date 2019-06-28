@@ -1126,13 +1126,49 @@ namespace SPIPware.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int NumberOfTrays {
             get {
                 return ((int)(this["NumberOfTrays"]));
             }
             set {
                 this["NumberOfTrays"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int WellXOffset {
+            get {
+                return ((int)(this["WellXOffset"]));
+            }
+            set {
+                this["WellXOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int WellYOffset {
+            get {
+                return ((int)(this["WellYOffset"]));
+            }
+            set {
+                this["WellYOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Experiment Title")]
+        public string ExperimentTitle {
+            get {
+                return ((string)(this["ExperimentTitle"]));
+            }
+            set {
+                this["ExperimentTitle"] = value;
             }
         }
     }

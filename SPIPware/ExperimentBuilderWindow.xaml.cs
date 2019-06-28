@@ -68,33 +68,23 @@ namespace SPIPware
 
         private void BtnApplyExperiment_Click(object sender, RoutedEventArgs e)
         {
-
+            //TODO: get this to load experiment parameters into settings
         }
-
-        //directly tied to settings now so these will be commented out until needed later
-       /* private void XOffsetOfPlate_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void YOffsetOfPlate_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void RadiusOfWell_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            RadiusOfWell.Text = RadiusOfWell_Value.Text;
-        }*/
 
         private void OpenPastExperiments_Click(object sender, RoutedEventArgs e)
         {
+            Experiment loadedExperiment = new Experiment();
+
             var dialog = openSaveDialog();
             SaveAsSettingsToFile(dialog);
             if (dialog != null)
             {
                 Properties.Settings.Default.ExperimentPath = dialog.FileName;
             }
+
+            loadedExperiment.LoadExperiment();
+
+            GenerateCurrentParametersList(loadedExperiment, PastExperimentPapameters);
         }
 
         //to say all wells are active
@@ -208,6 +198,7 @@ namespace SPIPware
 
 
                     }
+
                 }
                 else
                 {

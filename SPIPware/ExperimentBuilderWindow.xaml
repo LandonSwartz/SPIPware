@@ -94,11 +94,27 @@
 
                                     <!--Well Config-->
                                     <StackPanel Orientation="Vertical" Grid.Column="0">
+                                        
                                         <TextBlock FontWeight="Bold" Margin = "0 3" TextDecorations="Underline">Well Config</TextBlock>
+                                        <!--Radius of Well-->
                                         <StackPanel Orientation="Horizontal">
+
                                             <TextBlock Margin="0 0 10 0">Length of Radius (in cm):</TextBlock>
-                                            <TextBox Width="50" Name="RadiusOfWell" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay}"></TextBox>
+                                            <TextBox Width="50" Name="RadiusOfWell" HorizontalContentAlignment="Center" Text="{util:SettingBinding RadiusOfWell, Mode=TwoWay}"></TextBox>
+
                                         </StackPanel>
+                                        
+                                        <!--X and Y Offset of Well-->
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0 0 10 0">X Offset</TextBlock>
+                                            <TextBox Width="50" Name="WellXOffset" HorizontalContentAlignment="Center" Text="{util:SettingBinding WellXOffset, Mode=TwoWay}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0 0 10 0">Y Offset</TextBlock>
+                                            <TextBox Width="50" Name="WellYOffset" HorizontalContentAlignment="Center" Text="{util:SettingBinding WellYOffset, Mode=TwoWay}"/>
+                                        </StackPanel>
+                                            
+
                                     </StackPanel>
 
                                     <!--Experiment Path-->
@@ -144,11 +160,11 @@
                                         </StackPanel>
                                         <StackPanel  Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">X Offset:</TextBlock>
-                                            <TextBox Width="50" Name ="XOffsetOfPlate" Text="{util:SettingBinding XOffset, Mode=TwoWay}"></TextBox>
+                                            <TextBox Width="50" Name ="XOffsetOfPlate" HorizontalContentAlignment="Center" Text="{util:SettingBinding XOffset, Mode=TwoWay}"></TextBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">Y Offset:</TextBlock>
-                                            <TextBox Width="50" Name ="YOffsetOfPlate" Text ="{util:SettingBinding YOffset, Mode=TwoWay}"></TextBox>
+                                            <TextBox Width="50" Name ="YOffsetOfPlate" HorizontalContentAlignment="Center" Text ="{util:SettingBinding YOffset, Mode=TwoWay}"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
 
@@ -246,9 +262,17 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Button Grid.Column="0" Name="btnSaveExperiment" Click="ButtonSaveAsExperiment_Click" Content="Save Experiment" Padding="10"/>
+                                    <!--Save Button-->
+                                    <Border BorderThickness="3" Grid.Column="0">
+                                        <Button  Name="btnSaveExperiment" Click="ButtonSaveAsExperiment_Click" Content="Save Experiment" Padding="10"/>
+                                    </Border>
 
-                                    <Button Grid.Column="1" Name="btnApplyExperiment" Click="BtnApplyExperiment_Click" Content="Apply to Settings"/>
+                                    <!--Apply Button-->
+                                    <Border BorderThickness="3" Grid.Column="1">
+                                        <Button  Name="btnApplyExperiment" Click="BtnApplyExperiment_Click" Content="Apply to Settings" Padding="10"/>
+                                    </Border>
+
+
 
                                 </Grid>
                             </StackPanel>
@@ -271,25 +295,33 @@
 
                         <!-- Scroll Viewer of Past Experiment Files-->
                         <DockPanel Grid.Column="0">
-                            <TextBlock DockPanel.Dock="Top" FontWeight="Bold">Past Experiment Files</TextBlock>
-                            <Button x:Name ="OpenPastExperiments" Click="OpenPastExperiments_Click" Height="355" Width="180" Content="Open Past Experiment"/>
+                            <TextBlock DockPanel.Dock="Top" FontWeight="Bold" TextDecorations="Underline">Past Experiment Files</TextBlock>
+                            <Border BorderThickness="5">
+                                <Button x:Name ="OpenPastExperiments" Click="OpenPastExperiments_Click" VerticalAlignment="Stretch" Content="Open Past Experiment"/>
+                            </Border>
+                            
                         </DockPanel>
 
                         <!--Past Experimnet Parameters-->
                         <DockPanel Grid.Column="1">
-                            <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Text="Experiment Title"></TextBlock>
-                            <!--Put title of file here-->
-                            <StackPanel Name ="PastExperimentPapameters" DockPanel.Dock="Bottom" Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel x:Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center"/>
-                                </StackPanel>
+                            <!--Past Experiment Title-->
+                            <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Text="{util:SettingBinding ExperimentTitle, Mode=OneWay}" TextDecorations="Underline"></TextBlock>
+                            
+                            <!--Past Experiment Parameters Below-->
+                            <Border BorderThickness="5">
+                                
+                                <StackPanel Name ="PastExperimentPapameters" DockPanel.Dock="Bottom" Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel x:Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center"/>
+                                    </StackPanel>
 
-                            </StackPanel>
+                                </StackPanel>
+                                
+                            </Border>
+                            
                         </DockPanel>
 
                     </Grid>
-
-
 
 
                 </TabItem>
