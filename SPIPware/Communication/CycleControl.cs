@@ -144,7 +144,7 @@ namespace SPIPware.Communication
                 camera.loadCameraSettings();
                 posIndexX = 0;
                 posIndexY = 0;
-           //     posIndexZ = 0;
+                //posIndexZ = 0;
            
                 if (!ImagePositions.Any())
                 {
@@ -206,10 +206,11 @@ namespace SPIPware.Communication
             _log.Debug("Machine Home");
             if (runningCycle)
             {
+                 HandleNextPositionY(posIndexY); //move to next y-axis then move x then continue with x axis
+                posIndexY++;
                 HandleNextPositionX(posIndexX);
                 posIndexX++;
-                HandleNextPositionY(posIndexY);
-                posIndexY++;
+               
             }
 
         }
@@ -230,9 +231,9 @@ namespace SPIPware.Communication
                 
                 posIndexX++;
 
-                HandleNextPositionY(posIndexY);
+                //HandleNextPositionY(posIndexY);
 
-                posIndexY++;
+                //posIndexY++;
 
             }
         }

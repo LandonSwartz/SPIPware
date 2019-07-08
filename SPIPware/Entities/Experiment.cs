@@ -43,7 +43,7 @@ namespace SPIPware.Entities
         private int wellXoffset;
         private int wellYoffset;
         private int plateXOffset;
-        private int plateYOffest;
+        private int plateYOffset;
         private int betweenDistance;
         private string cameraSettingsPath;
         private string fileName;
@@ -75,7 +75,7 @@ namespace SPIPware.Entities
         public int PlatesPerColumn{ get => platesPerColumn; set => platesPerColumn = value; }
       //  public int[] CurrentPlate { get => currentPlate; set => currentPlate = value; } //current plate is array of x then y
         private int PlateXOffset { get => plateXOffset; set => plateXOffset = value; }
-        private int PlateYOffset { get => plateYOffest; set => plateYOffest = value; }
+        private int PlateYOffset { get => plateYOffset; set => plateYOffset = value; }
         public int WellXoffset { get => wellXoffset; set => wellXoffset = value; }
         public int WellYoffset { get => wellYoffset; set => wellYoffset = value; }
         public int BetweenDistance { get => betweenDistance; set => betweenDistance = value; }
@@ -125,7 +125,7 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.PlateYOffset = PlateYOffset;
                 Properties.Settings.Default.WellXOffset = WellXoffset;
                 Properties.Settings.Default.WellYOffset = WellYoffset;
-                Properties.Settings.Default.BetweenDistance = BetweenDistance;
+                Properties.Settings.Default.XBetweenDistance = BetweenDistance;
                 Properties.Settings.Default.CameraSettingsPath = CameraSettingsPath;
                 Properties.Settings.Default.FileName = FileName;
                 Properties.Settings.Default.SaveFolderPath = SaveFolderPath;
@@ -159,7 +159,7 @@ namespace SPIPware.Entities
             //CurrentPlate = Properties.Settings.Default.CurrentPlate;
             PlateXOffset = Properties.Settings.Default.PlateXOffset;
             PlateYOffset = Properties.Settings.Default.PlateYOffset;
-            BetweenDistance = Properties.Settings.Default.BetweenDistance;
+            BetweenDistance = Properties.Settings.Default.XBetweenDistance;
             CameraSettingsPath = Properties.Settings.Default.CameraSettingsPath;
             FileName = Properties.Settings.Default.FileName;
             SaveFolderPath = Properties.Settings.Default.SaveFolderPath;

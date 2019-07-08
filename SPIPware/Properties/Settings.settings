@@ -141,7 +141,7 @@ G92Z0;</Value>
     <Setting Name="PlateXOffset" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="BetweenDistance" Type="System.Int32" Scope="User">
+    <Setting Name="XBetweenDistance" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">132</Value>
     </Setting>
     <Setting Name="CameraSettingsPath" Type="System.String" Scope="User">
@@ -293,6 +293,9 @@ G92Z0;</Value>
     </Setting>
     <Setting Name="ExperimentTitle" Type="System.String" Scope="User">
       <Value Profile="(Default)">Experiment Title</Value>
+    </Setting>
+    <Setting Name="YBetweenDistance" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">132</Value>
     </Setting>
   </Settings>
 </SettingsFile>

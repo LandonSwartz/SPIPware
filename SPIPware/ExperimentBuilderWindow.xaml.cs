@@ -68,7 +68,7 @@ namespace SPIPware
 
         private void BtnApplyExperiment_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: get this to load experiment parameters into settings
+            //TODO have it save to setttings of application
         }
 
         private void OpenPastExperiments_Click(object sender, RoutedEventArgs e)

@@ -241,15 +241,21 @@
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="   Y:" VerticalAlignment="Center"/>
+                            <TextBlock Text="   Y: " VerticalAlignment="Center"/>
                             <TextBox Name="LabelPosY" Width="55"  Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+                            
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="MY: " VerticalAlignment="Center"/>
+                            <TextBox Name="LabelPosMY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Machine Position"/>
+
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="MX: " VerticalAlignment="Center"/>
                             <TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
 
                         </StackPanel>
-
+                        
                     </StackPanel>
                 </RibbonGroup>
                 <RibbonGroup Header="Commands">
@@ -282,21 +288,6 @@
                     <Button x:Name="ExperimentBuilderWindow_Open" Content="Experiment Builder" HorizontalAlignment="Left" Cursor="Help" Click="ButtonOpenExperimentBuilder_Click"/>
                 </RibbonGroup>
             </RibbonTab>
-            <!--Lando added below       will readd once experiment builder is ready
-            <RibbonTab Header="Experiment">
-S
-                <RibbonGroup Header= "Experiment Builder">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Experiment Window" Style="{StaticResource styleButton}" Click="OpenExperimentWindow_Click" Name="ButtonExperimentWindow"
-                                ToolTip="Opens Experiment builder"/>
-
-                    </StackPanel>
-                </RibbonGroup>
-
-
-
-            </RibbonTab>
-            end of Landon added-->
 
 
         </Ribbon>
@@ -413,8 +404,9 @@ S
                                 </StackPanel>
                             </GroupBox>
                             <!-- Will need to update below to tkae 2D or move to experiment builder window-->
-                            <GroupBox >
-                                <GroupBox.Header >
+                            <!--<GroupBox > -->
+                            <!--Obsolete Imaging Position Checkbox list-->
+                                <!--<GroupBox.Header >
                                     <TextBlock HorizontalAlignment="Center">Imaging Positions</TextBlock>
                                 </GroupBox.Header>
                                 <Grid Name="PlateGrid">
@@ -434,9 +426,9 @@ S
 
                                     </StackPanel>
 
-                                </Grid>
+                                </Grid>-->
 
-                            </GroupBox>
+                            <!--</GroupBox>-->
                             <GroupBox  VerticalAlignment="Top">
                                 <GroupBox.Header >
                                     <TextBlock HorizontalAlignment="Center">Backlight Color</TextBlock>
@@ -611,25 +603,61 @@ S
 
                             <GroupBox>
                                 <GroupBox.Header >
-                                    <TextBlock HorizontalAlignment="Center">Plate Position Calibration</TextBlock>
+                                    <TextBlock HorizontalAlignment="Center">Well Position Calibration</TextBlock>
                                 </GroupBox.Header>
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                                     <StackPanel Orientation="Horizontal">
-                                        <Label Content="First Plate Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="X First Well Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
 
-                                        <xctk:IntegerUpDown Name="udPlateOffset" Value="{util:SettingBinding PlateOffset}" Width="65" Margin="5"/>
+                                        <xctk:IntegerUpDown Name="udPlateOffset" Value="{util:SettingBinding WellXOffset}" Width="65" Margin="5"/>
                                         <Button Name="btnTestFirst" Content="Test" Style="{StaticResource styleButton}" Click="BtnTestFirst_Click"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
-                                        <Label Content="Between Plates:  " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="X Between Wells:  " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
 
-                                        <xctk:IntegerUpDown Name="udBetweenDistance" Value="{util:SettingBinding BetweenDistance}" Width="65" Margin="5" />
+                                        <xctk:IntegerUpDown Name="udBetweenDistance" Value="{util:SettingBinding XBetweenDistance}" Width="65" Margin="5" />
                                         <Button Name="btnTestBetween" Content="Test" Style="{StaticResource styleButton}" Click="btnTestBetween_Click" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Y Well Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                        <xctk:IntegerUpDown Name="udYPlateOffset" Value="{util:SettingBinding WellYOffset}" Width="65" Margin="5"/>
+                                        <Button Name="btnYTestFirst" Content="Test" Style="{StaticResource styleButton}" Click="BtnYTestFirst_Click"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Y Between Wells:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                        <xctk:IntegerUpDown Name="udYBetweenDistance" Value="{util:SettingBinding YDistanceBetween}" Width="65" Margin="5"/>
+                                        <Button Name="btnYTestBetween" Content="Test"   Style="{StaticResource styleButton}" Click="BtnYTestBetween_Click"/>
                                     </StackPanel>
 
                                 </StackPanel>
 
                             </GroupBox>
+                            
+                            <GroupBox>
+                                <GroupBox.Header>
+                                    <TextBlock HorizontalAlignment="Center">Plate Position Calibration TODO</TextBlock>
+                                </GroupBox.Header>
+
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="X Plate Offset" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                        <xctk:IntegerUpDown Name="udXWellOffset" Value="{util:SettingBinding PlateXOffset}" Width="65" Margin="5"/>
+                                        <Button Name="btnPlateXTest" Content="Test" Style="{StaticResource styleButton}" /> <!--TODO put click event--> 
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Y Plate Offset" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                        <xctk:IntegerUpDown Name="udYWellOffset" Value="{util:SettingBinding PlateYOffset}" Width="65" Margin="5"/>
+                                        <Button Name="btnPlateYTest" Content="Test" Style="{StaticResource styleButton}" />
+                                        <!--TODO put click event-->
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </GroupBox>
+                            
                             <GroupBox >
                                 <GroupBox.Header >
                                     <TextBlock HorizontalAlignment="Center">Plate Configuration</TextBlock>
@@ -649,7 +677,7 @@ S
                                     <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="85,5" HorizontalAlignment="Center" Grid.ColumnSpan="3">
 
                                         <TextBlock VerticalAlignment="Center" Margin="5">Number of Locations:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" ValueChanged="UpdatePlateClick"  />
+                                        <xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5"/> <!-- ValueChanged="UpdatePlateClick" -->
 
 
                                     </StackPanel>

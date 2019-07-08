@@ -92,7 +92,7 @@ namespace SPIPware.Communication
         public double CurrentTLO { get; private set; } = 0;
         #endregion
 
-        #region BugbearUpdates
+        #region BugbearUpdates (Tray Array)
         private Tray[] trays;//hard coded number of trays for later
         public Tray[] Trays
         {
@@ -629,7 +629,7 @@ namespace SPIPware.Communication
 		}
         #endregion
 
-        #region Posistion and Movement
+        #region Position and Movement
 
         //this struct is a data type that holds three doubles as a XYZ point location
         public struct machinePos
@@ -670,9 +670,8 @@ namespace SPIPware.Communication
 
         public double sendMotionCommandX(int position, double offset)
         {
-           // double distanceY = 0; //testing y value
-            double distance = homeMachinePos.currentLocationX + Properties.Settings.Default.PlateXOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
-            _log.Debug("Calculated Distance: " + distance);
+            double distance = homeMachinePos.currentLocationX + Properties.Settings.Default.WellXOffset + (Properties.Settings.Default.XBetweenDistance * position) + offset;
+            _log.Debug("Calculated X Distance: " + distance);
             //here a for loop could be add for each line of code per row then iterate to next y coordinate
             SendLine(buildCommandX(distance));
            // SendLine(buildCommandY(distance)); //y command line
@@ -683,8 +682,8 @@ namespace SPIPware.Communication
         //y-axis version
         public double sendMotionCommandY(int position, double offset) // could be important method to send y coordinates to sunbear
         {
-            double distance = homeMachinePos.currentLocationY + Properties.Settings.Default.PlateXOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
-            _log.Debug("Calculated Distance: " + distance);
+            double distance = homeMachinePos.currentLocationY + Properties.Settings.Default.WellYOffset + (Properties.Settings.Default.YBetweenDistance * position) + offset;
+            _log.Debug("Calculated Y Distance: " + distance);
             //here a for loop could be add for each line of code per row then iterate to next y coordinate
             SendLine(buildCommandY(distance));
             return distance;
@@ -717,7 +716,7 @@ namespace SPIPware.Communication
 
         public double sendMotionCommandZ(int position, double offset)
         {
-            double distance = homeMachinePos.currentLocationZ + Properties.Settings.Default.PlateXOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
+            double distance = homeMachinePos.currentLocationZ + Properties.Settings.Default.PlateXOffset + (Properties.Settings.Default.XBetweenDistance * position) + offset;
             _log.Debug("Calculated Distance: " + distance);
             SendLine(buildCommandZ(distance));
             return distance;

@@ -22,8 +22,8 @@ namespace SPIPware
         List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
         List<TextBlock> textBlocks = new List<TextBlock>();
 
-
-        public void UpdatePlateClick(object sender, RoutedEventArgs e)
+        //removed because plate checkboxes removed from main window for time being
+       /* public void UpdatePlateClick(object sender, RoutedEventArgs e)
         {
             if (spCheckboxes != null)
             {
@@ -35,7 +35,7 @@ namespace SPIPware
                 _log.Error("Could not update plate checkboxes, spCheckboxes null");
             }
 
-        }
+        }*/
 
         public void UpdatePlateCheckboxes(bool value)
         {
@@ -137,7 +137,8 @@ namespace SPIPware
             });
             
         }
-        public void UpdatePlateCheckboxes()
+        //removed for now because plate checkboxes removed from main window
+  /*      public void UpdatePlateCheckboxes()
         { //will redo checkboxes with expeirment builder so commenting below out FOR NOW    
             Dispatcher.Invoke(() =>
             {
@@ -166,7 +167,7 @@ namespace SPIPware
                     };
                     tempCB.Click += new RoutedEventHandler(PlateCheck_Change);
 
-                   /* if (cycle.ImagePositions!= null && cycle.ImagePositions.Contains(i))
+                    if (cycle.ImagePositions!= null && cycle.ImagePositions.Contains(i))
                     {
                         tempCB.IsChecked = true;
                     }
@@ -175,7 +176,7 @@ namespace SPIPware
                         cbSelectAll.IsChecked = null;
                         tempCB.IsChecked = false;
                         //IsThreeState = true;
-                    }*/
+                    }
                     
                     foreach(List<CheckBox> list in checkBoxes2D)
                     {
@@ -220,7 +221,7 @@ namespace SPIPware
             _log.Debug("Number of plate checkboxes: " + checkBoxes2D.Count);
             
 
-        }
+        }*/
 
         private void PlateCheck_Change(object sender, System.EventArgs e)
         {
@@ -368,7 +369,7 @@ namespace SPIPware
         }
         public void ExperimentUpdated()
         {
-            UpdatePlateCheckboxes();
+           // UpdatePlateCheckboxes();
             UpdateClrCanvas();
             UpdateBacklightColor();
         }

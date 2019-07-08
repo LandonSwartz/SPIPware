@@ -577,12 +577,12 @@ namespace SPIPware.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("132")]
-        public int BetweenDistance {
+        public int XBetweenDistance {
             get {
-                return ((int)(this["BetweenDistance"]));
+                return ((int)(this["XBetweenDistance"]));
             }
             set {
-                this["BetweenDistance"] = value;
+                this["XBetweenDistance"] = value;
             }
         }
         
@@ -1169,6 +1169,18 @@ namespace SPIPware.Properties {
             }
             set {
                 this["ExperimentTitle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("132")]
+        public int YBetweenDistance {
+            get {
+                return ((int)(this["YBetweenDistance"]));
+            }
+            set {
+                this["YBetweenDistance"] = value;
             }
         }
     }

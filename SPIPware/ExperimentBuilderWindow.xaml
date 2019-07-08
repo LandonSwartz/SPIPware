@@ -160,11 +160,11 @@
                                         </StackPanel>
                                         <StackPanel  Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">X Offset:</TextBlock>
-                                            <TextBox Width="50" Name ="XOffsetOfPlate" HorizontalContentAlignment="Center" Text="{util:SettingBinding XOffset, Mode=TwoWay}"></TextBox>
+                                            <TextBox Width="50" Name ="XOffsetOfPlate" HorizontalContentAlignment="Center" Text="{util:SettingBinding PlateXOffset, Mode=TwoWay}"></TextBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0 0 10 0">Y Offset:</TextBlock>
-                                            <TextBox Width="50" Name ="YOffsetOfPlate" HorizontalContentAlignment="Center" Text ="{util:SettingBinding YOffset, Mode=TwoWay}"></TextBox>
+                                            <TextBox Width="50" Name ="YOffsetOfPlate" HorizontalContentAlignment="Center" Text ="{util:SettingBinding PlateYOffset, Mode=TwoWay}"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
 
@@ -268,6 +268,7 @@
                                     </Border>
 
                                     <!--Apply Button-->
+                                    <!--Could apply experiment settings to file or something but may get rid of-->
                                     <Border BorderThickness="3" Grid.Column="1">
                                         <Button  Name="btnApplyExperiment" Click="BtnApplyExperiment_Click" Content="Apply to Settings" Padding="10"/>
                                     </Border>
@@ -325,13 +326,6 @@
 
 
                 </TabItem>
-
-                <!--Misc Tab-->
-                <!--
-                <TabItem Header="Graphic Representation">
-
-                </TabItem> -->
-
 
 
             </TabControl>

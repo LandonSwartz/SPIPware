@@ -105,5 +105,16 @@ namespace SPIPware
         {
             machine.sendMotionCommandX(1);
         }
+        private void BtnYTestBetween_Click(object sender, RoutedEventArgs e)
+        {
+            machine.sendMotionCommandY(0);
+        }
+
+        private void BtnYTestFirst_Click(object sender, RoutedEventArgs e)
+        {
+            machine.sendMotionCommandY(1);
+        }
+
+
     }
 }
