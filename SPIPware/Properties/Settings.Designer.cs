@@ -553,17 +553,6 @@ namespace SPIPware.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public int[] CurrentPlate {
-            get {
-                return ((int[])(this["CurrentPlate"]));
-            }
-            set {
-                this["CurrentPlate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int PlateXOffset {
             get {
@@ -1090,42 +1079,6 @@ namespace SPIPware.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Delete In Future")]
-        public string DeleteThis {
-            get {
-                return ((string)(this["DeleteThis"]));
-            }
-            set {
-                this["DeleteThis"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int XOffset {
-            get {
-                return ((int)(this["XOffset"]));
-            }
-            set {
-                this["XOffset"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int YOffset {
-            get {
-                return ((int)(this["YOffset"]));
-            }
-            set {
-                this["YOffset"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int NumberOfTrays {
             get {
@@ -1181,6 +1134,18 @@ namespace SPIPware.Properties {
             }
             set {
                 this["YBetweenDistance"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CurrentPlate {
+            get {
+                return ((int)(this["CurrentPlate"]));
+            }
+            set {
+                this["CurrentPlate"] = value;
             }
         }
     }

@@ -234,25 +234,30 @@
 
 
                     </StackPanel>
+                    <!--Actual Position (Work Position?) of Machine-->
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="   X: " VerticalAlignment="Center"/>
-                            <TextBox Name="LabelPosX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+                            <TextBox Name="LabelPosX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Work Position X value"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="   Y: " VerticalAlignment="Center"/>
-                            <TextBox Name="LabelPosY" Width="55"  Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+                            <TextBox Name="LabelPosY" Width="55"  Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Work Position Y value"/>
                             
                         </StackPanel>
+                    </StackPanel>
+                        
+                    <!--Machine Position of Machine-->
+                    <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="MY: " VerticalAlignment="Center"/>
-                            <TextBox Name="LabelPosMY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Machine Position"/>
+                            <TextBlock Text="MX: " VerticalAlignment="Center"/>
+                            <TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Machine X Position"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="MX: " VerticalAlignment="Center"/>
-                            <TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+                            <TextBlock Text="MY: " VerticalAlignment="Center"/>
+                            <TextBox Name="LabelPosMY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Machine Y Position"/>
 
                         </StackPanel>
                         
@@ -606,6 +611,7 @@
                                     <TextBlock HorizontalAlignment="Center">Well Position Calibration</TextBlock>
                                 </GroupBox.Header>
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <!--Currently offset whole axis so will need to see how to change in future but testing rn-->
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="X First Well Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
 
@@ -627,7 +633,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="Y Between Wells:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
 
-                                        <xctk:IntegerUpDown Name="udYBetweenDistance" Value="{util:SettingBinding YDistanceBetween}" Width="65" Margin="5"/>
+                                        <xctk:IntegerUpDown Name="udYBetweenDistance" Value="{util:SettingBinding YBetweenDistance}" Width="65" Margin="5"/>
                                         <Button Name="btnYTestBetween" Content="Test"   Style="{StaticResource styleButton}" Click="BtnYTestBetween_Click"/>
                                     </StackPanel>
 

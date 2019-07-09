@@ -295,7 +295,7 @@ namespace SPIPware
                             box.IsChecked = false;
                         }
                     }
-                    Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
+                  //  Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
                 }
             }
             

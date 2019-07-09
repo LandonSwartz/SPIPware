@@ -276,14 +276,14 @@ namespace SPIPware
 
                 image.Save(filePath, fileType);
 
-                LogMessage("Image acquired synchonously.");
-                if (Properties.Settings.Default.CurrentPlate[0] < Properties.Settings.Default.TotalRows)
+                LogMessage("Image acquired synchonously."); //TODO: fix current plate setting when taking pictures
+               // if (Properties.Settings.Default.CurrentPlate[0] < Properties.Settings.Default.TotalRows)
                 {
-                    Properties.Settings.Default.CurrentPlate[0]++;
+                    //Properties.Settings.Default.CurrentPlate[0]++;
                 }
-                else
+             //   else
                 {
-                    Properties.Settings.Default.CurrentPlate[0] = 1;
+                    //Properties.Settings.Default.CurrentPlate[0] = 1;
                 }
             });
 

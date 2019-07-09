@@ -135,9 +135,6 @@ G92Z0;</Value>
     <Setting Name="TotalRows" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7</Value>
     </Setting>
-    <Setting Name="CurrentPlate" Type="System.int32[]" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="PlateXOffset" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
@@ -273,15 +270,6 @@ G92Z0;</Value>
     <Setting Name="RadiusOfWell" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="DeleteThis" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Delete In Future</Value>
-    </Setting>
-    <Setting Name="XOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="YOffset" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="NumberOfTrays" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
@@ -296,6 +284,9 @@ G92Z0;</Value>
     </Setting>
     <Setting Name="YBetweenDistance" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">132</Value>
+    </Setting>
+    <Setting Name="CurrentPlate" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

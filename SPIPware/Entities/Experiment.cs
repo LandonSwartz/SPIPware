@@ -63,7 +63,8 @@ namespace SPIPware.Entities
         private long tlEndIntervalType;
         private long tlIntervalType;
         private int cycleCount;
-        private List<List<int>> imagePositions;
+        private int[] imagePositionsX;
+        private int[] imagePositionsY;
         private int numTrays;
         private int wellRadius;
         private string experimentTitle; //for title of experiment
@@ -101,7 +102,8 @@ namespace SPIPware.Entities
 
         public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
         
-        public List<List<int>> ImagePositions { get => imagePositions; set => imagePositions = value; }
+        public int[] ImagePositionsX { get => imagePositionsX; set => imagePositionsX = value; }
+        public int[] ImagePositionsY { get => imagePositionsY; set => imagePositionsY = value; }
         public int CycleCount { get => cycleCount; set => cycleCount = value; }
 
 
@@ -139,7 +141,8 @@ namespace SPIPware.Entities
                 Properties.Settings.Default.BacklightColor = BacklightColor;
                 Properties.Settings.Default.CycleCount = CycleCount;
                 //CycleControl.ImagePositions = ImagePositions;
-                cycle.ImagePositions = ImagePositions;
+                cycle.ImagePositionsX = ImagePositionsX;
+                cycle.ImagePositionsY = imagePositionsY;
                 Properties.Settings.Default.NumberOfTrays = NumTrays;
                 Properties.Settings.Default.RadiusOfWell = WellRadius;
 
@@ -181,13 +184,22 @@ namespace SPIPware.Entities
             NumTrays = Properties.Settings.Default.NumberOfTrays;
             WellRadius = Properties.Settings.Default.RadiusOfWell;
 
-            if (cycle.ImagePositions != null)
+            if (cycle.ImagePositionsX != null)
             {
-                ImagePositions = new List<List<int>>(cycle.ImagePositions);
+                ImagePositionsX = (cycle.ImagePositionsX);
             }
             else
             {
-                _log.Error("cycle.ImagePositions is null");
+                _log.Error("cycle.ImagePositionsX is null");
+            }
+
+            if (cycle.ImagePositionsY != null)
+            {
+                ImagePositionsY = (cycle.ImagePositionsY);
+            }
+            else
+            {
+                _log.Error("cycle.ImagePositionsY is null");
             }
         }
         public static Experiment LoadExperimentAndSave(string filePath)

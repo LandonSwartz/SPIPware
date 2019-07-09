@@ -95,7 +95,7 @@ namespace SPIPware
             btnTestFirst.IsEnabled = true;
             btnTestBetween.IsEnabled = true;
         }
-        //WILL NEED TO UPDATE FOR MULTIPLE AXIS
+        //x axis
         private void BtnTestFirst_Click(object sender, RoutedEventArgs e)
         {
             machine.sendMotionCommandX(0);
@@ -105,15 +105,18 @@ namespace SPIPware
         {
             machine.sendMotionCommandX(1);
         }
-        private void BtnYTestBetween_Click(object sender, RoutedEventArgs e)
+
+        //y-axis
+        private void BtnYTestFirst_Click(object sender, RoutedEventArgs e)
         {
             machine.sendMotionCommandY(0);
         }
-
-        private void BtnYTestFirst_Click(object sender, RoutedEventArgs e)
+        private void BtnYTestBetween_Click(object sender, RoutedEventArgs e)
         {
             machine.sendMotionCommandY(1);
         }
+
+        
 
 
     }

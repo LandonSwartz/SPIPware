@@ -72,7 +72,7 @@ namespace SPIPware.Communication
 
         public Vector3 MachinePosition { get; private set; } = new Vector3();   //No events here, the parser triggers a single event for both
         public Vector3 WorkOffset { get; private set; } = new Vector3();
-        public Vector3 WorkPosition { get { return MachinePosition - WorkOffset; } }
+        public Vector3 WorkPosition { get { return MachinePosition - WorkOffset; } } //Can change work position from w = machineP - offset to w = machineP +offset to put things into positive space
 
         public Vector3 LastProbePosMachine { get; private set; }
         public Vector3 LastProbePosWork { get; private set; }
@@ -629,7 +629,7 @@ namespace SPIPware.Communication
 		}
         #endregion
 
-        #region Position and Movement
+        #region Position and Movement Command Functions
 
         //this struct is a data type that holds three doubles as a XYZ point location
         public struct machinePos
@@ -672,11 +672,14 @@ namespace SPIPware.Communication
         {
             double distance = homeMachinePos.currentLocationX + Properties.Settings.Default.WellXOffset + (Properties.Settings.Default.XBetweenDistance * position) + offset;
             _log.Debug("Calculated X Distance: " + distance);
-            //here a for loop could be add for each line of code per row then iterate to next y coordinate
             SendLine(buildCommandX(distance));
-           // SendLine(buildCommandY(distance)); //y command line
             return distance;
 
+        }
+
+        public double sendMotionCommandX(int position)
+        {
+           return sendMotionCommandX(position, 0);
         }
 
         //y-axis version
@@ -690,18 +693,12 @@ namespace SPIPware.Communication
 
         }
 
-        public double sendMotionCommandX(int position)
-        {
-           return sendMotionCommandX(position, 0);
-        }
-
-        //y-axis version
         public double sendMotionCommandY(int position)
         {
             return sendMotionCommandY(position, 0);
         }
 
-        //z-axis command, not enabled yet
+        //z-axis command
         private String buildCommandZ(double distance) //where command is built for gcode
         {
 

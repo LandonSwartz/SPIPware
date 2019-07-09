@@ -62,6 +62,7 @@ namespace SPIPware
             else if (machine.Status == "Home")
             { //may need to add more axis
                 machine.homeMachinePos.currentLocationX = machine.MachinePosition.X;
+                machine.homeMachinePos.currentLocationY = machine.MachinePosition.Y;
                 //cycle.IsHome();
 
             }
@@ -90,10 +91,9 @@ namespace SPIPware
 			var nfi = Constants.DecimalOutputFormat;
 
 			LabelPosX.Text = machine.WorkPosition.X.ToString("N", nfi);
-            //LabelPosY.Text = machine.WorkPosition.Y.ToString("N", nfi);
+            LabelPosY.Text = machine.WorkPosition.Y.ToString("N", nfi);
             //LabelPosZ.Text = machine.WorkPosition.Z.ToString("N", nfi);
 
-            LabelPosY.Text = machine.WorkPosition.Y.ToString("N", nfi); //y value
 
 			LabelPosMX.Text = machine.MachinePosition.X.ToString("N", nfi);
             LabelPosMY.Text = machine.MachinePosition.Y.ToString("N", nfi);
