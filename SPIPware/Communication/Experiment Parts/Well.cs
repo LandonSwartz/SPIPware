@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 namespace SPIPware.Communication.Experiment_Parts
 
 {
+    /// <summary>
+    /// Well is most basic part of experiment parts. Each well is the object that will have a picture taken of. Contains
+    /// many properties: radius, diameter, active (if well has something in it), x and y coordinate of well in plate
+    /// </summary>
     public class Well
     {
         #region Properties

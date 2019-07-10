@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SPIPware.Communication.Experiment_Parts
 {
+    /// <summary>
+    /// Tray class is a collection of Plate objects. Basically a simplified Plate class.
+    /// </summary>
     public class Tray
     {
         #region Properties

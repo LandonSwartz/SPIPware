@@ -30,10 +30,10 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
-        private int[] _imagePositionsX = new int[Properties.Settings.Default.NumLocationsColumns]; //changed to 2D
+        private int[] _imagePositionsX = new int[Properties.Settings.Default.TotalColumns + 1]; //changed to 2D
         public int[] ImagePositionsX { get => _imagePositionsX; set => _imagePositionsX = value; }
 
-        private int[] _imagePositionsY = new int[Properties.Settings.Default.NumLocationsRow];
+        private int[] _imagePositionsY = new int[Properties.Settings.Default.TotalRows + 1];
         public int[] ImagePositionsY { get => _imagePositionsY; set => _imagePositionsY = value; }
 
         public event EventHandler StatusUpdate;
@@ -71,14 +71,14 @@ namespace SPIPware.Communication
         {
             _log.Debug("IsNextIndex IndexX: " + index);
             _log.Debug("IsNextIndex+ImagePositionsX[index] " + ImagePositionsX[index]); //because columns is x axis MAY NEED TO CHANGE
-            return (index <= ImagePositionsX[index] && index < Properties.Settings.Default.NumLocationsRow);
+            return (index <= ImagePositionsX[index] && index < Properties.Settings.Default.TotalColumns);
         }
 
         private bool IsCurrentIndexY(int index)
         {
             _log.Debug("IsNextIndex IndexY: " + index);
             _log.Debug("IsNextIndex+ImagePositionsY[index] " + ImagePositionsY[index]);
-            return (index <= ImagePositionsY[index] && index < Properties.Settings.Default.NumLocationsColumns);
+            return (index <= ImagePositionsY[index] && index < Properties.Settings.Default.TotalRows);
         }
 
         //NOT enabled
@@ -127,6 +127,8 @@ namespace SPIPware.Communication
 
         }
 
+        public bool rowCompleted = false;
+
         #region Cycle Status Functions
         public void Start()
         {
@@ -148,9 +150,10 @@ namespace SPIPware.Communication
                 camera.loadCameraSettings();
                 posIndexX = 0;
                 posIndexY = 0;
+                rowCompleted = false; //hasn't complete a row yet so false 
                 //posIndexZ = 0;
 
-                for(int i =0; i < ImagePositionsX.Length; i++)
+                for(int i = 0; i < ImagePositionsX.Length; i++)
                 {
                     ImagePositionsX[i] = i;
                 }
@@ -193,6 +196,7 @@ namespace SPIPware.Communication
             targetLocationX = 0;
             targetLocationY = 0;
             //targetLocationZ = 0;
+            rowCompleted = false;
             StatusUpdate.Raise(this, EventArgs.Empty);
 
             peripheral.SetLight(Peripheral.Backlight, false);
@@ -216,38 +220,47 @@ namespace SPIPware.Communication
         public delegate void ImageUpdated();
         public event EventHandler ImageUpdatedEvent;
         public BitmapImage bi;
+        
 
         public void IsHome()
-        {//currently only set up for x-axis
+        {
             _log.Debug("Machine Home");
-            if (runningCycle)
+
+            
+            _log.Debug("Row Complete Value is " + rowCompleted);
+            //first run
+            if (runningCycle && rowCompleted != true)
             {
+              //  rowCompleted = false;
+                _log.Debug("Position Index X is " + posIndexX);
+                _log.Debug("Position Index Y is " + posIndexY);
+
                HandleNextPositionY(posIndexY); //move to next y-axis then move x then continue with x axis
                posIndexY++;
-                HandleNextPositionX(posIndexX);
-                posIndexX++;
+               HandleNextPositionX(posIndexX);
+               posIndexX++;
                
             }
-
-        }
-
-        public void IsHomeRow()
-        {//for 2d cycle, moves y axis
-            _log.Debug("Machine Home for next row");
-            machine.SendLine("$HX");
-            posIndexX = 0;
-            targetLocationX = 0;
-            for (int i = 0; i < ImagePositionsX.Length; i++)
+            else if (runningCycle && rowCompleted) //next row shiz
             {
-                ImagePositionsX[i] = i;
-            }
-            if (runningCycle)
-            {
-                HandleNextPositionY(posIndexY);
-                posIndexY++;
+                //resetting x values
+                posIndexX = 0;
+                targetLocationX = 0;
+                for (int i = 0; i < ImagePositionsX.Length; i++)
+                {
+                    ImagePositionsX[i] = i;
+                }
+
                 HandleNextPositionX(posIndexX);
                 posIndexX++;
+
+                System.Threading.Thread.Sleep(5000); //wait five seconds
+
+                HandleNextPositionY(posIndexY); 
+                posIndexY++;
+                
             }
+
         }
 
         public void IsIdle()
@@ -265,11 +278,6 @@ namespace SPIPware.Communication
                 HandleNextPositionX(posIndexX);
                 
                 posIndexX++;
-
-                //HandleNextPositionY(posIndexY);
-
-                //posIndexY++;
-
             }
         }
         #endregion
@@ -286,12 +294,14 @@ namespace SPIPware.Communication
             {
                 _log.Debug("local index X: " + index);
                 GoToPositionX(index);
+                rowCompleted = true;
             }
-            else IsHomeRow(); //changed from end() to isHome() to try to make 2D
+            else IsHome(); //changed from end() to isHome() to try to make 2D
         }
+
         public void GoToPositionX(int index)
         { //image position is [0,index] because columns is second value which is x axis
-            _log.Debug("ImagePositions[0,index]: " + ImagePositionsX[index]);
+            _log.Debug("ImagePositionsX[indexX]: " + ImagePositionsX[index]);
             targetLocationX = machine.sendMotionCommandX(ImagePositionsX[index]); 
             _log.Debug("Going to target  X: " + targetLocationX);
         }
@@ -306,13 +316,16 @@ namespace SPIPware.Communication
                 _log.Debug("local index Y: " + index);
                 GoToPositionY(index);
             }
-            else End();
+            else
+            {
+                End();
+            }
         }
         public void GoToPositionY(int indexY)
         {
             //moving by rows
-            _log.Debug("ImagePositions[indexY, 0]: " + ImagePositionsY[indexY]);
-            targetLocationX = machine.sendMotionCommandY(ImagePositionsY[indexY]);
+            _log.Debug("ImagePositionsY[IndexY]: " + ImagePositionsY[indexY]);
+            targetLocationY = machine.sendMotionCommandY(ImagePositionsY[indexY]);
             _log.Debug("Going to target location Y: " + targetLocationY);
         }
 

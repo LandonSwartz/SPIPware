@@ -10,7 +10,12 @@ using System.Collections;
 
 namespace SPIPware.Communication.Experiment_Parts
 {
-    //for collection of wells
+    /// <summary>
+    /// Plate class is a collection of well objects in a 2D array. Contains properties of number of wells, number of rows/columns,
+    /// x/y offset, a boolean for if plate is active, and 2d array of wells. Methods include a function to activate the plate.
+    /// Two constructors. The standard Plate() builds the plate class from dynamic setting values. The second constructor takes in
+    /// many parameters to manual build Plate class.
+    /// </summary>
     public class Plate
     {
         #region Properties
@@ -24,13 +29,12 @@ namespace SPIPware.Communication.Experiment_Parts
         private bool active; //all wells are active
         public Well[,] wells; //could change to list of list later
 
-        /* Notes for future...
-         * 
-         * Right now, the wells are based as a 2D fixed array. The hope is though
-         * that in the future, it is a dynamic 2D array. But for current modes of 
-         * operation, I am keeping fixed and will work in future. May make a 
-         * dictionary of list or a list of lists to make it truly dynamic but 
-         * only time will tell if I can learn enough c# to do it. 
+        /* Notes for future...                                                          *
+         * Right now, the wells are based as a 2D fixed array. The hope is though       *
+         * that in the future, it is a dynamic 2D array. But for current modes of       *
+         * operation, I am keeping fixed and will work in future. May make a            *
+         * dictionary of list or a list of lists to make it truly dynamic but           *
+         * only time will tell if I can learn enough c# to do it.                       *
          */
 
 
@@ -73,9 +77,9 @@ namespace SPIPware.Communication.Experiment_Parts
 
         #region Methods
         /// <summary>
-        /// Activates all wells in a plate. Returns 1 if sucessful, 0 if not
+        /// Activates all wells in a plate. 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns 1 if sucessful, 0 if not</returns>
         public int ActivatePlates()
         {
             for(int i =0; i < numRows; i++)

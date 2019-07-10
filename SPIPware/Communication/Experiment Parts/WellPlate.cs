@@ -5,7 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SPIPware.Communication.Experiment_Parts
-{ //Special case class where the well is the actual plate instead of wells in plate
+{
+    /// <summary>
+    /// Special case class where the well is the actual plate of the experiment. Inherits the well class
+    /// then manual has some of the Plate attributes given to it.
+    /// </summary>
     class WellPlate : Well //inheritance bby
     {
         #region Properites

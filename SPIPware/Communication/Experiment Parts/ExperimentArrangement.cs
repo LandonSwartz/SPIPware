@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace SPIPware.Communication.Experiment_Parts
 {
+    /// <summary>
+    /// Class to contain total arragement of experiment parts. Includes an array of Tray objects. 
+    /// One method to activate all trays in the experiment (for quicker experiment building).
+    /// Constructor makes array of Trays when initialized.
+    /// </summary>
     class ExperimentArrangement
     {
         #region Properties
@@ -19,10 +24,11 @@ namespace SPIPware.Communication.Experiment_Parts
         #endregion
 
         #region Methods
+
         /// <summary>
         /// Activates all the wells in the trays of plates
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns 1 if success, 0 if fail</returns>
         public int ActivateAllTrays()
         {
             for(int i=0; i < 3; i++) //hard coded to three rn'
