@@ -14,11 +14,15 @@ using static SPIPware.Communication.PeripheralControl;
 
 namespace SPIPware.Communication
 {
+    /// <summary>
+    /// Class for the controlling of the cycling of the machine during a timelapse or single cycle run
+    /// </summary>
     class CycleControl
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly CycleControl instance = new CycleControl();
 
+        #region Constructor and Instance Function
         static CycleControl()
         {
             
@@ -30,10 +34,22 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
-        private int[] _imagePositionsX = new int[Properties.Settings.Default.TotalColumns + 1]; //changed to 2D
+        /// <summary>
+        /// Function to check for Image acquired event and changes machine status
+        /// </summary>
+        CycleControl()
+        {
+            camera.ImageAcquiredEvent += OnImageAcquired;
+            machine.StatusChanged += Machine_StatusChanged;
+        }
+        #endregion
+
+        #region Properties
+
+        private int[] _imagePositionsX = new int[Properties.Settings.Default.TotalColumns + 1]; //image positions of x axis
         public int[] ImagePositionsX { get => _imagePositionsX; set => _imagePositionsX = value; }
 
-        private int[] _imagePositionsY = new int[Properties.Settings.Default.TotalRows + 1];
+        private int[] _imagePositionsY = new int[Properties.Settings.Default.TotalRows + 1]; //image position of y-axis
         public int[] ImagePositionsY { get => _imagePositionsY; set => _imagePositionsY = value; }
 
         public event EventHandler StatusUpdate;
@@ -50,23 +66,21 @@ namespace SPIPware.Communication
         //target locations for next position in cycle
         private double targetLocationX = 0;
         private double targetLocationY = 0;
-   //     private double targetLocationZ = 0; TO USE LATER IF NEEDED
+   /*    private double targetLocationZ = 0; TO USE LATER IF NEEDED */
 
         //position index for each axis
         private static int posIndexX = 0;
         private static int posIndexY = 0; //y position index
-       // private static int posIndexZ = 0; TO USE LATER IF NEEDED
+                                          /*  private static int posIndexZ = 0; TO USE LATER IF NEEDED  */
+        #endregion
 
-        CycleControl()
-        {
-            camera.ImageAcquiredEvent += OnImageAcquired;
-            machine.StatusChanged += Machine_StatusChanged;
-        }
         public void OnImageAcquired(object sender, EventArgs e)
         {
     
         }
-        //finds if currenet index (but only for x?)
+
+
+        #region IsCurrentIndex Functions (x,y,z)
         private bool IsCurrentIndexX(int index)
         {
             _log.Debug("IsNextIndex IndexX: " + index);
@@ -86,29 +100,30 @@ namespace SPIPware.Communication
         {
             return false; //DO NOT USE
         }
+        #endregion
 
-        //removing because probs don't need
-       /* public void UpdatePositionList(List<List<CheckBox>> checkBoxes)
-        {
-            Array.Clear(ImagePositions, 0, ImagePositions.Length); //remade into array.clear, hopefully will work
-            _log.Debug("Number of Checkboxes: " + checkBoxes.Count);
-            //ImagePositions.ForEach((position) => _log.Debug(position + ","));
+        //Removed 7/8/2019 becuase redudnat with new bugbear updates
+        /* public void UpdatePositionList(List<List<CheckBox>> checkBoxes)
+         {
+             Array.Clear(ImagePositions, 0, ImagePositions.Length); //remade into array.clear, hopefully will work
+             _log.Debug("Number of Checkboxes: " + checkBoxes.Count);
+             //ImagePositions.ForEach((position) => _log.Debug(position + ","));
 
-            for (var i = 0; i < Properties.Settings.Default.TotalRows; i++)
-            {
-                for (var j = 0; j < Properties.Settings.Default.TotalColumns; j++)
-                {
-                    if (checkBoxes[i][j].IsChecked == true)
-                    {
-                        ImagePositions[i, j] = i + j;
-                    }
-                }
-            }
-            //_imagePositions.ForEach(i => _log.Debug)
-            _log.Debug("UpdatePositionList+ImagePositions.Count: " + ImagePositions.Length);
-        }*/
+             for (var i = 0; i < Properties.Settings.Default.TotalRows; i++)
+             {
+                 for (var j = 0; j < Properties.Settings.Default.TotalColumns; j++)
+                 {
+                     if (checkBoxes[i][j].IsChecked == true)
+                     {
+                         ImagePositions[i, j] = i + j;
+                     }
+                 }
+             }
+             //_imagePositions.ForEach(i => _log.Debug)
+             _log.Debug("UpdatePositionList+ImagePositions.Count: " + ImagePositions.Length);
+         }*/
 
-        //Machine Status Change function
+        //Machine Status Change method
         private void Machine_StatusChanged()
         {
 
@@ -127,9 +142,13 @@ namespace SPIPware.Communication
 
         }
 
-        public bool rowCompleted = false;
+        public bool rowCompleted = false; //for testing of cycle control with new y-axis
 
         #region Cycle Status Functions
+        /// <summary>
+        /// Start() is what is called when starting a cycle. Intializes properties to zero and begins
+        /// log of data
+        /// </summary>
         public void Start()
         {
             if (machine.Connected && peripheral.Connected)
@@ -174,7 +193,7 @@ namespace SPIPware.Communication
                 peripheral.SetLight(Peripheral.Backlight, true);
                 peripheral.SetLight(Peripheral.GrowLight, false, false);
                 peripheral.SetBacklightColor(Properties.Settings.Default.BacklightColor);
-                machine.SendLine("$H");
+                machine.SendLine("$H"); //forces machine.status to "HOME"
       
             }
             else
@@ -184,6 +203,9 @@ namespace SPIPware.Communication
 
 
         }
+        /// <summary>
+        /// End() called at end of cycle to reset properties and tie up loose cycle ends.
+        /// </summary>
         public void End()
         {
             _log.Debug("Ending Cycle.");
@@ -208,6 +230,9 @@ namespace SPIPware.Communication
 
 
         }
+        /// <summary>
+        /// Stop() stops the currently running cycle and ends the cycle.
+        /// </summary>
         public void Stop()
         {
             _log.Error("Stop Occured");
@@ -217,11 +242,17 @@ namespace SPIPware.Communication
             //    machine.SoftReset();
             //}
         }
+
+        //image properties for cycle 
         public delegate void ImageUpdated();
         public event EventHandler ImageUpdatedEvent;
         public BitmapImage bi;
-        
 
+        /// <summary>
+        /// IsHome() is called when machine.status is home after a $H call. It is split into two main parts.
+        /// The first is about what to do during the first start of the entire cycle. The second
+        /// is about when moving to the next row for a new X-axis cycle.
+        /// </summary>
         public void IsHome()
         {
             _log.Debug("Machine Home");
@@ -246,15 +277,13 @@ namespace SPIPware.Communication
                 //resetting x values
                 posIndexX = 0;
                 targetLocationX = 0;
-                for (int i = 0; i < ImagePositionsX.Length; i++)
-                {
-                    ImagePositionsX[i] = i;
-                }
-
+                rowCompleted = false;
+               // machine.Status = "Home";
+               
                 HandleNextPositionX(posIndexX);
                 posIndexX++;
 
-                System.Threading.Thread.Sleep(5000); //wait five seconds
+                System.Threading.Thread.Sleep(3000); //wait five seconds
 
                 HandleNextPositionY(posIndexY); 
                 posIndexY++;
@@ -263,6 +292,9 @@ namespace SPIPware.Communication
 
         }
 
+        /// <summary>
+        /// IsIdle() is called when machine is idle during a run and captures a picture before moving on to new position.
+        /// </summary>
         public void IsIdle()
         {//only set up for x
             _log.Debug("Machine Idle");
@@ -279,11 +311,32 @@ namespace SPIPware.Communication
                 
                 posIndexX++;
             }
+            /*else if (runningCycle && rowCompleted) //next row shiz
+            {
+                //resetting x values
+                posIndexX = 0;
+                targetLocationX = 0;
+                rowCompleted = false;
+                // machine.Status = "Home";
+
+                HandleNextPositionX(posIndexX);
+                posIndexX++;
+
+                System.Threading.Thread.Sleep(3000); //wait five seconds
+
+                HandleNextPositionY(posIndexY);
+                posIndexY++;
+
+            }*/
         }
         #endregion
 
 
         #region HandleNextPosition and GoToPosition Functions(x,y,z)
+        /// <summary>
+        /// These Functions find the next position for their respective axis then goes to it.
+        /// </summary>
+        /// <param name="index">Each axis has own index based off of their respective machine position index</param>
 
         //x-axis
         public void HandleNextPositionX(int index)
@@ -296,25 +349,25 @@ namespace SPIPware.Communication
                 GoToPositionX(index);
                 rowCompleted = true;
             }
-            else IsHome(); //changed from end() to isHome() to try to make 2D
+            else IsIdle(); //changed from end() to isHome() to try to make 2D, 7/8/2019
         }
 
         public void GoToPositionX(int index)
-        { //image position is [0,index] because columns is second value which is x axis
+        {
             _log.Debug("ImagePositionsX[indexX]: " + ImagePositionsX[index]);
             targetLocationX = machine.sendMotionCommandX(ImagePositionsX[index]); 
             _log.Debug("Going to target  X: " + targetLocationX);
         }
 
         //y-axis
-        public void HandleNextPositionY(int index)
+        public void HandleNextPositionY(int indexY)
         {
-            bool foundPlate = IsCurrentIndexY(index);
+            bool foundPlate = IsCurrentIndexY(indexY);
             _log.Debug("Found Current Plate Y: " + foundPlate);
             if (foundPlate)
             {
-                _log.Debug("local index Y: " + index);
-                GoToPositionY(index);
+                _log.Debug("local index Y: " + indexY);
+                GoToPositionY(indexY);
             }
             else
             {

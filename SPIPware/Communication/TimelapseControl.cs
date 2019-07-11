@@ -11,6 +11,9 @@ using static SPIPware.Communication.PeripheralControl;
 
 namespace SPIPware.Communication
 {
+    /// <summary>
+    /// TimelapseControl helps control the timelapse function of SPIPware
+    /// </summary>
     class TimelapseControl
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

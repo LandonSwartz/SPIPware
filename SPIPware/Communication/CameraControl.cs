@@ -16,36 +16,50 @@ using System.Windows.Threading;
 
 namespace SPIPware
 {
-
+    /// <summary>
+    /// CameraControl is a class for entirely controlling the camera on the SPIPware machine.
+    /// </summary>
     public sealed class CameraControl
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly CameraControl instance = new CameraControl();
+
+        #region Constructors
+        /// <summary>
+        /// Constructor for Camera Control Class
+        /// </summary> 
         static CameraControl()
         {
 
         }
-        public static CameraControl Instance
+        public static CameraControl Instance //instance is the object's understanding at the specific point in time when called.
         {
             get
             {
                 return instance;
             }
         }
+        #endregion
 
-        public bool settingsLoaded = false;
+        #region Properties
+        public bool settingsLoaded = false; //are settings for the camera loaded or not?
 
         string previousSettingsDir;
         private VimbaHelper m_VimbaHelper = null;
         public Image m_PictureBox;
         //TODO Make real output
         private CameraInfo selectedItem;
-        public VimbaHelper VimbaHelper { get => m_VimbaHelper; set => m_VimbaHelper = value; }
+        public VimbaHelper VimbaHelper { get => m_VimbaHelper; set => m_VimbaHelper = value; } //from VIMBAhelper.cs
         public CameraInfo SelectedItem { get => selectedItem; set => selectedItem = value; }
         //Add log message to logging list box
         public delegate void ImageAcquired();
         public event EventHandler ImageAcquiredEvent;
-        
+        #endregion
+
+        #region Start and Setting Methods
+        /// <summary>
+        /// Starts the Vimba camera and others
+        /// </summary>
         public void StartVimba()
         {
             //cameraControl = new CameraControl();
@@ -80,6 +94,9 @@ namespace SPIPware
         {
             ImageAcquiredEvent.Raise(this, new EventArgs());
         }
+        /// <summary>
+        /// Shuts down Vimba camera
+        /// </summary>
         public void ShutdownVimba()
         {
             if (null != m_VimbaHelper)
@@ -204,6 +221,9 @@ namespace SPIPware
 
 
         }
+        #endregion
+
+        #region Image Capturing
         public BitmapImage bi;
         public BitmapImage UpdateImageBox(System.Drawing.Image image)
         {
@@ -334,5 +354,6 @@ namespace SPIPware
             _log.Error(exception);
         }
     }
-   
+    #endregion
+
 }

@@ -23,10 +23,17 @@ namespace SPIPware.Communication
         Serial
     }
 
+    /// <summary>
+    /// Machine class is everything needed to run actual machine of SPIPware. Most notably the grbl commands and positions.
+    /// </summary>
     public sealed class Machine
     {
+        #region Logger
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly Machine instance = new Machine();
+        #endregion
+
+        #region Constuctors
         static Machine()
         {
 
@@ -38,14 +45,18 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
-        //Operating Mode for the machine
+        #endregion
+
+        /// <summary>
+        /// OperatingMode is an enum that reflects the machine object's current Operating mode
+        /// </summary>
         public enum OperatingMode
         {
-            Manual,
-            SendFile,
-            Probe,
-            Disconnected,
-            SendMacro
+            Manual, //0
+            SendFile,//1
+            Probe,//2
+            Disconnected,//3
+            SendMacro//4
         }
 
         #region Properties
@@ -102,22 +113,9 @@ namespace SPIPware.Communication
                 trays = new Tray[3];
             }
         }
-        
-        /* may or may not keep, we will see
-        public Tray[] Trays
-        {
-            get { return trays;}
-            set
-            {
-                for(int i = 0; i < 3; i++)
-                {
-                    trays[i] = new Tray();
-                }
-            }
-        }*/
-       
-        #endregion 
+        #endregion
 
+        #region More Properties (relating to Misc)
         private Calculator _calculator;
 		private Calculator Calculator { get { return _calculator; } }
 
@@ -164,9 +162,10 @@ namespace SPIPware.Communication
 				RaiseEvent(OperatingModeChanged);
 			}
 		}
+        #endregion
 
-		#region Status and other settings
-		private string _status = "Disconnected";
+        #region Status and other settings
+        private string _status = "Disconnected";
 		public string Status
 		{
 			get { return _status; }
@@ -288,6 +287,10 @@ namespace SPIPware.Communication
         #endregion
 
         #region Work() Function
+        /// <summary>
+        /// Work does the main work for the machine object and helps translate to the 
+        /// different operating modes and writing G-code.
+        /// </summary>
         private void Work()
 		{
 			try
@@ -529,6 +532,9 @@ namespace SPIPware.Communication
         #endregion
 
         #region Connect() and Disconnection() Functions
+        /// <summary>
+        /// Connect() is called when the machine object is connecting to the relate ardunios
+        /// </summary>
         public void Connect()
 		{
 			if (Connected)
@@ -572,8 +578,13 @@ namespace SPIPware.Communication
 			WorkerThread = new Thread(Work);
 			WorkerThread.Priority = ThreadPriority.AboveNormal;
 			WorkerThread.Start();
+
+            SendLine("$H"); //sending homing command when connected
 		}
 
+        /// <summary>
+        /// Disconnect() is called when the machine wants to disconnected from the current ardunios
+        /// </summary>
 		public void Disconnect()
 		{
 			if (!Connected)
@@ -631,7 +642,9 @@ namespace SPIPware.Communication
 
         #region Position and Movement Command Functions
 
-        //this struct is a data type that holds three doubles as a XYZ point location
+        /// <summary>
+        /// Struct for the current positon of the machine in x,y,z
+        /// </summary>
         public struct machinePos
         { //have to put public in the members of the struct because default by private with C#
             public double currentLocationX;
@@ -652,7 +665,22 @@ namespace SPIPware.Communication
             return sb.ToString();
         }
 
-        //The below functions emulates the similar X axis, perhaps by seperating the two axis, the commands can be seperated by axes
+        public double sendMotionCommandX(int position, double offset)
+        {
+            double distance = homeMachinePos.currentLocationX + Properties.Settings.Default.WellXOffset + (Properties.Settings.Default.XBetweenDistance * position) + offset;
+            _log.Debug("Calculated X Distance: " + distance);
+            SendLine(buildCommandX(distance));
+            return distance;
+
+        }
+
+        public double sendMotionCommandX(int position)
+        {
+           return sendMotionCommandX(position, 0);
+        }
+       
+
+       //y-axis version
        private String buildCommandY(double distance) //where command is built for gcode
         {
 
@@ -667,22 +695,6 @@ namespace SPIPware.Communication
             return sb.ToString();
         }
 
-
-        public double sendMotionCommandX(int position, double offset)
-        {
-            double distance = homeMachinePos.currentLocationX + Properties.Settings.Default.WellXOffset + (Properties.Settings.Default.XBetweenDistance * position) + offset;
-            _log.Debug("Calculated X Distance: " + distance);
-            SendLine(buildCommandX(distance));
-            return distance;
-
-        }
-
-        public double sendMotionCommandX(int position)
-        {
-           return sendMotionCommandX(position, 0);
-        }
-
-        //y-axis version
         public double sendMotionCommandY(int position, double offset) // could be important method to send y coordinates to sunbear
         {
             double distance = homeMachinePos.currentLocationY + Properties.Settings.Default.WellYOffset + (Properties.Settings.Default.YBetweenDistance * position) + offset;
@@ -697,6 +709,7 @@ namespace SPIPware.Communication
         {
             return sendMotionCommandY(position, 0);
         }
+
 
         //z-axis command
         private String buildCommandZ(double distance) //where command is built for gcode

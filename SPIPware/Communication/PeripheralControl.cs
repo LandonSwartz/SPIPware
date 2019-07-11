@@ -24,6 +24,9 @@ namespace SPIPware.Communication
     }
     #endregion
 
+    /// <summary>
+    /// PeripheralControl class helps control the lights of the machine
+    /// </summary>
     public sealed class PeripheralControl
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
