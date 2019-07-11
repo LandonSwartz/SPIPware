@@ -193,7 +193,8 @@ namespace SPIPware.Communication
                 peripheral.SetLight(Peripheral.Backlight, true);
                 peripheral.SetLight(Peripheral.GrowLight, false, false);
                 peripheral.SetBacklightColor(Properties.Settings.Default.BacklightColor);
-                machine.SendLine("$H"); //forces machine.status to "HOME"
+
+                machine.SendLine("$H"); //forces machine.status to "HOME"               
       
             }
             else
@@ -349,7 +350,7 @@ namespace SPIPware.Communication
                 GoToPositionX(index);
                 rowCompleted = true;
             }
-            else IsIdle(); //changed from end() to isHome() to try to make 2D, 7/8/2019
+            else IsHome(); //changed from end() to isHome() to try to make 2D, 7/8/2019
         }
 
         public void GoToPositionX(int index)
