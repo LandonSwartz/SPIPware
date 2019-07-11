@@ -71,7 +71,7 @@ namespace SPIPware.Communication
         //position index for each axis
         private static int posIndexX = 0;
         private static int posIndexY = 0; //y position index
-                                          /*  private static int posIndexZ = 0; TO USE LATER IF NEEDED  */
+        /*  private static int posIndexZ = 0; TO USE LATER IF NEEDED  */
         #endregion
 
         public void OnImageAcquired(object sender, EventArgs e)
@@ -88,11 +88,11 @@ namespace SPIPware.Communication
             return (index <= ImagePositionsX[index] && index < Properties.Settings.Default.TotalColumns);
         }
 
-        private bool IsCurrentIndexY(int index)
+        private bool IsCurrentIndexY(int indexY)
         {
-            _log.Debug("IsNextIndex IndexY: " + index);
-            _log.Debug("IsNextIndex+ImagePositionsY[index] " + ImagePositionsY[index]);
-            return (index <= ImagePositionsY[index] && index < Properties.Settings.Default.TotalRows);
+            _log.Debug("IsNextIndex IndexY: " + indexY);
+            _log.Debug("IsNextIndex+ImagePositionsY[index] " + ImagePositionsY[indexY]);
+            return (indexY <= ImagePositionsY[indexY] && indexY < Properties.Settings.Default.TotalRows);
         }
 
         //NOT enabled
@@ -176,7 +176,7 @@ namespace SPIPware.Communication
                 {
                     ImagePositionsX[i] = i;
                 }
-                for(int i = 0; i <ImagePositionsY.Length; i++)
+                for(int i = 0; i < ImagePositionsY.Length; i++)
                 {
                     ImagePositionsY[i] = i;
                 }
@@ -273,24 +273,28 @@ namespace SPIPware.Communication
                posIndexX++;
                
             }
-            else if (runningCycle && rowCompleted) //next row shiz
+            
+        }
+        //for next row
+        public void IsHomeRow()
+        {
+            if (runningCycle && rowCompleted) //next row shiz
             {
                 //resetting x values
                 posIndexX = 0;
                 targetLocationX = 0;
                 rowCompleted = false;
-               // machine.Status = "Home";
-               
-                HandleNextPositionX(posIndexX);
-                posIndexX++;
+                // machine.Status = "Home";
+
+                GoToPositionX(posIndexX); //go to home position
 
                 System.Threading.Thread.Sleep(3000); //wait five seconds
 
                 HandleNextPositionY(posIndexY); 
                 posIndexY++;
+                //posIndexX = 1; FOR TESTING
                 
             }
-
         }
 
         /// <summary>
@@ -309,26 +313,13 @@ namespace SPIPware.Communication
                 ImageUpdatedEvent.Raise(this, new EventArgs());
                                 
                 HandleNextPositionX(posIndexX);
+
+                if(rowCompleted == true)
+                {
+                    posIndexX++;
+                }
                 
-                posIndexX++;
             }
-            /*else if (runningCycle && rowCompleted) //next row shiz
-            {
-                //resetting x values
-                posIndexX = 0;
-                targetLocationX = 0;
-                rowCompleted = false;
-                // machine.Status = "Home";
-
-                HandleNextPositionX(posIndexX);
-                posIndexX++;
-
-                System.Threading.Thread.Sleep(3000); //wait five seconds
-
-                HandleNextPositionY(posIndexY);
-                posIndexY++;
-
-            }*/
         }
         #endregion
 
@@ -350,7 +341,7 @@ namespace SPIPware.Communication
                 GoToPositionX(index);
                 rowCompleted = true;
             }
-            else IsHome(); //changed from end() to isHome() to try to make 2D, 7/8/2019
+            else IsHomeRow(); //changed from end() to isHome() to try to make 2D, 7/8/2019
         }
 
         public void GoToPositionX(int index)
