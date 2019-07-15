@@ -46,10 +46,11 @@ namespace SPIPware.Communication
 
         #region Properties
 
-        private int[] _imagePositionsX = new int[Properties.Settings.Default.TotalColumns + 1]; //image positions of x axis
+
+        private int[] _imagePositionsX; // = new int[Properties.Settings.Default.TotalColumns + 1]; //image positions of x axis
         public int[] ImagePositionsX { get => _imagePositionsX; set => _imagePositionsX = value; }
 
-        private int[] _imagePositionsY = new int[Properties.Settings.Default.TotalRows + 1]; //image position of y-axis
+        private int[] _imagePositionsY; // = new int[Properties.Settings.Default.TotalRows + 1]; //image position of y-axis
         public int[] ImagePositionsY { get => _imagePositionsY; set => _imagePositionsY = value; }
 
         public event EventHandler StatusUpdate;
@@ -172,8 +173,8 @@ namespace SPIPware.Communication
                 rowCompleted = false; //hasn't complete a row yet so false 
                 //posIndexZ = 0;
 
-               // ImagePositionsX = int[Properties.Settings.Default.TotalColumns + 1];
-               // ImagePositionsY = ;
+                ImagePositionsX = new int[Properties.Settings.Default.TotalColumns + 1];
+                ImagePositionsY = new int[Properties.Settings.Default.TotalRows + 1] ;
 
                 for(int i = 0; i < ImagePositionsX.Length; i++)
                 {
