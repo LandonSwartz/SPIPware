@@ -12,12 +12,12 @@ Goals:
 		- Make more variabled with 2D Arraylist/list to make size dynamic based on user settings
 		- Add more methods to make finding where well is on plate for GRBL automatic
 	- Rebuild machine.cs to take plate, well and trays and maybe make more variable DONE
-		- Added property named trays that is an array of 3 trays (for time being)
+		- Added property named trays that is an array of 3 trays (for time being) DONE
 			- Add way to make variabled
 	- Redo CycleControl.cs to take plates, well, and trays in motion DONE
 		- Remaking front end components that are also affected by this (maybe just leave to redo in future)
 	- (Optional) Make PheripheralControl.cs take many cameras 
-	- Make Experiment.cs a better object for the plates, trays, and wells
+	- Make Experiment.cs a better object for the plates, trays, and wells DONE
 		- Maybe just remake entire experiment object because need to gut a lot of past things
 		- Make the object compatible with JSON file type
 	- Make file reader for importing plate config and other things

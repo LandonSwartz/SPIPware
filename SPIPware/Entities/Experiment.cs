@@ -68,6 +68,8 @@ namespace SPIPware.Entities
         private int numTrays;
         private int wellRadius;
         private string experimentTitle; //for title of experiment
+        private int totalColumns;
+        private int totalRows;
 
         private Color BacklightColor;
 
@@ -99,6 +101,8 @@ namespace SPIPware.Entities
         public int NumTrays { get => numTrays; set => numTrays = value; }
         public int WellRadius { get => wellRadius; set => wellRadius = value; }
         public string ExperimentTitle { get => experimentTitle; set => experimentTitle = value; }
+        public int TotalColumns { get => totalColumns; set => totalColumns = value;}
+        public int TotalRows { get => totalRows; set => totalRows = value; }
 
         public Color BackgroundColor { get => BacklightColor; set => BacklightColor = value; }
         
@@ -145,6 +149,8 @@ namespace SPIPware.Entities
                 cycle.ImagePositionsY = imagePositionsY;
                 Properties.Settings.Default.NumberOfTrays = NumTrays;
                 Properties.Settings.Default.RadiusOfWell = WellRadius;
+                Properties.Settings.Default.TotalColumns = TotalColumns;
+                Properties.Settings.Default.TotalRows = TotalRows;
 
 
                 Properties.Settings.Default.Save();
@@ -162,6 +168,8 @@ namespace SPIPware.Entities
             //CurrentPlate = Properties.Settings.Default.CurrentPlate;
             PlateXOffset = Properties.Settings.Default.PlateXOffset;
             PlateYOffset = Properties.Settings.Default.PlateYOffset;
+            WellXoffset = Properties.Settings.Default.WellXOffset;
+            WellYoffset = Properties.Settings.Default.WellYOffset;
             BetweenDistance = Properties.Settings.Default.XBetweenDistance;
             CameraSettingsPath = Properties.Settings.Default.CameraSettingsPath;
             FileName = Properties.Settings.Default.FileName;
@@ -183,6 +191,8 @@ namespace SPIPware.Entities
             CycleCount = Properties.Settings.Default.CycleCount;
             NumTrays = Properties.Settings.Default.NumberOfTrays;
             WellRadius = Properties.Settings.Default.RadiusOfWell;
+            TotalRows = Properties.Settings.Default.TotalRows;
+            TotalColumns = Properties.Settings.Default.TotalColumns;
 
             if (cycle.ImagePositionsX != null)
             {

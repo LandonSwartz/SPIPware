@@ -172,6 +172,9 @@ namespace SPIPware.Communication
                 rowCompleted = false; //hasn't complete a row yet so false 
                 //posIndexZ = 0;
 
+               // ImagePositionsX = int[Properties.Settings.Default.TotalColumns + 1];
+               // ImagePositionsY = ;
+
                 for(int i = 0; i < ImagePositionsX.Length; i++)
                 {
                     ImagePositionsX[i] = i;
