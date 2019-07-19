@@ -14,18 +14,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using log4net;
+using SPIPware.Communication.Experiment_Parts; //for experiment parts may to another file set later
 
 namespace SPIPware.Communication
 {
-	enum ConnectionType
-	{
-		Serial
-	}
+    enum ConnectionType
+    {
+        Serial
+    }
 
-	public sealed class Machine
-	{
+    /// <summary>
+    /// Machine class is everything needed to run actual machine of SPIPware. Most notably the grbl commands and positions.
+    /// </summary>
+    public sealed class Machine
+    {
+        #region Logger
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly Machine instance = new Machine();
+        #endregion
+
+        #region Constuctors
         static Machine()
         {
 
@@ -37,56 +45,78 @@ namespace SPIPware.Communication
                 return instance;
             }
         }
+        #endregion
+
+        /// <summary>
+        /// OperatingMode is an enum that reflects the machine object's current Operating mode
+        /// </summary>
         public enum OperatingMode
-		{
-			Manual,
-			SendFile,
-			Probe,
-			Disconnected,
-			SendMacro
-		}
+        {
+            Manual, //0
+            SendFile,//1
+            Probe,//2
+            Disconnected,//3
+            SendMacro//4
+        }
 
-		public event Action<Vector3, bool> ProbeFinished;
-		public event Action<string> NonFatalException;
-		public event Action<string> Info;
-		public event Action<string> LineReceived;
-		public event Action<string> StatusReceived;
-		public event Action<string> LineSent;
-		public event Action ConnectionStateChanged;
-		public event Action PositionUpdateReceived;
-		public event Action StatusChanged;
-		public event Action DistanceModeChanged;
-		public event Action UnitChanged;
-		public event Action PlaneChanged;
-		public event Action BufferStateChanged;
-		public event Action PinStateChanged;
-		public event Action OperatingModeChanged;
-		public event Action FileChanged;
-		public event Action FilePositionChanged;
-		public event Action OverrideChanged;
+        #region Properties
+        public event Action<Vector3, bool> ProbeFinished;
+        public event Action<string> NonFatalException;
+        public event Action<string> Info;
+        public event Action<string> LineReceived;
+        public event Action<string> StatusReceived;
+        public event Action<string> LineSent;
+        public event Action ConnectionStateChanged;
+        public event Action PositionUpdateReceived;
+        public event Action StatusChanged;
+        public event Action DistanceModeChanged;
+        public event Action UnitChanged;
+        public event Action PlaneChanged;
+        public event Action BufferStateChanged;
+        public event Action PinStateChanged;
+        public event Action OperatingModeChanged;
+        public event Action FileChanged;
+        public event Action FilePositionChanged;
+        public event Action OverrideChanged;
+     //   public event Action NumRowsChanged; //event for number of plate rows changing
+     //   public event Action NumColumnsChanged;
 
-		public Vector3 MachinePosition { get; private set; } = new Vector3();   //No events here, the parser triggers a single event for both
-		public Vector3 WorkOffset { get; private set; } = new Vector3();
-		public Vector3 WorkPosition { get { return MachinePosition - WorkOffset; } }
+        public Vector3 MachinePosition { get; private set; } = new Vector3();   //No events here, the parser triggers a single event for both
+        public Vector3 WorkOffset { get; private set; } = new Vector3();
+        public Vector3 WorkPosition { get { return MachinePosition - WorkOffset; } } //Can change work position from w = machineP - offset to w = machineP +offset to put things into positive space
 
-		public Vector3 LastProbePosMachine { get; private set; }
-		public Vector3 LastProbePosWork { get; private set; }
+        public Vector3 LastProbePosMachine { get; private set; }
+        public Vector3 LastProbePosWork { get; private set; }
 
-		public int FeedOverride { get; private set; } = 100;
-		public int RapidOverride { get; private set; } = 100;
-		public int SpindleOverride { get; private set; } = 100;
+        public int FeedOverride { get; private set; } = 100;
+        public int RapidOverride { get; private set; } = 100;
+        public int SpindleOverride { get; private set; } = 100;
 
-		public bool PinStateProbe { get; private set; } = false;
-		public bool PinStateLimitX { get; private set; } = false;
-		public bool PinStateLimitY { get; private set; } = false;
-		public bool PinStateLimitZ { get; private set; } = false;
+        public bool PinStateProbe { get; private set; } = false;
+        public bool PinStateLimitX { get; private set; } = false;
+        public bool PinStateLimitY { get; private set; } = false;
+        public bool PinStateLimitZ { get; private set; } = false;
 
-		public double FeedRateRealtime { get; private set; } = 0;
-		public double SpindleSpeedRealtime { get; private set; } = 0;
+        public double FeedRateRealtime { get; private set; } = 0;
+        public double SpindleSpeedRealtime { get; private set; } = 0;
 
-		public double CurrentTLO { get; private set; } = 0;
+        public double CurrentTLO { get; private set; } = 0;
+        #endregion
 
-		private Calculator _calculator;
+        #region BugbearUpdates (Tray Array)
+        private Tray[] trays;//hard coded number of trays for later
+        public Tray[] Trays
+        {
+            get { return trays; }
+            set
+            {
+                trays = new Tray[3];
+            }
+        }
+        #endregion
+
+        #region More Properties (relating to Misc)
+        private Calculator _calculator;
 		private Calculator Calculator { get { return _calculator; } }
 
 		private ReadOnlyCollection<bool> _pauselines = new ReadOnlyCollection<bool>(new bool[0]);
@@ -132,9 +162,10 @@ namespace SPIPware.Communication
 				RaiseEvent(OperatingModeChanged);
 			}
 		}
+        #endregion
 
-		#region Status
-		private string _status = "Disconnected";
+        #region Status and other settings
+        private string _status = "Disconnected";
 		public string Status
 		{
 			get { return _status; }
@@ -222,9 +253,10 @@ namespace SPIPware.Communication
 				RaiseEvent(BufferStateChanged);
 			}
 		}
-		#endregion Status
+        #endregion Status
 
-		public bool SyncBuffer { get; set; }
+        #region Misc threads and Buffer
+        public bool SyncBuffer { get; set; }
 
 		private Stream Connection;
 		private Thread WorkerThread;
@@ -252,8 +284,14 @@ namespace SPIPware.Communication
 		Queue ToSend = Queue.Synchronized(new Queue());
 		Queue ToSendPriority = Queue.Synchronized(new Queue()); //contains characters (for soft reset, feed hold etc)
 		Queue ToSendMacro = Queue.Synchronized(new Queue());
+        #endregion
 
-		private void Work()
+        #region Work() Function
+        /// <summary>
+        /// Work does the main work for the machine object and helps translate to the 
+        /// different operating modes and writing G-code.
+        /// </summary>
+        private void Work()
 		{
 			try
 			{
@@ -491,8 +529,13 @@ namespace SPIPware.Communication
 				Disconnect();
 			}
 		}
+        #endregion
 
-		public void Connect()
+        #region Connect() and Disconnection() Functions
+        /// <summary>
+        /// Connect() is called when the machine object is connecting to the relate ardunios
+        /// </summary>
+        public void Connect()
 		{
 			if (Connected)
 				throw new Exception("Can't Connect: Already Connected");
@@ -535,8 +578,13 @@ namespace SPIPware.Communication
 			WorkerThread = new Thread(Work);
 			WorkerThread.Priority = ThreadPriority.AboveNormal;
 			WorkerThread.Start();
+
+            SendLine("$H"); //sending homing command when connected
 		}
 
+        /// <summary>
+        /// Disconnect() is called when the machine wants to disconnected from the current ardunios
+        /// </summary>
 		public void Disconnect()
 		{
 			if (!Connected)
@@ -590,26 +638,49 @@ namespace SPIPware.Communication
 			Sent.Clear();
 			ToSendMacro.Clear();
 		}
-        public double homeMachinePos;
-        private String buildCommand(double distance) //where command is built for gcode
+        #endregion
+
+        #region Position and Movement Command Functions
+
+        /// <summary>
+        /// Struct for the current positon of the machine in x,y,z
+        /// </summary>
+        public struct machinePos
+        { //have to put public in the members of the struct because default by private with C#
+            public double currentLocationX;
+            public double currentLocationY;
+            public double currentLocationZ;
+        };
+        public machinePos homeMachinePos;
+
+        private String buildCommandX(double distance) //where command is built for gcode
         {
             
             StringBuilder sb = new StringBuilder();
             sb.Append("G90");
             sb.Append(Properties.Settings.Default.PrimaryAxis); //primary axis is labeled as x so could be overload to be given y
-            sb.Append(distance + " ");
-            
-            //Landon added code
-            //sb.Append(Properties.Settings.Default.SecondaryAxis); //this is the same as appending "Y" to the string
-            //sb.Append(distance + " "); //should move as same distance FOR NOW
-            //end of landon added code
-
+            sb.Append(distance + " "); 
             sb.Append("F" + Properties.Settings.Default.Speed);
             _log.Info("Generated Command: "+ sb.ToString());
             return sb.ToString();
         }
 
-        //The below functions emulates the similar X axis, perhaps by seperating the two axis, the commands can be seperated by axes
+        public double sendMotionCommandX(int position, double offset)
+        {
+            double distance = homeMachinePos.currentLocationX + Properties.Settings.Default.WellXOffset + (Properties.Settings.Default.XBetweenDistance * position) + offset;
+            _log.Debug("Calculated X Distance: " + distance);
+            SendLine(buildCommandX(distance));
+            return distance;
+
+        }
+
+        public double sendMotionCommandX(int position)
+        {
+           return sendMotionCommandX(position, 0);
+        }
+       
+
+       //y-axis version
        private String buildCommandY(double distance) //where command is built for gcode
         {
 
@@ -624,41 +695,50 @@ namespace SPIPware.Communication
             return sb.ToString();
         }
 
-
-        public double sendMotionCommand(int position, double offset)
-        {
-           // double distanceY = 0; //testing y value
-            double distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
-            _log.Debug("Calculated Distance: " + distance);
-            //here a for loop could be add for each line of code per row then iterate to next y coordinate
-            SendLine(buildCommand(distance));
-           // SendLine(buildCommandY(distance)); //y command line
-            return distance;
-
-        }
-
-        //y-axis version
         public double sendMotionCommandY(int position, double offset) // could be important method to send y coordinates to sunbear
         {
-            double distance = homeMachinePos + Properties.Settings.Default.PlateOffset + (Properties.Settings.Default.BetweenDistance * position) + offset;
-            _log.Debug("Calculated Distance: " + distance);
+            double distance = homeMachinePos.currentLocationY + Properties.Settings.Default.WellYOffset + (Properties.Settings.Default.YBetweenDistance * position) + offset;
+            _log.Debug("Calculated Y Distance: " + distance);
             //here a for loop could be add for each line of code per row then iterate to next y coordinate
             SendLine(buildCommandY(distance));
             return distance;
 
         }
 
-        public double sendMotionCommand(int position)
-        {
-           return sendMotionCommand(position, 0);
-        }
-
-        //y-axis version
         public double sendMotionCommandY(int position)
         {
             return sendMotionCommandY(position, 0);
         }
 
+
+        //z-axis command
+        private String buildCommandZ(double distance) //where command is built for gcode
+        {
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("G90");
+            sb.Append(Properties.Settings.Default.TertiaryAxis); //tertiary axis is z
+            sb.Append(distance + " ");
+            sb.Append("F" + Properties.Settings.Default.Speed);
+            _log.Info("Generated Command: " + sb.ToString());
+            return sb.ToString();
+        }
+
+        public double sendMotionCommandZ(int position, double offset)
+        {
+            double distance = homeMachinePos.currentLocationZ + Properties.Settings.Default.PlateXOffset + (Properties.Settings.Default.XBetweenDistance * position) + offset;
+            _log.Debug("Calculated Distance: " + distance);
+            SendLine(buildCommandZ(distance));
+            return distance;
+        }
+
+        public double sendMotionCommandZ(int position)
+        {
+            return sendMotionCommandZ(position, 0);
+        }
+        #endregion
+
+        #region GRBL related functions
         public void SendLine(string line)
 		{
 			if (!Connected)
@@ -800,8 +880,10 @@ namespace SPIPware.Communication
 
 			RaiseEvent(FilePositionChanged);
 		}
+        #endregion
 
-		public void ClearFile()
+        #region File and Probe Functions
+        public void ClearFile()
 		{
 			if (Mode == OperatingMode.SendFile)
 			{
@@ -897,8 +979,9 @@ namespace SPIPware.Communication
 
 			RaiseEvent(FilePositionChanged);
 		}
+        #endregion
 
-		public void ClearQueue()
+        public void ClearQueue()
 		{
 			if (Mode != OperatingMode.Manual)
 			{
@@ -909,7 +992,8 @@ namespace SPIPware.Communication
 			ToSend.Clear();
 		}
 
-		private static Regex GCodeSplitter = new Regex(@"([GZ])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
+        #region Update Status info functions
+        private static Regex GCodeSplitter = new Regex(@"([GZ])\s*(\-?\d+\.?\d*)", RegexOptions.Compiled);
 
 		/// <summary>
 		/// Updates Status info from each line sent
@@ -1209,12 +1293,13 @@ namespace SPIPware.Communication
 			}
 
 		}
+        #endregion
 
-		/// <summary>
-		/// Reports error. This is there to offload the ExpandError function from the "Real-Time" worker thread to the application thread
-		/// also used for alarms
-		/// </summary>
-		private void ReportError(string error)
+        /// <summary>
+        /// Reports error. This is there to offload the ExpandError function from the "Real-Time" worker thread to the application thread
+        /// also used for alarms
+        /// </summary>
+        private void ReportError(string error)
 		{
             _log.Error(GrblCodeTranslator.ExpandError(error));
             if (NonFatalException != null)

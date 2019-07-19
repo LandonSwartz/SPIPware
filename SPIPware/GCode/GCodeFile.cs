@@ -123,6 +123,7 @@ namespace SPIPware.GCode
 			File.WriteAllLines(path, GetGCode());
 		}
 
+        //legacy code below from when ripped from CNC mill project
 		//public void GetModel(LinesVisual3D line, LinesVisual3D rapid, LinesVisual3D arc)
 		//{
 		//	var sw = System.Diagnostics.Stopwatch.StartNew();
@@ -341,6 +342,7 @@ namespace SPIPware.GCode
 			return new GCodeFile(newFile);
 		}
 
+        //also ripped CNC mill legacy code
 		//public GCodeFile ApplyHeightMap(HeightMap map)
 		//{
 		//	double segmentLength = Math.Min(map.GridX, map.GridY);

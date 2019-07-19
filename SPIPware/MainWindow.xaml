@@ -57,6 +57,7 @@
                     <RibbonApplicationMenuItem Header="Open" Click="ButtonLoadExperiment_Click"  ImageSource="Resources/Icons/open_small.png"></RibbonApplicationMenuItem>
                     <RibbonApplicationMenuItem Header="Save"  Click="ButtonSaveExperiment_Click" ImageSource="Resources/Icons/save.png"></RibbonApplicationMenuItem>
                     <RibbonApplicationMenuItem Header="Save As" Click="ButtonSaveAsExperiment_Click" ImageSource="Resources/Icons/saveas.png"></RibbonApplicationMenuItem>
+                    <RibbonApplicationMenuItem Header="Open Settings" Click="OpenAppSettingsWindow_Click" ImageSource="C:\Users\sam998\Desktop\Lando's Folder\SPIPware build\SPIPware-master\SPIPware\Resources\Icons\Button_Icon_SettingsWindow.png"></RibbonApplicationMenuItem>
 
                     <RibbonSeparator></RibbonSeparator>
                     <RibbonApplicationSplitMenuItem Header="Defaults" >
@@ -233,18 +234,33 @@
 
 
                     </StackPanel>
+                    <!--Actual Position (Work Position?) of Machine-->
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="   X: " VerticalAlignment="Center"/>
-                            <TextBox Name="LabelPosX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+                            <TextBox Name="LabelPosX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Work Position X value"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="   Y: " VerticalAlignment="Center"/>
+                            <TextBox Name="LabelPosY" Width="55"  Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Work Position Y value"/>
+                            
+                        </StackPanel>
+                    </StackPanel>
+                        
+                    <!--Machine Position of Machine-->
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
                             <TextBlock Text="MX: " VerticalAlignment="Center"/>
-                            <TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22"/>
+                            <TextBox Name="LabelPosMX" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Machine X Position"/>
 
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="MY: " VerticalAlignment="Center"/>
+                            <TextBox Name="LabelPosMY" Width="55" Text="0.0" IsReadOnly="True" VerticalContentAlignment="Center" Height="22" ToolTip="Machine Y Position"/>
 
+                        </StackPanel>
+                        
                     </StackPanel>
                 </RibbonGroup>
                 <RibbonGroup Header="Commands">
@@ -272,28 +288,11 @@
                 </RibbonGroup>
 
             </RibbonTab>
-            <!--Lando added below-->
-            <RibbonTab Header="2D Motion">
-
-                <RibbonGroup Header= "Vertical Motion">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Name ="ButtonManualMoveYAxisUp" Click="ButtonManualMoveYAxisUp_Click" Style="{StaticResource bigButton}"
-                                ToolTip="Move Y-Axis Up by one Unit">
-                            <Image Height="36" Margin="2" Name ="UpMotionArrow"  Source="pack://application:,,,/Resources/Images/redditUpvote.png">
-                            </Image>
-                        </Button>
-                        <Button Name="ButtonManualMoveYAxisDown" Click="ButtonManualMoveYAxisDown_Click" Style="{StaticResource bigButton}" 
-                                ToolTip="Move Y-Axis Down by One Unit">
-                            <Image Height="36" Margin="2" Name ="DownMotionArrow"  Source="pack://application:,,,/Resources/Images/redditDownvote.png">
-                            </Image>
-                        </Button>
-                    </StackPanel>
+            <RibbonTab Header="Experiment Builder" HorizontalAlignment="Left" Height="88" VerticalAlignment="Top" Width="1498">
+                <RibbonGroup>
+                    <Button x:Name="ExperimentBuilderWindow_Open" Content="Experiment Builder" HorizontalAlignment="Left" Cursor="Help" Click="ButtonOpenExperimentBuilder_Click"/>
                 </RibbonGroup>
-
-
-
             </RibbonTab>
-            <!--end of Landon added-->
 
 
         </Ribbon>
@@ -388,28 +387,31 @@
                                 <GroupBox.Header>
                                     <TextBlock>Plate Tagging</TextBlock>
                                 </GroupBox.Header>
+
+
                                 <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <StackPanel Orientation="Vertical" Margin="20,5,20,5">
-                                        <TextBlock VerticalAlignment="Center">Total Plates Per Row:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates, Mode=TwoWay}" Name="udTotalPlates" Margin="5" />
-                                    </StackPanel>
-                                    <!--<StackPanel Orientation="Vertical" Margin="20,5,20,5">
+                                    <StackPanel Orientation="Vertical" Margin="10,5,10,5">
                                         <TextBlock VerticalAlignment="Center">Total Rows:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalPlates, Mode=TwoWay}" Name="udTotalPlates" Margin="5" />
-                                    </StackPanel> -->
-                                    <StackPanel Margin="20,5,20,5" Orientation="Vertical">
+                                        <xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalRows, Mode=TwoWay}" Name="udTotalRows" Margin="5" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical" Margin="10,5,10,5">
+                                        <TextBlock VerticalAlignment="Center">Total Columns:</TextBlock>
+                                        <xctk:IntegerUpDown Minimum="0"  Value= "{util:SettingBinding TotalColumns, Mode=TwoWay}" Name="udTotalColumns" Margin="5" />
+                                    </StackPanel>
+                                    <StackPanel Margin="10,5,10,5" Orientation="Vertical">
                                         <TextBlock VerticalAlignment="Center">Cycle Count:</TextBlock>
                                         <xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CycleCount, Mode=TwoWay}" Name="udCycleCount"  Margin="5" />
                                     </StackPanel>
-                                    <StackPanel Margin="20,5,20,5" Orientation="Vertical">
+                                    <StackPanel Margin="10,5,10,5" Orientation="Vertical">
                                         <TextBlock VerticalAlignment="Center">Current Plate:</TextBlock>
                                         <xctk:IntegerUpDown  Minimum="0" Value= "{util:SettingBinding CurrentPlate, Mode=TwoWay}" Name="udCurrentPlate"  Margin="5" />
                                     </StackPanel>
-
                                 </StackPanel>
                             </GroupBox>
-                            <GroupBox >
-                                <GroupBox.Header >
+                            <!-- Will need to update below to tkae 2D or move to experiment builder window-->
+                            <!--<GroupBox > -->
+                            <!--Obsolete Imaging Position Checkbox list-->
+                                <!--<GroupBox.Header >
                                     <TextBlock HorizontalAlignment="Center">Imaging Positions</TextBlock>
                                 </GroupBox.Header>
                                 <Grid Name="PlateGrid">
@@ -421,16 +423,17 @@
 
                                     <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
 
-                                        <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}" Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
+                                        <CheckBox IsThreeState="{Binding IsThreeStates, Mode=OneWayToSource}" IsChecked="{Binding SelectAllValue, Mode=TwoWay}"
+                                                  Name="cbSelectAll"   Content="Select All" VerticalAlignment="Center" Click="selectAll_Change"  ></CheckBox>
 
                                     </StackPanel>
                                     <StackPanel Name="spCheckboxes" Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
 
                                     </StackPanel>
 
-                                </Grid>
+                                </Grid>-->
 
-                            </GroupBox>
+                            <!--</GroupBox>-->
                             <GroupBox  VerticalAlignment="Top">
                                 <GroupBox.Header >
                                     <TextBlock HorizontalAlignment="Center">Backlight Color</TextBlock>
@@ -447,7 +450,16 @@
                         <TabItem.Header>
                             <Label Content="Single Cycle" 
 								 MouseLeftButtonDown="UpdateCurrentParams_Click" 
-								 HorizontalAlignment="Stretch" FontSize="14"/>
+								 HorizontalAlignment="Stretch" FontSize="14" RenderTransformOrigin="0.5,0.5">
+                                <Label.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="-0.168"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Label.RenderTransform>
+                            </Label>
                         </TabItem.Header>
                         <StackPanel>
                             <GroupBox>
@@ -455,9 +467,7 @@
 
                                     <TextBlock HorizontalAlignment="Center">Experiment Parameters</TextBlock>
                                 </GroupBox.Header>
-                                <StackPanel Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center">
-                                </StackPanel>
-
+                                <StackPanel Name="SPCurrentParameters" Orientation="Horizontal" HorizontalAlignment="Center"/>
                             </GroupBox>
                             <GroupBox>
                                 <GroupBox.Header >
@@ -598,25 +608,62 @@
 
                             <GroupBox>
                                 <GroupBox.Header >
-                                    <TextBlock HorizontalAlignment="Center">Plate Position Calibration</TextBlock>
+                                    <TextBlock HorizontalAlignment="Center">Well Position Calibration</TextBlock>
                                 </GroupBox.Header>
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <!--Currently offset whole axis so will need to see how to change in future but testing rn-->
                                     <StackPanel Orientation="Horizontal">
-                                        <Label Content="First Plate Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="X First Well Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
 
-                                        <xctk:IntegerUpDown Name="udPlateOffset" Value="{util:SettingBinding PlateOffset}" Width="65" Margin="5"/>
+                                        <xctk:IntegerUpDown Name="udPlateOffset" Value="{util:SettingBinding WellXOffset}" Width="65" Margin="5"/>
                                         <Button Name="btnTestFirst" Content="Test" Style="{StaticResource styleButton}" Click="BtnTestFirst_Click"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
-                                        <Label Content="Between Plates:  " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="X Between Wells:  " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
 
-                                        <xctk:IntegerUpDown Name="udBetweenDistance" Value="{util:SettingBinding BetweenDistance}" Width="65" Margin="5" />
+                                        <xctk:IntegerUpDown Name="udBetweenDistance" Value="{util:SettingBinding XBetweenDistance}" Width="65" Margin="5" />
                                         <Button Name="btnTestBetween" Content="Test" Style="{StaticResource styleButton}" Click="btnTestBetween_Click" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Y Well Offset:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                        <xctk:IntegerUpDown Name="udYPlateOffset" Value="{util:SettingBinding WellYOffset}" Width="65" Margin="5"/>
+                                        <Button Name="btnYTestFirst" Content="Test" Style="{StaticResource styleButton}" Click="BtnYTestFirst_Click"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Y Between Wells:" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                        <xctk:IntegerUpDown Name="udYBetweenDistance" Value="{util:SettingBinding YBetweenDistance}" Width="65" Margin="5"/>
+                                        <Button Name="btnYTestBetween" Content="Test"   Style="{StaticResource styleButton}" Click="BtnYTestBetween_Click"/>
                                     </StackPanel>
 
                                 </StackPanel>
 
                             </GroupBox>
+                            
+                            <GroupBox>
+                                <GroupBox.Header>
+                                    <TextBlock HorizontalAlignment="Center">Plate Position Calibration TODO</TextBlock>
+                                </GroupBox.Header>
+
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="X Plate Offset" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                        <xctk:IntegerUpDown Name="udXWellOffset" Value="{util:SettingBinding PlateXOffset}" Width="65" Margin="5"/>
+                                        <Button Name="btnPlateXTest" Content="Test" Style="{StaticResource styleButton}" /> <!--TODO put click event--> 
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Y Plate Offset" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"/>
+
+                                        <xctk:IntegerUpDown Name="udYWellOffset" Value="{util:SettingBinding PlateYOffset}" Width="65" Margin="5"/>
+                                        <Button Name="btnPlateYTest" Content="Test" Style="{StaticResource styleButton}" />
+                                        <!--TODO put click event-->
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </GroupBox>
+                            
                             <GroupBox >
                                 <GroupBox.Header >
                                     <TextBlock HorizontalAlignment="Center">Plate Configuration</TextBlock>
@@ -636,7 +683,7 @@
                                     <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="85,5" HorizontalAlignment="Center" Grid.ColumnSpan="3">
 
                                         <TextBlock VerticalAlignment="Center" Margin="5">Number of Locations:</TextBlock>
-                                        <xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5" ValueChanged="UpdatePlateClick"  />
+                                        <xctk:IntegerUpDown Minimum="0" Maximum="7" Name="udNumLocations" Value="{util:SettingBinding NumLocations}" Margin="5"/> <!-- ValueChanged="UpdatePlateClick" -->
 
 
                                     </StackPanel>
@@ -692,7 +739,9 @@
 
                     </TabItem>
 
-                    <TabItem> <!--May change to Machine Position or something along those lines-->
+                 <!--   <TabItem>
+                        May change to Machine Position or something along those lines
+                        
                         <TabItem.Header>
                             <Label Content="Plant Array" 
 								 HorizontalAlignment="Stretch" FontSize="14"/>
@@ -706,7 +755,7 @@
                             <Grid Margin="18,0,18,0" Height="321">
 
                                 <Grid.ColumnDefinitions>
-                                    <!-- for now there is seven columns and 3 rows -->
+                                    for now there is seven columns and 3 rows 
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
@@ -749,7 +798,7 @@
                             </Grid>
                         </GroupBox>
 
-                    </TabItem>
+                    </TabItem> -->
 
                 </TabControl>
             </DockPanel>

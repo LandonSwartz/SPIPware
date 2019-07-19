@@ -1,29 +1,118 @@
-﻿using log4net;
-using SPIPware.Communication;
-using SPIPware.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-
-/* Useful Links
- * https://social.msdn.microsoft.com/Forums/vstudio/en-US/2f303aa2-73c8-420b-ab6d-2dde22a9d0bb/wpf-dynamically-adding-controls-to-grid?forum=wpf
- */
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using SPIPware.Communication;
+using SPIPware.Entities; //for experiment class
+using System.IO; //for file opening
+using log4net;
+using System.Reflection;
+using SPIPware.Communication.Experiment_Parts;
+using System.Reflection.Emit;
 
 namespace SPIPware
 {
-    partial class MainWindow
+    /// <summary>
+    /// Interaction logic for ExperimentBuilderWindow.xaml
+    /// </summary>
+    public partial class ExperimentBuilderWindow : Window
     {
-        //WILL UPDATE WHEN WORKING ON EXPERIMENT BUILDER WINDOW
+        ExperimentArrangement experiment = new ExperimentArrangement();
+
+        public ExperimentBuilderWindow()
+        {
+            InitializeComponent();
+
+            this.DataContext = new ExperimentViewModel();
+
+         //   Experiment newExperimet = new Experiment();
+
+            //filling out plate thingy
+            for(int i = 0; i < Properties.Settings.Default.TotalColumns; i++)
+            {
+                for(int j = 0; j < Properties.Settings.Default.TotalRows; j++)
+                {
+                    Image greySquare = new Image();
+
+                    Grid.SetColumn(greySquare, i);
+                    Grid.SetRow(greySquare, j);
+                    //PlateArrangementGrid.Children.Add(greySquare);
+                }
+            }
+        }
+
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        
+
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
+        }
+
+        private void BtnSaveExperiment_Click(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsToFile(Properties.Settings.Default.ExperimentPath);
+        }
+
+        private void BtnApplyExperiment_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO have it save to setttings of application
+        }
+
+        private void OpenPastExperiments_Click(object sender, RoutedEventArgs e)
+        {
+            Experiment loadedExperiment = new Experiment();
+
+            var dialog = openSaveDialog();
+            SaveAsSettingsToFile(dialog);
+            if (dialog != null)
+            {
+                Properties.Settings.Default.ExperimentPath = dialog.FileName;
+            }
+
+            loadedExperiment.LoadExperiment();
+
+            GenerateCurrentParametersList(loadedExperiment, PastExperimentPapameters);
+        }
+
+        //to say all wells are active
+        private void selectAll_Change(object sender, RoutedEventArgs e)
+        {
+            SelectAll_Change();
+
+        }
+        private void SelectAll_Change()
+        { 
+            experiment.ActivateAllTrays();
+
+            //making method in plate classes to make all wells active then calling those for each plate in tray
+
+        }
+
+
+
+
+        #region Past SPIPware functions
+     
+
+        //other settings from experiments
         List<List<CheckBox>> checkBoxes2D = new List<List<CheckBox>>();
         List<TextBlock> textBlocks = new List<TextBlock>();
 
-        //removed because plate checkboxes removed from main window for time being
-       /* public void UpdatePlateClick(object sender, RoutedEventArgs e)
+
+     /*   public void UpdatePlateClick(object sender, RoutedEventArgs e)
         {
             if (spCheckboxes != null)
             {
@@ -35,7 +124,7 @@ namespace SPIPware
                 _log.Error("Could not update plate checkboxes, spCheckboxes null");
             }
 
-        }*/
+        } */
 
         public void UpdatePlateCheckboxes(bool value)
         {
@@ -44,9 +133,9 @@ namespace SPIPware
                 //1D version
                 //checkBoxes2D.ForEach(c => c.IsChecked = value);
 
-                foreach(List<CheckBox> boxList in checkBoxes2D)
+                foreach (List<CheckBox> boxList in checkBoxes2D)
                 {
-                    foreach(CheckBox box in boxList)
+                    foreach (CheckBox box in boxList)
                     {
                         box.IsChecked = value;
                     }
@@ -109,6 +198,7 @@ namespace SPIPware
 
 
                     }
+
                 }
                 else
                 {
@@ -117,7 +207,7 @@ namespace SPIPware
                         Text = "WARNING: ",
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(3)
-                      
+
                     };
                     leftPanel.Children.Add(keyText);
                     TextBlock valueText = new TextBlock
@@ -135,22 +225,21 @@ namespace SPIPware
                 panel.Children.Add(rightPanel);
 
             });
-            
+
         }
-        //removed for now because plate checkboxes removed from main window
-  /*      public void UpdatePlateCheckboxes()
+        public void UpdatePlateCheckboxes()
         { //will redo checkboxes with expeirment builder so commenting below out FOR NOW    
             Dispatcher.Invoke(() =>
             {
                 _log.Debug("Updating Plate Checkboxes");
                 int numBoxes = Properties.Settings.Default.NumLocationsRow;
-                spCheckboxes.Children.Clear();
-                foreach(List<CheckBox> list in checkBoxes2D)
+              //  spCheckboxes.Children.Clear();
+                foreach (List<CheckBox> list in checkBoxes2D)
                 {
-                        list.Clear();
+                    list.Clear();
                 }
 
-                
+
                 textBlocks.Clear();
                 for (int i = 0; i < numBoxes; i++)
                 {
@@ -167,22 +256,22 @@ namespace SPIPware
                     };
                     tempCB.Click += new RoutedEventHandler(PlateCheck_Change);
 
-                    if (cycle.ImagePositions!= null && cycle.ImagePositions.Contains(i))
-                    {
-                        tempCB.IsChecked = true;
-                    }
-                    else
-                    {
-                        cbSelectAll.IsChecked = null;
-                        tempCB.IsChecked = false;
-                        //IsThreeState = true;
-                    }
-                    
-                    foreach(List<CheckBox> list in checkBoxes2D)
+                    /* if (cycle.ImagePositions!= null && cycle.ImagePositions.Contains(i))
+                     {
+                         tempCB.IsChecked = true;
+                     }
+                     else
+                     {
+                         cbSelectAll.IsChecked = null;
+                         tempCB.IsChecked = false;
+                         //IsThreeState = true;
+                     }*/
+
+                    foreach (List<CheckBox> list in checkBoxes2D)
                     {
                         list.Add(tempCB);
                     }
-                    
+
 
                     TextBlock tempText = new TextBlock();
                     tempText.Text = (i + 1).ToString();
@@ -190,38 +279,30 @@ namespace SPIPware
                     tempText.Margin = new Thickness(5);
                     textBlocks.Add(tempText);
 
-                    foreach(List<CheckBox> list in checkBoxes2D)
+                    foreach (List<CheckBox> list in checkBoxes2D)
                     {
-                        foreach(CheckBox box in list)
+                        foreach (CheckBox box in list)
                         {
                             stackPanel.Children.Add(box);
                         }
-                        
+
                     }
-                    
+
                     stackPanel.Children.Add(textBlocks[i]);
 
-                    spCheckboxes.Children.Add(stackPanel);
+                    //spCheckboxes.Children.Add(stackPanel);
 
-                    foreach(List<CheckBox> list in checkBoxes2D)
-                    {
-                        foreach(CheckBox box in list)
-                        {
-                            spCheckboxes.Children.Add(box);
-                        }
-                        
-                    }
-                    
-                    spCheckboxes.Children.Add(textBlocks[i]);
+                    //spCheckboxes.Children.Add(checkBoxes[i]);
+                    //spCheckboxes.Children.Add(textBlocks[i]);
 
                 }
-                cycle.UpdatePositionList(checkBoxes2D);
+                //cycle.UpdatePositionList(checkBoxes);
             });
             //checkBoxes.ForEach(c => c.Click += new RoutedEventHandler(PlateCheck_Change));
             _log.Debug("Number of plate checkboxes: " + checkBoxes2D.Count);
-            
 
-        }*/
+
+        }
 
         private void PlateCheck_Change(object sender, System.EventArgs e)
         {
@@ -273,33 +354,7 @@ namespace SPIPware
                 _IsThreeState = value;
             }
         }
-        private void selectAll_Change(object sender, RoutedEventArgs e)
-        {
-            SelectAll_Change();
 
-        }
-        private void SelectAll_Change()
-        {
-            foreach(List<CheckBox> boxList in checkBoxes2D)
-            {
-                foreach(CheckBox box in boxList)
-                {
-                    if (box != null)
-                    {
-                        if (SelectAllValue == true)
-                        {
-                            box.IsChecked = true;
-                        }
-                        else if (SelectAllValue == false)
-                        {
-                            box.IsChecked = false;
-                        }
-                    }
-                  //  Dispatcher.Invoke(() => cycle.UpdatePositionList(checkBoxes2D));
-                }
-            }
-            
-        }
         public void LoadDefaults()
         {
             Experiment.LoadDefaults();
@@ -369,9 +424,9 @@ namespace SPIPware
         }
         public void ExperimentUpdated()
         {
-           // UpdatePlateCheckboxes();
-            UpdateClrCanvas();
-            UpdateBacklightColor();
+            UpdatePlateCheckboxes();
+       //     UpdateClrCanvas();
+       //     UpdateBacklightColor();
         }
         public void LoadSettings(string fileName)
         {
@@ -421,12 +476,14 @@ namespace SPIPware
             else { return null; }
 
         }
-        private void UpdateTLParams()
+        //may remove
+    /*    private void UpdateTLParams()
         {
             Experiment tlExperiment = Experiment.LoadExperiment(Properties.Settings.Default.tlExperimentPath);
             GenerateCurrentParametersList(tlExperiment, TLCurrentParameters);
 
-        }
+        }*/
+
         private string getFileResultName(System.Windows.Forms.OpenFileDialog dialog)
         {
             if (dialog != null)
@@ -469,7 +526,7 @@ namespace SPIPware
             if (dialog != null)
             {
                 Properties.Settings.Default.tlExperimentPath = getFileResultName(dialog);
-                UpdateTLParams();
+                //UpdateTLParams();
             }
 
         }
@@ -513,12 +570,20 @@ namespace SPIPware
         {
             //TODO: Make reload on load
             //TODO: Fix random issues with crashing on parameters loading
-          
-                UpdateTLParams();
-        
- 
+
+            //UpdateTLParams();
+
+
 
         }
 
+        private void TbFileName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
+
+    #endregion
 }
+
+

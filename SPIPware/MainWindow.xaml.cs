@@ -25,6 +25,8 @@ namespace SPIPware
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         GrblSettingsWindow settingsWindow = new GrblSettingsWindow();
+        ExperimentBuilderWindow experimentWindow = new ExperimentBuilderWindow();
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string propertyName)
@@ -422,7 +424,7 @@ namespace SPIPware
                 return;
             }
             Properties.Settings.Default.CurrentLocationX--;
-            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocationX);
+            machine.sendMotionCommandX(Properties.Settings.Default.CurrentLocationX);
         }
         //increases x axis position
         private void ButtonManualMoveXAxisRight_Click(object sender, RoutedEventArgs e)
@@ -434,14 +436,25 @@ namespace SPIPware
 
             _log.Debug("Goto X-axis right dockpanel button clicked");
             Properties.Settings.Default.CurrentLocationX++;
-            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocationX);
+            machine.sendMotionCommandX(Properties.Settings.Default.CurrentLocationX);
 
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
+       //may move in the future for easier readability
+        private void ButtonOpenExperimentBuilder_Click(object sender, RoutedEventArgs e)
+        {
+            experimentWindow.ShowDialog();
+        }
+        SettingsWindow settings = new SettingsWindow();
+        private void OpenAppSettingsWindow_Click(object sender, RoutedEventArgs e)
+        {
+            settings.ShowDialog();
+        }
+
     }
     internal static class NativeMethods
     {

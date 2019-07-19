@@ -7,6 +7,7 @@ using static SPIPware.Communication.PeripheralControl;
 
 namespace SPIPware.Communication
 {
+    #region PeripheralEventArgs Class
     public class PeripheralEventArgs : EventArgs
     {
         private Peripheral periperal;
@@ -21,6 +22,11 @@ namespace SPIPware.Communication
         public Peripheral Periperal { get => periperal; set => periperal = value; }
         public bool Status { get => status; set => status = value; }
     }
+    #endregion
+
+    /// <summary>
+    /// PeripheralControl class helps control the lights of the machine
+    /// </summary>
     public sealed class PeripheralControl
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

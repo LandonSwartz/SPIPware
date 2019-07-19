@@ -95,15 +95,29 @@ namespace SPIPware
             btnTestFirst.IsEnabled = true;
             btnTestBetween.IsEnabled = true;
         }
-
+        //x axis
         private void BtnTestFirst_Click(object sender, RoutedEventArgs e)
         {
-            machine.sendMotionCommand(0);
+            machine.sendMotionCommandX(0);
 
         }
         private void btnTestBetween_Click(object sender, RoutedEventArgs e)
         {
-            machine.sendMotionCommand(1);
+            machine.sendMotionCommandX(1);
         }
+
+        //y-axis
+        private void BtnYTestFirst_Click(object sender, RoutedEventArgs e)
+        {
+            machine.sendMotionCommandY(0);
+        }
+        private void BtnYTestBetween_Click(object sender, RoutedEventArgs e)
+        {
+            machine.sendMotionCommandY(1);
+        }
+
+        
+
+
     }
 }

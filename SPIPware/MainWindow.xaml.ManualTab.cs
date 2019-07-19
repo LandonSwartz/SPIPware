@@ -113,8 +113,8 @@ namespace SPIPware
         }
         private void ButtonGotoPositionX(object sender, RoutedEventArgs e)
         {
-            _log.Debug("Goto button clicked");
-            machine.sendMotionCommand(Properties.Settings.Default.CurrentLocationX);
+            _log.Debug("Goto X-Axis button clicked");
+            machine.sendMotionCommandX(Properties.Settings.Default.CurrentLocationX);
         }
 
         private void ButtonGotoPositionY(object sender, RoutedEventArgs e)

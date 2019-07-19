@@ -12,7 +12,7 @@ namespace SPIPware.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -542,48 +542,36 @@ namespace SPIPware.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public int TotalPlates {
+        public int TotalRows {
             get {
-                return ((int)(this["TotalPlates"]));
+                return ((int)(this["TotalRows"]));
             }
             set {
-                this["TotalPlates"] = value;
+                this["TotalRows"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int CurrentPlate {
+        public int PlateXOffset {
             get {
-                return ((int)(this["CurrentPlate"]));
+                return ((int)(this["PlateXOffset"]));
             }
             set {
-                this["CurrentPlate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int PlateOffset {
-            get {
-                return ((int)(this["PlateOffset"]));
-            }
-            set {
-                this["PlateOffset"] = value;
+                this["PlateXOffset"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("132")]
-        public int BetweenDistance {
+        public int XBetweenDistance {
             get {
-                return ((int)(this["BetweenDistance"]));
+                return ((int)(this["XBetweenDistance"]));
             }
             set {
-                this["BetweenDistance"] = value;
+                this["XBetweenDistance"] = value;
             }
         }
         
@@ -637,13 +625,13 @@ namespace SPIPware.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("6")]
-        public int NumLocations {
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int NumLocationsRow {
             get {
-                return ((int)(this["NumLocations"]));
+                return ((int)(this["NumLocationsRow"]));
             }
             set {
-                this["NumLocations"] = value;
+                this["NumLocationsRow"] = value;
             }
         }
         
@@ -667,37 +655,19 @@ namespace SPIPware.Properties {
                 return ((int)(this["MinLocation"]));
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int CurrentLocationX
-        {
-            get
-            {
+        public int CurrentLocationX {
+            get {
                 return ((int)(this["CurrentLocationX"]));
             }
-            set
-            {
+            set {
                 this["CurrentLocationX"] = value;
             }
         }
-        //y current location
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int CurrentLocationY
-        {
-            get
-            {
-                return ((int)(this["CurrentLocationY"]));
-            }
-            set
-            {
-                this["CurrentLocationY"] = value;
-            }
-        }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Mako")]
@@ -718,18 +688,7 @@ namespace SPIPware.Properties {
                 return ((string)(this["PrimaryAxis"]));
             }
         }
-        //y-axis added
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Y")]
-        public string SecondaryAxis 
-        {
-            get
-            {
-                return ((string)(this["SecondaryAxis"]));
-            }
-        }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10000")]
@@ -983,6 +942,210 @@ namespace SPIPware.Properties {
         public global::System.TimeSpan EndOfNight {
             get {
                 return ((global::System.TimeSpan)(this["EndOfNight"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Y")]
+        public string SecondaryAxis {
+            get {
+                return ((string)(this["SecondaryAxis"]));
+            }
+            set {
+                this["SecondaryAxis"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Z")]
+        public string TertiaryAxis {
+            get {
+                return ((string)(this["TertiaryAxis"]));
+            }
+            set {
+                this["TertiaryAxis"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int CurrentLocationY {
+            get {
+                return ((int)(this["CurrentLocationY"]));
+            }
+            set {
+                this["CurrentLocationY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int CurrentLocationZ {
+            get {
+                return ((int)(this["CurrentLocationZ"]));
+            }
+            set {
+                this["CurrentLocationZ"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        public int NumLocationsColumns {
+            get {
+                return ((int)(this["NumLocationsColumns"]));
+            }
+            set {
+                this["NumLocationsColumns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
+        public int NumPlates {
+            get {
+                return ((int)(this["NumPlates"]));
+            }
+            set {
+                this["NumPlates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Y_Axis_Enable {
+            get {
+                return ((bool)(this["Y_Axis_Enable"]));
+            }
+            set {
+                this["Y_Axis_Enable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Z_Axis_Enable {
+            get {
+                return ((bool)(this["Z_Axis_Enable"]));
+            }
+            set {
+                this["Z_Axis_Enable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        public int TotalColumns {
+            get {
+                return ((int)(this["TotalColumns"]));
+            }
+            set {
+                this["TotalColumns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int PlateYOffset {
+            get {
+                return ((int)(this["PlateYOffset"]));
+            }
+            set {
+                this["PlateYOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int RadiusOfWell {
+            get {
+                return ((int)(this["RadiusOfWell"]));
+            }
+            set {
+                this["RadiusOfWell"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int NumberOfTrays {
+            get {
+                return ((int)(this["NumberOfTrays"]));
+            }
+            set {
+                this["NumberOfTrays"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int WellXOffset {
+            get {
+                return ((int)(this["WellXOffset"]));
+            }
+            set {
+                this["WellXOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int WellYOffset {
+            get {
+                return ((int)(this["WellYOffset"]));
+            }
+            set {
+                this["WellYOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Experiment Title")]
+        public string ExperimentTitle {
+            get {
+                return ((string)(this["ExperimentTitle"]));
+            }
+            set {
+                this["ExperimentTitle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("132")]
+        public int YBetweenDistance {
+            get {
+                return ((int)(this["YBetweenDistance"]));
+            }
+            set {
+                this["YBetweenDistance"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CurrentPlate {
+            get {
+                return ((int)(this["CurrentPlate"]));
+            }
+            set {
+                this["CurrentPlate"] = value;
             }
         }
     }

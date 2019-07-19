@@ -1,0 +1,39 @@
+Experiment Builder:
+
+GOAL: To build 'experiments' in SPIPware and greatly expand the experiment function by making it variable
+
+Steps:
+1. Make classes for steps of experiment
+
+Experiment
+|
+|--Machine
+|	|
+|	|--Plate (collection of wells)
+|	|	|
+|	|	|--Wells (individual thing of being experimented
+|	|	|
+
+
+Wells will need radius and other attributes
+Plates will need number of wells and arrangement
+Machine will be a camera and number of plates
+Expriment will need number of total plates and positioning and  number of machines/cameras connected
+
+2. Make pop-up window of experiment builder
+	- Want to make it savabale and reusable
+	- variable
+	- etc.
+	
+3. Implement and test
+
+Notes over existing program:
+Experiment.cs saves the infomation of the experiment so that can be saved and extended through experiment
+builder 
+
+Update to Pheripheral.cs to make it more variabled and easier to communicate between seperate cameras and what not ?
+
+TODO:
+1. Update existing files to take 2/3 dimensions
+2. Build Experiment Builder classes and files
+3. Implemnet to front end of development

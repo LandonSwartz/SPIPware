@@ -1,0 +1,76 @@
+Landon's To do for SPIPware, sarcasm slightly used:
+
+Goals:
+1. Get 2D program working with plates, well, trays
+2. Make GUI for experiment builder
+3. Make variabled
+4. Extreme Code Makeover (documentation, github page, removing legacy code)
+
+1. Backend (Biggest Hurdles):
+	- Finish plate, well, and tray classes DONE (at least arbitarialy)
+		- Basic framework set up DONE
+		- Make more variabled with 2D Arraylist/list to make size dynamic based on user settings
+		- Add more methods to make finding where well is on plate for GRBL automatic
+	- Rebuild machine.cs to take plate, well and trays and maybe make more variable DONE
+		- Added property named trays that is an array of 3 trays (for time being) DONE
+			- Add way to make variabled
+	- Redo CycleControl.cs to take plates, well, and trays in motion DONE
+		- Remaking front end components that are also affected by this (maybe just leave to redo in future)
+	- (Optional) Make PheripheralControl.cs take many cameras 
+	- Make Experiment.cs a better object for the plates, trays, and wells DONE
+		- Maybe just remake entire experiment object because need to gut a lot of past things
+		- Make the object compatible with JSON file type
+	- Make file reader for importing plate config and other things
+		- Saving plate configs in experiment builder
+		- Already have default so user can't mess it up then maybe make it later
+	
+2. Frontend:
+	- Make Experiment builder window
+		- Finish Actual builder window
+			- move old experiment functinos to new window 
+			- get it to save as JSON
+			- get plate and well stuff saved to experiment.cs
+			- could make the window be view model bound to experiment.cs
+				- https://www.youtube.com/watch?v=U2ZvZwDZmJU
+		- Finish Loader Window
+			- Have file load preview and a apply button for past file experiments
+			- Take info from experiment builder window and input
+	- Remake the parts of main window to remove old experiment things and input the new
+		- Move timelaspe ribbon to experiment builder window
+		- Move parts of Machine tab to window
+		- Move experiment tab to window
+		- Add y position to g-code terminal view DONE
+		- Remove Experiment ribbon tab on main window
+	
+	- (Optional) Update Sunbear logo to BugBear logo
+	
+3. Other Goals
+	-Documenation
+		- Documenting back end code
+			- xml to every function and class
+		- Documenting front end code
+			- xml to major parts of GUI
+			- reformat GUI files to be more intuitative in reading
+	- Quality of Life improvements
+		- Asking to close window if trying to close during cycle
+		- General Code Clean up
+			- Remove legacy code from CNC mill
+			- Remove past comments
+			- Add regions to major parts of classes DONE
+			- Rework file trees
+		- Settings Window
+			- (Optional) Make Settings window and import some of settings of application (because y and z axis can be enable/disabled in settings and maybe way to switch between one and two axis)
+			- Add to file ribbon on ribbbon bar
+			- Useful for dev testing at least
+		- Github Update
+			- Update ReadMe
+				- Add images, some experiment data, way more info on program and everything else
+				- Documenation doc on page
+				- Move over to lab github
+				- Add contribute.md file
+				
+				
+4. NOTES
+	- Current Plate setting is currently an int[] but default values not always working so will figure out at a later time how to work
+	- Application is set up through application settings being the program's setting, may just have to deal with then fix later
+	- Best way to make experimentBuilderWindow Load experiment tab to work is probs a listbox on left then some viewer or loader of experiment on the right
